@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="EduCan — DİM hazırlığı üçün Azərbaycanda ən yaxşı onlayn müəllim platforması. Müəllim tap, dərs rezerv et, Zoom-da öyrən.">
+    <title>EduCan - DİM Hazırlıq Platforması</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: { primary: '#1A56A0', accent: '#20948B' }
+                }
+            }
+        }
+    </script>
+    <style>
+        .hero-bg {
+            background-image: linear-gradient(to right, rgba(239, 246, 255, 0.95) 40%, rgba(239, 246, 255, 0.7) 70%, rgba(239, 246, 255, 0.2) 100%),
+                              url('https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=1200&q=80&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center right;
+        }
+        #mobile-menu { display: none; }
+        #mobile-menu.open { display: block; }
+    </style>
+</head>
+<body class="bg-white text-gray-900 font-sans">
+
+    <!-- HEADER -->
+    <header class="sticky top-0 bg-white/95 backdrop-blur-sm z-50 border-b border-gray-100 shadow-sm">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex justify-between items-center">
+            <a href="/" class="text-2xl sm:text-3xl font-extrabold text-primary tracking-tighter">EduCan</a>
+
+            <div class="hidden md:flex gap-8 font-medium text-gray-600">
+                <a href="/teachers" class="hover:text-primary transition">Müəllim tap</a>
+                <a href="/how-it-works" class="hover:text-primary transition">Necə işləyir</a>
+                <a href="/about" class="hover:text-primary transition">Haqqımızda</a>
+                <a href="/contact" class="hover:text-primary transition">Əlaqə</a>
+            </div>
+
+            <div class="hidden md:flex gap-3 items-center">
+                <a href="/login" class="px-5 py-2 font-semibold text-primary hover:text-blue-800 transition">Daxil ol</a>
+                <a href="/register/student" class="bg-primary text-white px-6 py-2 rounded-xl font-semibold hover:bg-blue-800 transition">Qeydiyyat</a>
+            </div>
+
+            <button id="menu-btn" class="md:hidden text-2xl text-primary p-2" aria-label="Menyu" aria-expanded="false">
+                <i class="fas fa-bars" id="menu-icon"></i>
+            </button>
+        </nav>
+
+        <div id="mobile-menu" class="md:hidden border-t border-gray-100 bg-white px-4 pb-4">
+            <div class="flex flex-col gap-1 pt-2 font-medium text-gray-600">
+                <a href="/teachers" class="py-3 px-2 hover:text-primary border-b border-gray-50">Müəllim tap</a>
+                <a href="/how-it-works" class="py-3 px-2 hover:text-primary border-b border-gray-50">Necə işləyir</a>
+                <a href="/about" class="py-3 px-2 hover:text-primary border-b border-gray-50">Haqqımızda</a>
+                <a href="/contact" class="py-3 px-2 hover:text-primary border-b border-gray-50">Əlaqə</a>
+                <div class="flex gap-3 pt-4">
+                    <a href="/login" class="flex-1 text-center py-2 font-semibold text-primary border border-primary rounded-xl">Daxil ol</a>
+                    <a href="/register/student" class="flex-1 text-center bg-primary text-white py-2 rounded-xl font-semibold">Qeydiyyat</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- HERO SECTION -->
+    <section class="hero-bg py-16 sm:py-24">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6">
+            <div class="max-w-2xl">
+                <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-gray-900 leading-tight mb-6">
+                    DİM üçün ən yaxşı müəllimini tap
+                </h1>
+                <p class="text-lg sm:text-xl text-gray-600 mb-8 leading-relaxed">
+                    EduCan — Azərbaycanın bütün regionlarından DİM hazırlığı üçün peşəkar müəllimlərlə onlayn dərslər platformasıdır. Evindən çıxmadan keyfiyyətli təhsil al.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4">
+                    <a href="/teachers" class="bg-primary text-white px-8 py-4 rounded-xl font-bold text-center hover:bg-blue-800 transition shadow-lg">
+                        Müəllim axtar
+                    </a>
+                    <a href="/register/teacher" class="bg-accent text-white px-8 py-4 rounded-xl font-bold text-center hover:bg-teal-700 transition shadow-lg">
+                        Müəllim kimi qoşul
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- STATISTICS BAR -->
+    <section class="bg-primary text-white py-12 sm:py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+            <div>
+                <div class="text-3xl sm:text-4xl font-extrabold mb-2">500+</div>
+                <p class="text-blue-100 text-sm sm:text-base">Qeydiyyatlı müəllim</p>
+            </div>
+            <div>
+                <div class="text-3xl sm:text-4xl font-extrabold mb-2">10 000+</div>
+                <p class="text-blue-100 text-sm sm:text-base">Tamamlanmış dərs</p>
+            </div>
+            <div>
+                <div class="text-3xl sm:text-4xl font-extrabold mb-2">60+</div>
+                <p class="text-blue-100 text-sm sm:text-base">Rayon əhatəsi</p>
+            </div>
+            <div>
+                <div class="text-3xl sm:text-4xl font-extrabold mb-2">4.8/5</div>
+                <p class="text-blue-100 text-sm sm:text-base">Orta müəllim reytinqi</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- HOW IT WORKS -->
+    <section id="how-it-works" class="py-16 sm:py-20 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 text-center">
+            <h2 class="text-3xl sm:text-4xl font-bold mb-4">Necə işləyir?</h2>
+            <p class="text-gray-600 mb-12 max-w-xl mx-auto">Üç sadə addımda DİM hazırlığına başla</p>
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="bg-white p-8 rounded-3xl shadow-md border border-gray-100">
+                    <div class="w-16 h-16 bg-blue-50 text-primary rounded-2xl flex items-center justify-center text-2xl mx-auto mb-6">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <div class="text-sm font-bold text-accent mb-2">Addım 1</div>
+                    <h3 class="text-xl font-bold mb-3">Müəllim seç</h3>
+                    <p class="text-gray-600">Fənn, qiymət və reytinqə görə filtrlə. Özünə uyğun müəllimi tap.</p>
+                </div>
+                <div class="bg-white p-8 rounded-3xl shadow-md border border-gray-100">
+                    <div class="w-16 h-16 bg-blue-50 text-primary rounded-2xl flex items-center justify-center text-2xl mx-auto mb-6">
+                        <i class="fas fa-calendar-check"></i>
+                    </div>
+                    <div class="text-sm font-bold text-accent mb-2">Addım 2</div>
+                    <h3 class="text-xl font-bold mb-3">Dərs rezerv et</h3>
+                    <p class="text-gray-600">Müəllimin boş vaxtlarından birini seç və bir kliklə rezerv et.</p>
+                </div>
+                <div class="bg-white p-8 rounded-3xl shadow-md border border-gray-100">
+                    <div class="w-16 h-16 bg-blue-50 text-primary rounded-2xl flex items-center justify-center text-2xl mx-auto mb-6">
+                        <i class="fas fa-video"></i>
+                    </div>
+                    <div class="text-sm font-bold text-accent mb-2">Addım 3</div>
+                    <h3 class="text-xl font-bold mb-3">Zoom-da öyrən</h3>
+                    <p class="text-gray-600">Dərs vaxtı Zoom linkinə daxil ol və müəllimlə canlı dərslər keç.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FEATURED TEACHERS -->
+    <section class="py-16 sm:py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6">
+            <h2 class="text-3xl sm:text-4xl font-bold mb-4 text-center">Seçilmiş Müəllimlər</h2>
+            <p class="text-gray-600 text-center mb-12">Platformamızın ən yüksək reytinqli müəllimləri</p>
+            <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+
+                <div class="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm hover:shadow-lg transition-shadow">
+                    <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=200&h=200&fit=crop&crop=face&auto=format&q=80" alt="Rəşad Hüseynov" class="w-24 h-24 rounded-full mx-auto mb-4 object-cover border-4 border-blue-50" loading="lazy">
+                    <h3 class="font-bold text-lg text-center">Rəşad Hüseynov</h3>
+                    <p class="text-sm text-gray-500 mb-3 text-center">Riyaziyyat · DİM</p>
+                    <div class="flex justify-center items-center gap-1 mb-2">
+                        <i class="fas fa-star text-yellow-400 text-sm"></i>
+                        <i class="fas fa-star text-yellow-400 text-sm"></i>
+                        <i class="fas fa-star text-yellow-400 text-sm"></i>
+                        <i class="fas fa-star text-yellow-400 text-sm"></i>
+                        <i class="fas fa-star text-yellow-400 text-sm"></i>
+                        <span class="text-accent font-bold ml-1">4.9</span>
+                    </div>
+                    <p class="text-center font-bold text-gray-800 mb-5">20 AZN / dərs</p>
+                    <a href="/teachers/rashad-huseynov" class="block text-center border-2 border-primary text-primary py-2 rounded-xl font-semibold hover:bg-primary hover:text-white transition">Profilə bax</a>
+                </div>
+
+                <div class="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm hover:shadow-lg transition-shadow">
+                    <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=200&h=200&fit=crop&crop=face&auto=format&q=80" alt="Leyla Quliyeva" class="w-24 h-24 rounded-full mx-auto mb-4 object-cover border-4 border-blue-50" loading="lazy">
+                    <h3 class="font-bold text-lg text-center">Leyla Quliyeva</h3>
+                    <p class="text-sm text-gray-500 mb-3 text-center">Fizika · DİM</p>
+                    <div class="flex justify-center items-center gap-1 mb-2">
+                        <i class="fas fa-star text-yellow-400 text-sm"></i>
+                        <i class="fas fa-star text-yellow-400 text-sm"></i>
+                        <i class="fas fa-star text-yellow-400 text-sm"></i>
+                        <i class="fas fa-star text-yellow-400 text-sm"></i>
+                        <i class="fas fa-star text-yellow-400 text-sm"></i>
+                        <span class="text-accent font-bold ml-1">5.0</span>
+                    </div>
+                    <p class="text-center font-bold text-gray-800 mb-5">25 AZN / dərs</p>
+                    <a href="/teachers/leyla-quliyeva" class="block text-center border-2 border-primary text-primary py-2 rounded-xl font-semibold hover:bg-primary hover:text-white transition">Profilə bax</a>
+                </div>
+
+                <div class="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm hover:shadow-lg transition-shadow">
+                    <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&h=200&fit=crop&crop=face&auto=format&q=80" alt="Elvin Məmmədov" class="w-24 h-24 rounded-full mx-auto mb-4 object-cover border-4 border-blue-50" loading="lazy">
+                    <h3 class="font-bold text-lg text-center">Elvin Məmmədov</h3>
+                    <p class="text-sm text-gray-500 mb-3 text-center">Kimya · DİM</p>
+                    <div class="flex justify-center items-center gap-1 mb-2">
+                        <i class="fas fa-star text-yellow-400 text-sm"></i>
+                        <i class="fas fa-star text-yellow-400 text-sm"></i>
+                        <i class="fas fa-star text-yellow-400 text-sm"></i>
+                        <i class="fas fa-star text-yellow-400 text-sm"></i>
+                        <i class="fas fa-star-half-alt text-yellow-400 text-sm"></i>
+                        <span class="text-accent font-bold ml-1">4.7</span>
+                    </div>
+                    <p class="text-center font-bold text-gray-800 mb-5">22 AZN / dərs</p>
+                    <a href="/teachers/elvin-mammadov" class="block text-center border-2 border-primary text-primary py-2 rounded-xl font-semibold hover:bg-primary hover:text-white transition">Profilə bax</a>
+                </div>
+
+                <div class="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm hover:shadow-lg transition-shadow">
+                    <img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?w=200&h=200&fit=crop&crop=face&auto=format&q=80" alt="Günay Əliyeva" class="w-24 h-24 rounded-full mx-auto mb-4 object-cover border-4 border-blue-50" loading="lazy">
+                    <h3 class="font-bold text-lg text-center">Günay Əliyeva</h3>
+                    <p class="text-sm text-gray-500 mb-3 text-center">İngilis dili · DİM</p>
+                    <div class="flex justify-center items-center gap-1 mb-2">
+                        <i class="fas fa-star text-yellow-400 text-sm"></i>
+                        <i class="fas fa-star text-yellow-400 text-sm"></i>
+                        <i class="fas fa-star text-yellow-400 text-sm"></i>
+                        <i class="fas fa-star text-yellow-400 text-sm"></i>
+                        <i class="fas fa-star text-yellow-400 text-sm"></i>
+                        <span class="text-accent font-bold ml-1">4.8</span>
+                    </div>
+                    <p class="text-center font-bold text-gray-800 mb-5">30 AZN / dərs</p>
+                    <a href="/teachers/gunay-aliyeva" class="block text-center border-2 border-primary text-primary py-2 rounded-xl font-semibold hover:bg-primary hover:text-white transition">Profilə bax</a>
+                </div>
+
+                <div class="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm hover:shadow-lg transition-shadow">
+                    <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=200&h=200&fit=crop&crop=face&auto=format&q=80" alt="Tural Rəhimov" class="w-24 h-24 rounded-full mx-auto mb-4 object-cover border-4 border-blue-50" loading="lazy">
+                    <h3 class="font-bold text-lg text-center">Tural Rəhimov</h3>
+                    <p class="text-sm text-gray-500 mb-3 text-center">Azərbaycan dili · DİM</p>
+                    <div class="flex justify-center items-center gap-1 mb-2">
+                        <i class="fas fa-star text-yellow-400 text-sm"></i>
+                        <i class="fas fa-star text-yellow-400 text-sm"></i>
+                        <i class="fas fa-star text-yellow-400 text-sm"></i>
+                        <i class="fas fa-star text-yellow-400 text-sm"></i>
+                        <i class="fas fa-star text-yellow-400 text-sm"></i>
+                        <span class="text-accent font-bold ml-1">4.9</span>
+                    </div>
+                    <p class="text-center font-bold text-gray-800 mb-5">18 AZN / dərs</p>
+                    <a href="/teachers/tural-rahimov" class="block text-center border-2 border-primary text-primary py-2 rounded-xl font-semibold hover:bg-primary hover:text-white transition">Profilə bax</a>
+                </div>
+
+                <div class="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm hover:shadow-lg transition-shadow">
+                    <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=200&h=200&fit=crop&crop=face&auto=format&q=80" alt="Nərgiz Səfərova" class="w-24 h-24 rounded-full mx-auto mb-4 object-cover border-4 border-blue-50" loading="lazy">
+                    <h3 class="font-bold text-lg text-center">Nərgiz Səfərova</h3>
+                    <p class="text-sm text-gray-500 mb-3 text-center">Tarix · DİM</p>
+                    <div class="flex justify-center items-center gap-1 mb-2">
+                        <i class="fas fa-star text-yellow-400 text-sm"></i>
+                        <i class="fas fa-star text-yellow-400 text-sm"></i>
+                        <i class="fas fa-star text-yellow-400 text-sm"></i>
+                        <i class="fas fa-star text-yellow-400 text-sm"></i>
+                        <i class="fas fa-star-half-alt text-yellow-400 text-sm"></i>
+                        <span class="text-accent font-bold ml-1">4.6</span>
+                    </div>
+                    <p class="text-center font-bold text-gray-800 mb-5">15 AZN / dərs</p>
+                    <a href="/teachers/nergiz-seferova" class="block text-center border-2 border-primary text-primary py-2 rounded-xl font-semibold hover:bg-primary hover:text-white transition">Profilə bax</a>
+                </div>
+
+            </div>
+            <div class="text-center mt-10">
+                <a href="/teachers" class="inline-block bg-primary text-white px-10 py-4 rounded-xl font-bold hover:bg-blue-800 transition shadow-md">
+                    Bütün müəllimləri gör
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- TESTIMONIALS -->
+    <section class="py-16 sm:py-20 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6">
+            <h2 class="text-3xl sm:text-4xl font-bold mb-4 text-center">Tələbələrimiz nə deyir?</h2>
+            <p class="text-gray-600 text-center mb-12">Minlərlə tələbənin etibar etdiyi platforma</p>
+            <div class="grid md:grid-cols-3 gap-6">
+                <div class="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm">
+                    <div class="flex items-center gap-4 mb-5">
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&h=80&fit=crop&crop=face&auto=format&q=80" alt="Əli Məmmədov" class="w-14 h-14 rounded-full object-cover" loading="lazy">
+                        <div>
+                            <div class="font-bold">Əli Məmmədov</div>
+                            <div class="text-sm text-gray-500">Bakı · DİM 2025</div>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 leading-relaxed">"EduCan sayəsində riyaziyyatdan 90 bal topladım. Müəllimim hər dərsdə səbirli və peşəkardı. Evimdən çıxmadan hazırlaşmaq çox rahat oldu."</p>
+                </div>
+                <div class="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm">
+                    <div class="flex items-center gap-4 mb-5">
+                        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop&crop=face&auto=format&q=80" alt="Aynur Əliyeva" class="w-14 h-14 rounded-full object-cover" loading="lazy">
+                        <div>
+                            <div class="font-bold">Aynur Əliyeva</div>
+                            <div class="text-sm text-gray-500">Gəncə · DİM 2025</div>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 leading-relaxed">"Müəllim seçmək çox asan idi — reytinq və qiymətə görə filtrlədim. Fizika müəllimim hər mövzunu aydın izah edirdi. Bütün dostlarıma tövsiyə edirəm."</p>
+                </div>
+                <div class="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm">
+                    <div class="flex items-center gap-4 mb-5">
+                        <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=80&h=80&fit=crop&crop=face&auto=format&q=80" alt="Murad Vəliyev" class="w-14 h-14 rounded-full object-cover" loading="lazy">
+                        <div>
+                            <div class="font-bold">Murad Vəliyev</div>
+                            <div class="text-sm text-gray-500">Şəki · DİM 2024</div>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 leading-relaxed">"Zoom dərsləri çox rahatdır — vaxtı seçirsən, qoşulursan, öyrənirsən. EduCan mənim üçün həqiqi fürsət oldu."</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOR TEACHERS -->
+    <section class="py-16 sm:py-20 bg-primary text-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 grid md:grid-cols-2 gap-12 items-center">
+            <div>
+                <h2 class="text-3xl sm:text-4xl font-bold mb-6">Müəllim kimi qazanmağa başla</h2>
+                <p class="text-blue-100 text-lg mb-8 leading-relaxed">
+                    Bilik və təcrübənizi paylaşın, tələbələrə kömək edin və öz cədvəlinizə uyğun qazanc əldə edin.
+                </p>
+                <ul class="space-y-4 mb-10">
+                    <li class="flex items-start gap-3">
+                        <i class="fas fa-clock text-accent mt-1"></i>
+                        <span><strong class="text-white">Çevik cədvəl</strong> — öz vaxtınızı özünüz təyin edin</span>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <i class="fas fa-money-bill-wave text-accent mt-1"></i>
+                        <span><strong class="text-white">Pul qazanın</strong> — hər dərs üçün birbaşa ödəniş alın</span>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <i class="fas fa-map-marked-alt text-accent mt-1"></i>
+                        <span><strong class="text-white">Bütün regionlardan tələbələr</strong> — Azərbaycanın hər yerindən tələbələrə çatın</span>
+                    </li>
+                </ul>
+                <a href="/register/teacher" class="inline-block bg-white text-primary px-10 py-4 rounded-xl font-bold hover:bg-blue-50 transition shadow-lg">
+                    Müəllim kimi qeydiyyatdan keç
+                </a>
+            </div>
+            <div class="hidden md:flex items-center justify-center">
+                <div class="bg-white/10 rounded-3xl p-12 border border-white/20 text-center">
+                    <i class="fas fa-chalkboard-teacher text-8xl text-white/40 mb-6"></i>
+                    <p class="text-2xl font-bold">500+ müəllim artıq qoşulub</p>
+                    <p class="text-blue-200 mt-2">Siz də bu gün başlayın</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-white border-t border-gray-100 py-12 sm:py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6">
+            <div class="grid sm:grid-cols-2 md:grid-cols-4 gap-10 text-gray-600">
+                <div>
+                    <a href="/" class="text-2xl font-extrabold text-primary mb-4 block">EduCan</a>
+                    <p class="text-sm leading-relaxed">Azərbaycanın DİM hazırlığı üçün onlayn müəllim platforması.</p>
+                </div>
+                <div>
+                    <h4 class="font-bold text-gray-900 mb-4">Naviqasiya</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="/teachers" class="hover:text-primary transition">Müəllim tap</a></li>
+                        <li><a href="/how-it-works" class="hover:text-primary transition">Necə işləyir</a></li>
+                        <li><a href="/about" class="hover:text-primary transition">Haqqımızda</a></li>
+                        <li><a href="/contact" class="hover:text-primary transition">Əlaqə</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold text-gray-900 mb-4">Hüquqi</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="/privacy" class="hover:text-primary transition">Məxfilik Siyasəti</a></li>
+                        <li><a href="/terms" class="hover:text-primary transition">İstifadə Qaydaları</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold text-gray-900 mb-4">Sosial şəbəkələr</h4>
+                    <div class="flex gap-4 text-2xl">
+                        <a href="https://instagram.com/educan" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-primary transition" aria-label="Instagram">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="https://facebook.com/educan" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-primary transition" aria-label="Facebook">
+                            <i class="fab fa-facebook"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-12 pt-8 border-t border-gray-100 text-center text-sm text-gray-400">
+                © 2026 EduCan. Bütün hüquqlar qorunur.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const menuBtn = document.getElementById('menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const menuIcon = document.getElementById('menu-icon');
+
+        menuBtn.addEventListener('click', () => {
+            const isOpen = mobileMenu.classList.toggle('open');
+            menuBtn.setAttribute('aria-expanded', isOpen);
+            menuIcon.classList.toggle('fa-bars', !isOpen);
+            menuIcon.classList.toggle('fa-times', isOpen);
+        });
+    </script>
+</body>
+</html>

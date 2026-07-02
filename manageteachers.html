@@ -1,0 +1,1124 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Müəllimləri İdarə Et | EduCan Admin</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: { primary: '#1A56A0', accent: '#20948B' }
+                }
+            }
+        }
+    </script>
+    <style>
+        #mobile-menu { display: none; }
+        #mobile-menu.open { display: block; }
+        .sidebar-item {
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+        .sidebar-item:hover {
+            background: #EFF6FF;
+            color: #1A56A0;
+        }
+        .sidebar-item.active {
+            background: #1A56A0;
+            color: white;
+        }
+        .sidebar-item i {
+            width: 1.5rem;
+            text-align: center;
+        }
+        .sidebar-mobile {
+            position: fixed;
+            top: 0;
+            left: -280px;
+            width: 280px;
+            height: 100vh;
+            background: white;
+            z-index: 1000;
+            transition: left 0.3s ease;
+            box-shadow: 2px 0 20px rgba(0,0,0,0.1);
+            overflow-y: auto;
+        }
+        .sidebar-mobile.open {
+            left: 0;
+        }
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.4);
+            z-index: 999;
+            display: none;
+        }
+        .overlay.open {
+            display: block;
+        }
+        .sidebar-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            font-size: 1.5rem;
+            color: #6B7280;
+            cursor: pointer;
+        }
+        .sidebar-close:hover {
+            color: #1A56A0;
+        }
+        .filter-btn {
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+        .filter-btn.active {
+            background: #1A56A0;
+            color: white;
+        }
+        .filter-btn.active:hover {
+            background: #1A4A8A;
+        }
+        .filter-btn:not(.active):hover {
+            background: #F3F4F6;
+        }
+        .teacher-row {
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+        .teacher-row:hover {
+            background: #F8FAFF;
+        }
+        .teacher-row.expanded {
+            background: #EFF6FF;
+        }
+        .status-badge {
+            font-size: 0.65rem;
+            padding: 0.2rem 0.7rem;
+            border-radius: 999px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+        .status-badge.pending { background: #FEF3C7; color: #92400E; }
+        .status-badge.approved { background: #D1FAE5; color: #065F46; }
+        .status-badge.rejected { background: #FEE2E2; color: #991B1B; }
+        .status-badge.suspended { background: #FEE2E2; color: #991B1B; }
+        .action-btn {
+            transition: all 0.2s ease;
+        }
+        .action-btn:hover {
+            transform: scale(1.05);
+        }
+        .action-btn.approve:hover { background: #D1FAE5; color: #065F46; border-color: #065F46; }
+        .action-btn.reject:hover { background: #FEE2E2; color: #991B1B; border-color: #991B1B; }
+        .action-btn.suspend:hover { background: #FEF3C7; color: #92400E; border-color: #92400E; }
+        .action-btn.view:hover { background: #DBEAFE; color: #1A56A0; border-color: #1A56A0; }
+        .modal-overlay {
+            animation: fadeIn 0.3s ease;
+        }
+        .modal-content {
+            animation: slideUp 0.3s ease;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        .success-toast {
+            animation: slideDown 0.4s ease;
+        }
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .search-input:focus {
+            box-shadow: 0 0 0 3px rgba(26, 86, 160, 0.15);
+        }
+        .avatar-placeholder {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 50%;
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: white;
+            flex-shrink: 0;
+        }
+        .profile-detail {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #F3F4F6;
+        }
+        .profile-detail:last-child {
+            border-bottom: none;
+        }
+        .profile-detail .label {
+            color: #6B7280;
+            font-size: 0.8rem;
+            min-width: 100px;
+        }
+        .profile-detail .value {
+            font-weight: 500;
+            color: #1F2937;
+            font-size: 0.9rem;
+        }
+        .email-notification {
+            background: linear-gradient(135deg, #EFF6FF, #DBEAFE);
+            border: 1px solid #BFDBFE;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-900 font-sans">
+
+    <!-- ============================================================ -->
+    <!-- MOBILE SIDEBAR OVERLAY -->
+    <!-- ============================================================ -->
+    <div class="overlay" id="sidebarOverlay"></div>
+
+    <!-- ============================================================ -->
+    <!-- MOBILE SIDEBAR -->
+    <!-- ============================================================ -->
+    <div class="sidebar-mobile" id="mobileSidebar">
+        <div class="p-6">
+            <span class="sidebar-close" id="sidebarClose"><i class="fas fa-times"></i></span>
+            <div class="flex items-center gap-3 mb-8 mt-2">
+                <div class="admin-avatar" style="width: 2.5rem; height: 2.5rem; font-size: 1rem; background: #1A56A0; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700;">A</div>
+                <div>
+                    <div class="font-bold text-gray-900">Admin</div>
+                    <div class="text-sm text-gray-500">Super Admin</div>
+                </div>
+            </div>
+            <nav class="space-y-1">
+                <a href="/admin/dashboard" class="flex items-center gap-3 px-4 py-3 rounded-xl sidebar-item">
+                    <i class="fas fa-th-large"></i> Dashboard
+                </a>
+                <a href="/admin/teachers" class="flex items-center gap-3 px-4 py-3 rounded-xl sidebar-item active">
+                    <i class="fas fa-chalkboard-teacher"></i> Müəllimlər
+                    <span class="ml-auto text-xs bg-yellow-100 text-yellow-700 px-2 py-0.5 rounded-full">3</span>
+                </a>
+                <a href="/admin/students" class="flex items-center gap-3 px-4 py-3 rounded-xl sidebar-item">
+                    <i class="fas fa-user-graduate"></i> Tələbələr
+                </a>
+                <a href="/admin/lessons" class="flex items-center gap-3 px-4 py-3 rounded-xl sidebar-item">
+                    <i class="fas fa-calendar-check"></i> Dərslər
+                </a>
+                <a href="/admin/payments" class="flex items-center gap-3 px-4 py-3 rounded-xl sidebar-item">
+                    <i class="fas fa-credit-card"></i> Ödənişlər
+                </a>
+                <a href="/admin/reviews" class="flex items-center gap-3 px-4 py-3 rounded-xl sidebar-item">
+                    <i class="fas fa-star"></i> Rəylər
+                </a>
+                <a href="/admin/settings" class="flex items-center gap-3 px-4 py-3 rounded-xl sidebar-item">
+                    <i class="fas fa-cog"></i> Parametrlər
+                </a>
+                <div class="border-t border-gray-100 my-3"></div>
+                <a href="/logout" class="flex items-center gap-3 px-4 py-3 rounded-xl sidebar-item text-red-500 hover:bg-red-50">
+                    <i class="fas fa-sign-out-alt"></i> Çıxış
+                </a>
+            </nav>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- HEADER -->
+    <!-- ============================================================ -->
+    <header class="sticky top-0 bg-white/95 backdrop-blur-sm z-50 border-b border-gray-100 shadow-sm">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex justify-between items-center">
+            <div class="flex items-center gap-4">
+                <button id="sidebarToggle" class="lg:hidden text-2xl text-gray-600 hover:text-primary transition p-2" aria-label="Sidebar">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <a href="/admin/dashboard" class="text-2xl sm:text-3xl font-extrabold text-primary tracking-tighter">EduCan</a>
+                <span class="hidden sm:inline text-xs bg-primary/10 text-primary px-2 py-1 rounded-full font-semibold">Admin</span>
+            </div>
+
+            <div class="flex items-center gap-4">
+                <button class="relative text-gray-500 hover:text-primary transition text-lg">
+                    <i class="fas fa-bell"></i>
+                </button>
+                <div class="hidden sm:flex items-center gap-2">
+                    <div class="admin-avatar" style="width: 2rem; height: 2rem; font-size: 0.8rem; background: #1A56A0; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700;">A</div>
+                    <span class="text-sm font-medium text-gray-700">Admin</span>
+                </div>
+                <a href="/logout" class="text-gray-500 hover:text-red-500 transition text-sm font-medium hidden sm:inline">
+                    <i class="fas fa-sign-out-alt"></i> Çıxış
+                </a>
+                <button class="lg:hidden text-2xl text-gray-600 hover:text-primary transition" id="mobileMenuBtn">
+                    <i class="fas fa-ellipsis-v"></i>
+                </button>
+            </div>
+        </nav>
+
+        <div id="mobile-menu" class="lg:hidden border-t border-gray-100 bg-white px-4 pb-4">
+            <div class="flex flex-wrap gap-2 pt-3">
+                <a href="/admin/dashboard" class="text-sm px-3 py-1.5 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition">Dashboard</a>
+                <a href="/admin/teachers" class="text-sm px-3 py-1.5 bg-primary text-white rounded-lg font-medium">Müəllimlər</a>
+                <a href="/admin/students" class="text-sm px-3 py-1.5 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition">Tələbələr</a>
+                <a href="/admin/lessons" class="text-sm px-3 py-1.5 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition">Dərslər</a>
+                <a href="/admin/payments" class="text-sm px-3 py-1.5 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition">Ödənişlər</a>
+                <a href="/admin/reviews" class="text-sm px-3 py-1.5 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition">Rəylər</a>
+                <a href="/admin/settings" class="text-sm px-3 py-1.5 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition">Parametrlər</a>
+                <a href="/logout" class="text-sm px-3 py-1.5 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition">Çıxış</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- ============================================================ -->
+    <!-- MAIN CONTENT -->
+    <!-- ============================================================ -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-8">
+        <div class="flex flex-col lg:flex-row gap-8">
+            
+            <!-- ========================================================== -->
+            <!-- SIDEBAR (Desktop) -->
+            <!-- ========================================================== -->
+            <aside class="hidden lg:block w-64 flex-shrink-0">
+                <div class="bg-white rounded-2xl border border-gray-100 p-4 sticky top-24">
+                    <div class="flex items-center gap-3 mb-6 p-2">
+                        <div class="admin-avatar" style="width: 3rem; height: 3rem; font-size: 1.1rem; background: #1A56A0; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700;">A</div>
+                        <div>
+                            <div class="font-bold text-gray-900">Admin</div>
+                            <div class="text-sm text-gray-500">Super Admin</div>
+                        </div>
+                    </div>
+                    <nav class="space-y-1">
+                        <a href="/admin/dashboard" class="flex items-center gap-3 px-4 py-3 rounded-xl sidebar-item">
+                            <i class="fas fa-th-large"></i> Dashboard
+                        </a>
+                        <a href="/admin/teachers" class="flex items-center gap-3 px-4 py-3 rounded-xl sidebar-item active">
+                            <i class="fas fa-chalkboard-teacher"></i> Müəllimlər
+                            <span class="ml-auto text-xs bg-yellow-100 text-yellow-700 px-2 py-0.5 rounded-full">3</span>
+                        </a>
+                        <a href="/admin/students" class="flex items-center gap-3 px-4 py-3 rounded-xl sidebar-item">
+                            <i class="fas fa-user-graduate"></i> Tələbələr
+                        </a>
+                        <a href="/admin/lessons" class="flex items-center gap-3 px-4 py-3 rounded-xl sidebar-item">
+                            <i class="fas fa-calendar-check"></i> Dərslər
+                        </a>
+                        <a href="/admin/payments" class="flex items-center gap-3 px-4 py-3 rounded-xl sidebar-item">
+                            <i class="fas fa-credit-card"></i> Ödənişlər
+                        </a>
+                        <a href="/admin/reviews" class="flex items-center gap-3 px-4 py-3 rounded-xl sidebar-item">
+                            <i class="fas fa-star"></i> Rəylər
+                        </a>
+                        <a href="/admin/settings" class="flex items-center gap-3 px-4 py-3 rounded-xl sidebar-item">
+                            <i class="fas fa-cog"></i> Parametrlər
+                        </a>
+                        <div class="border-t border-gray-100 my-3"></div>
+                        <a href="/logout" class="flex items-center gap-3 px-4 py-3 rounded-xl sidebar-item text-red-500 hover:bg-red-50">
+                            <i class="fas fa-sign-out-alt"></i> Çıxış
+                        </a>
+                    </nav>
+                </div>
+            </aside>
+
+            <!-- ========================================================== -->
+            <!-- TEACHERS CONTENT -->
+            <!-- ========================================================== -->
+            <main class="flex-1 space-y-6">
+                
+                <!-- Başlıq -->
+                <div>
+                    <h1 class="text-2xl font-extrabold text-gray-900">Müəllimləri İdarə Et</h1>
+                    <p class="text-gray-500 text-sm mt-1">Bütün müəllimləri görün, təsdiqləyin və idarə edin</p>
+                </div>
+
+                <!-- Uğur mesajı (toast) -->
+                <div id="successToast" class="hidden bg-green-50 border border-green-200 rounded-xl px-4 py-3 text-green-700 flex items-center gap-3 success-toast">
+                    <i class="fas fa-check-circle text-green-500"></i>
+                    <span id="toastMessage">Müəllim uğurla təsdiqləndi!</span>
+                </div>
+
+                <!-- ======================================================== -->
+                <!-- STATISTICS -->
+                <!-- ======================================================== -->
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                    <div class="bg-white rounded-2xl border border-gray-100 p-4 shadow-sm text-center">
+                        <div class="text-2xl font-extrabold text-primary" id="totalTeachers">12</div>
+                        <div class="text-sm text-gray-500">Ümumi</div>
+                    </div>
+                    <div class="bg-white rounded-2xl border border-gray-100 p-4 shadow-sm text-center">
+                        <div class="text-2xl font-extrabold text-yellow-600" id="pendingTeachers">3</div>
+                        <div class="text-sm text-gray-500">Gözləyən</div>
+                    </div>
+                    <div class="bg-white rounded-2xl border border-gray-100 p-4 shadow-sm text-center">
+                        <div class="text-2xl font-extrabold text-green-600" id="approvedTeachers">7</div>
+                        <div class="text-sm text-gray-500">Təsdiqlənib</div>
+                    </div>
+                    <div class="bg-white rounded-2xl border border-gray-100 p-4 shadow-sm text-center">
+                        <div class="text-2xl font-extrabold text-red-500" id="suspendedTeachers">2</div>
+                        <div class="text-sm text-gray-500">Dayandırılıb</div>
+                    </div>
+                </div>
+
+                <!-- ======================================================== -->
+                <!-- SEARCH & FILTERS -->
+                <!-- ======================================================== -->
+                <div class="bg-white rounded-2xl border border-gray-100 p-4 shadow-sm">
+                    <div class="flex flex-col sm:flex-row gap-3">
+                        <div class="flex-1 relative">
+                            <i class="fas fa-search absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                            <input 
+                                type="text" 
+                                id="searchInput"
+                                placeholder="Müəllim axtar (ad, email, fənn)..." 
+                                class="search-input w-full p-3 pl-10 bg-gray-50 rounded-xl border-0 focus:ring-2 focus:ring-primary outline-none transition text-sm"
+                                oninput="filterTeachers()"
+                            >
+                        </div>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="filter-btn active px-4 py-2 rounded-full text-sm font-medium bg-primary text-white" data-filter="all" onclick="setFilter('all')">
+                                Hamısı
+                            </button>
+                            <button class="filter-btn px-4 py-2 rounded-full text-sm font-medium bg-gray-100 text-gray-700" data-filter="pending" onclick="setFilter('pending')">
+                                Gözləyən
+                            </button>
+                            <button class="filter-btn px-4 py-2 rounded-full text-sm font-medium bg-gray-100 text-gray-700" data-filter="approved" onclick="setFilter('approved')">
+                                Təsdiqlənib
+                            </button>
+                            <button class="filter-btn px-4 py-2 rounded-full text-sm font-medium bg-gray-100 text-gray-700" data-filter="rejected" onclick="setFilter('rejected')">
+                                Rədd edilib
+                            </button>
+                            <button class="filter-btn px-4 py-2 rounded-full text-sm font-medium bg-gray-100 text-gray-700" data-filter="suspended" onclick="setFilter('suspended')">
+                                Dayandırılıb
+                            </button>
+                        </div>
+                    </div>
+                    <div class="mt-3 pt-3 border-t border-gray-100 flex justify-between items-center">
+                        <span class="text-sm text-gray-500" id="resultCount">12 müəllim</span>
+                    </div>
+                </div>
+
+                <!-- ======================================================== -->
+                <!-- TEACHERS TABLE -->
+                <!-- ======================================================== -->
+                <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+                    <div class="overflow-x-auto">
+                        <table class="w-full">
+                            <thead class="bg-gray-50 border-b border-gray-100">
+                                <tr>
+                                    <th class="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Müəllim</th>
+                                    <th class="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hidden sm:table-cell">Fənnlər</th>
+                                    <th class="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hidden md:table-cell">Qeydiyyat</th>
+                                    <th class="px-4 sm:px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                    <th class="px-4 sm:px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Əməliyyatlar</th>
+                                </tr>
+                            </thead>
+                            <tbody id="teachersTable" class="divide-y divide-gray-100">
+                                <!-- JS ilə doldurulacaq -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- ======================================================== -->
+                <!-- EMPTY STATE -->
+                <!-- ======================================================== -->
+                <div id="emptyState" class="hidden text-center py-12">
+                    <i class="fas fa-chalkboard-teacher text-4xl text-gray-300 mb-3 block"></i>
+                    <p class="text-gray-400 text-sm">Bu filtrlərə uyğun müəllim tapılmadı</p>
+                </div>
+
+            </main>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- TEACHER DETAIL MODAL -->
+    <!-- ============================================================ -->
+    <div id="teacherModal" class="fixed inset-0 z-50 flex items-center justify-center px-4 hidden">
+        <div class="absolute inset-0 bg-black/50 modal-overlay" onclick="closeTeacherModal()"></div>
+        <div class="bg-white rounded-3xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl relative z-10 modal-content">
+            <div class="sticky top-0 bg-white border-b border-gray-100 p-6 flex items-center justify-between">
+                <div class="flex items-center gap-4">
+                    <div id="modalAvatar" class="avatar-placeholder" style="background: #1A56A0; width: 3rem; height: 3rem; font-size: 1.1rem;">R</div>
+                    <div>
+                        <h3 class="text-xl font-bold text-gray-900" id="modalName">Müəllim adı</h3>
+                        <p class="text-sm text-gray-500" id="modalEmail">email@example.com</p>
+                    </div>
+                </div>
+                <button onclick="closeTeacherModal()" class="text-gray-400 hover:text-gray-600 transition text-2xl">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="p-6">
+                <!-- Profil məlumatları -->
+                <div class="grid grid-cols-2 gap-4 mb-6">
+                    <div class="bg-gray-50 rounded-xl p-3">
+                        <p class="text-xs text-gray-400">Telefon</p>
+                        <p class="font-medium text-gray-800" id="modalPhone">+994 50 123 45 67</p>
+                    </div>
+                    <div class="bg-gray-50 rounded-xl p-3">
+                        <p class="text-xs text-gray-400">Region</p>
+                        <p class="font-medium text-gray-800" id="modalRegion">Bakı</p>
+                    </div>
+                    <div class="bg-gray-50 rounded-xl p-3">
+                        <p class="text-xs text-gray-400">Təcrübə</p>
+                        <p class="font-medium text-gray-800" id="modalExperience">8 il</p>
+                    </div>
+                    <div class="bg-gray-50 rounded-xl p-3">
+                        <p class="text-xs text-gray-400">Dərs növü</p>
+                        <p class="font-medium text-gray-800" id="modalSessionType">1-on-1, Qrup</p>
+                    </div>
+                </div>
+
+                <div class="mb-6">
+                    <h4 class="font-semibold text-gray-800 mb-2">Bio</h4>
+                    <p class="text-sm text-gray-600" id="modalBio">Riyaziyyat müəllimiyəm. 8 ildir DİM hazırlığı üzrə dərs deyirəm.</p>
+                </div>
+
+                <div class="mb-6">
+                    <h4 class="font-semibold text-gray-800 mb-2">Fənnlər</h4>
+                    <div class="flex flex-wrap gap-2" id="modalSubjects">
+                        <span class="px-3 py-1 bg-blue-50 text-primary rounded-full text-sm">Riyaziyyat</span>
+                        <span class="px-3 py-1 bg-blue-50 text-primary rounded-full text-sm">Fizika</span>
+                    </div>
+                </div>
+
+                <!-- Email bildirişi -->
+                <div class="email-notification rounded-xl p-4 mb-6">
+                    <div class="flex items-start gap-3">
+                        <i class="fas fa-envelope text-primary mt-0.5"></i>
+                        <div>
+                            <p class="text-sm font-medium text-gray-800">Təsdiq email-i</p>
+                            <p class="text-sm text-gray-600" id="modalEmailNote">Müəllim təsdiqləndikdə avtomatik email göndəriləcək.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Əməliyyat düymələri -->
+                <div class="flex flex-wrap gap-2" id="modalActions">
+                    <button class="action-btn approve px-4 py-2 border-2 border-green-500 text-green-600 rounded-xl font-semibold text-sm hover:bg-green-50 transition" onclick="handleAction('approve')">
+                        <i class="fas fa-check mr-1"></i> Təsdiqlə
+                    </button>
+                    <button class="action-btn reject px-4 py-2 border-2 border-red-500 text-red-600 rounded-xl font-semibold text-sm hover:bg-red-50 transition" onclick="handleAction('reject')">
+                        <i class="fas fa-times mr-1"></i> Rədd et
+                    </button>
+                    <button class="action-btn suspend px-4 py-2 border-2 border-yellow-500 text-yellow-600 rounded-xl font-semibold text-sm hover:bg-yellow-50 transition" onclick="handleAction('suspend')">
+                        <i class="fas fa-pause mr-1"></i> Dayandır
+                    </button>
+                    <button class="action-btn view px-4 py-2 border-2 border-primary text-primary rounded-xl font-semibold text-sm hover:bg-blue-50 transition" onclick="handleAction('view')">
+                        <i class="fas fa-external-link-alt mr-1"></i> İctimai profil
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- FOOTER -->
+    <!-- ============================================================ -->
+    <footer class="bg-white border-t border-gray-100 py-12 mt-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6">
+            <div class="grid sm:grid-cols-2 md:grid-cols-4 gap-10 text-gray-600">
+                <div>
+                    <a href="/" class="text-2xl font-extrabold text-primary mb-4 block">EduCan</a>
+                    <p class="text-sm leading-relaxed">Azərbaycanın DİM hazırlığı üçün onlayn müəllim platforması.</p>
+                </div>
+                <div>
+                    <h4 class="font-bold text-gray-900 mb-4">Naviqasiya</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="/teachers" class="hover:text-primary transition">Müəllim tap</a></li>
+                        <li><a href="/how-it-works" class="hover:text-primary transition">Necə işləyir</a></li>
+                        <li><a href="/about" class="hover:text-primary transition">Haqqımızda</a></li>
+                        <li><a href="/contact" class="hover:text-primary transition">Əlaqə</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold text-gray-900 mb-4">Hüquqi</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="/privacy" class="hover:text-primary transition">Məxfilik Siyasəti</a></li>
+                        <li><a href="/terms" class="hover:text-primary transition">İstifadə Qaydaları</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold text-gray-900 mb-4">Sosial şəbəkələr</h4>
+                    <div class="flex gap-4 text-2xl">
+                        <a href="https://instagram.com/educan" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-primary transition" aria-label="Instagram">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="https://facebook.com/educan" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-primary transition" aria-label="Facebook">
+                            <i class="fab fa-facebook"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-12 pt-8 border-t border-gray-100 text-center text-sm text-gray-400">
+                © 2026 EduCan. Bütün hüquqlar qorunur.
+            </div>
+        </div>
+    </footer>
+
+    <!-- ============================================================ -->
+    <!-- SCRIPTS -->
+    <!-- ============================================================ -->
+    <script>
+        // ============================================================
+        //  SIDEBAR TOGGLE
+        // ============================================================
+        const sidebarToggle = document.getElementById('sidebarToggle');
+        const mobileSidebar = document.getElementById('mobileSidebar');
+        const sidebarOverlay = document.getElementById('sidebarOverlay');
+        const sidebarClose = document.getElementById('sidebarClose');
+
+        function openSidebar() {
+            mobileSidebar.classList.add('open');
+            sidebarOverlay.classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeSidebar() {
+            mobileSidebar.classList.remove('open');
+            sidebarOverlay.classList.remove('open');
+            document.body.style.overflow = '';
+        }
+
+        sidebarToggle.addEventListener('click', openSidebar);
+        sidebarClose.addEventListener('click', closeSidebar);
+        sidebarOverlay.addEventListener('click', closeSidebar);
+
+        // ============================================================
+        //  MOBILE TOP MENU
+        // ============================================================
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            const isOpen = mobileMenu.classList.toggle('open');
+            mobileMenuBtn.querySelector('i').className = isOpen ? 'fas fa-times' : 'fas fa-ellipsis-v';
+        });
+
+        // ============================================================
+        //  MƏLUMATLAR
+        // ============================================================
+        const teachersData = [
+            {
+                id: 1,
+                name: 'Rəşad Hüseynov',
+                email: 'rashad@email.com',
+                phone: '+994 50 123 45 67',
+                region: 'Bakı',
+                subjects: ['Riyaziyyat', 'Fizika'],
+                experience: '8 il',
+                sessionType: '1-on-1, Qrup',
+                bio: 'Riyaziyyat müəllimiyəm. 8 ildir DİM hazırlığı üzrə dərs deyirəm. Tələbələrimlə fərdi yanaşma ilə işləyirəm.',
+                registrationDate: '15 İyun 2026',
+                status: 'pending',
+                avatar: 'R',
+                color: '#1A56A0'
+            },
+            {
+                id: 2,
+                name: 'Leyla Quliyeva',
+                email: 'leyla@email.com',
+                phone: '+994 50 987 65 43',
+                region: 'Gəncə',
+                subjects: ['Fizika', 'Astronomiya'],
+                experience: '5 il',
+                sessionType: '1-on-1',
+                bio: 'Fizika müəllimiyəm. 5 ildir DİM hazırlığı üzrə çalışıram. Tələbələrimə mürəkkəb mövzuları sadə dildə izah etməyi bacarıram.',
+                registrationDate: '14 İyun 2026',
+                status: 'pending',
+                avatar: 'L',
+                color: '#20948B'
+            },
+            {
+                id: 3,
+                name: 'Elvin Məmmədov',
+                email: 'elvin@email.com',
+                phone: '+994 50 111 22 33',
+                region: 'Sumqayıt',
+                subjects: ['Kimya', 'Biologiya'],
+                experience: '4 il',
+                sessionType: 'Qrup',
+                bio: 'Kimya müəllimiyəm. 4 ildir tələbələrə DİM-ə hazırlaşmaqda kömək edirəm. Təcrübəli müəlliməm.',
+                registrationDate: '12 İyun 2026',
+                status: 'pending',
+                avatar: 'E',
+                color: '#8B5CF6'
+            },
+            {
+                id: 4,
+                name: 'Günay Əliyeva',
+                email: 'gunay@email.com',
+                phone: '+994 50 444 55 66',
+                region: 'Bakı',
+                subjects: ['İngilis dili'],
+                experience: '6 il',
+                sessionType: '1-on-1, Qrup',
+                bio: 'İngilis dili müəllimiyəm. 6 ildir DİM hazırlığı üzrə dərs deyirəm. Tələbələrimlə səmərəli işləyirəm.',
+                registrationDate: '10 İyun 2026',
+                status: 'approved',
+                avatar: 'G',
+                color: '#EC4899'
+            },
+            {
+                id: 5,
+                name: 'Tural Rəhimov',
+                email: 'tural@email.com',
+                phone: '+994 50 777 88 99',
+                region: 'Şəki',
+                subjects: ['Azərbaycan dili', 'Ədəbiyyat'],
+                experience: '7 il',
+                sessionType: '1-on-1',
+                bio: 'Azərbaycan dili və ədəbiyyat müəllimiyəm. 7 ildir DİM-ə hazırlıq üzrə çalışıram.',
+                registrationDate: '8 İyun 2026',
+                status: 'approved',
+                avatar: 'T',
+                color: '#F59E0B'
+            },
+            {
+                id: 6,
+                name: 'Nərgiz Səfərova',
+                email: 'nergiz@email.com',
+                phone: '+994 50 222 33 44',
+                region: 'Lənkəran',
+                subjects: ['Tarix', 'Coğrafiya'],
+                experience: '3 il',
+                sessionType: 'Qrup',
+                bio: 'Tarix müəllimiyəm. 3 ildir DİM hazırlığı üzrə dərs deyirəm.',
+                registrationDate: '5 İyun 2026',
+                status: 'approved',
+                avatar: 'N',
+                color: '#EF4444'
+            },
+            {
+                id: 7,
+                name: 'Rəşad Qasımov',
+                email: 'rashadq@email.com',
+                phone: '+994 50 555 66 77',
+                region: 'Quba',
+                subjects: ['Riyaziyyat'],
+                experience: '10 il',
+                sessionType: '1-on-1',
+                bio: '10 illik təcrübəyə malik riyaziyyat müəllimiyəm. DİM hazırlığı üzrə ixtisaslaşmışam.',
+                registrationDate: '3 İyun 2026',
+                status: 'approved',
+                avatar: 'R',
+                color: '#3B82F6'
+            },
+            {
+                id: 8,
+                name: 'Leyla Məmmədova',
+                email: 'leylam@email.com',
+                phone: '+994 50 888 99 00',
+                region: 'Mingəçevir',
+                subjects: ['Fizika', 'Riyaziyyat'],
+                experience: '4 il',
+                sessionType: '1-on-1, Qrup',
+                bio: 'Fizika və riyaziyyat müəllimiyəm. 4 ildir DİM hazırlığı üzrə dərs deyirəm.',
+                registrationDate: '1 İyun 2026',
+                status: 'approved',
+                avatar: 'L',
+                color: '#10B981'
+            },
+            {
+                id: 9,
+                name: 'Murad Vəliyev',
+                email: 'murad@email.com',
+                phone: '+994 50 000 11 22',
+                region: 'Bakı',
+                subjects: ['Kimya'],
+                experience: '2 il',
+                sessionType: 'Qrup',
+                bio: 'Kimya müəllimiyəm. 2 ildir DİM hazırlığı üzrə çalışıram.',
+                registrationDate: '28 May 2026',
+                status: 'rejected',
+                avatar: 'M',
+                color: '#6B7280'
+            },
+            {
+                id: 10,
+                name: 'Aynur Hüseynova',
+                email: 'aynurh@email.com',
+                phone: '+994 50 333 44 55',
+                region: 'Naxçıvan',
+                subjects: ['Azərbaycan dili'],
+                experience: '5 il',
+                sessionType: '1-on-1',
+                bio: 'Azərbaycan dili müəllimiyəm. 5 ildir DİM-ə hazırlıq üzrə çalışıram.',
+                registrationDate: '25 May 2026',
+                status: 'suspended',
+                avatar: 'A',
+                color: '#DC2626'
+            },
+            {
+                id: 11,
+                name: 'Cavid Məmmədov',
+                email: 'cavid@email.com',
+                phone: '+994 50 666 77 88',
+                region: 'Bakı',
+                subjects: ['Riyaziyyat'],
+                experience: '6 il',
+                sessionType: '1-on-1, Qrup',
+                bio: '6 illik təcrübəyə malik riyaziyyat müəllimiyəm.',
+                registrationDate: '20 May 2026',
+                status: 'approved',
+                avatar: 'C',
+                color: '#0891B2'
+            },
+            {
+                id: 12,
+                name: 'Səbinə Əliyeva',
+                email: 'sabina@email.com',
+                phone: '+994 50 999 00 11',
+                region: 'Gəncə',
+                subjects: ['Biologiya', 'Kimya'],
+                experience: '3 il',
+                sessionType: 'Qrup',
+                bio: 'Biologiya və kimya müəllimiyəm. 3 ildir DİM hazırlığı üzrə çalışıram.',
+                registrationDate: '18 May 2026',
+                status: 'suspended',
+                avatar: 'S',
+                color: '#7C3AED'
+            }
+        ];
+
+        // ============================================================
+        //  STATE
+        // ============================================================
+        let currentFilter = 'all';
+        let searchQuery = '';
+        let currentTeacherId = null;
+
+        // ============================================================
+        //  RENDER TEACHERS
+        // ============================================================
+        function renderTeachers(data) {
+            const container = document.getElementById('teachersTable');
+            container.innerHTML = '';
+
+            if (data.length === 0) {
+                document.getElementById('emptyState').classList.remove('hidden');
+                document.getElementById('resultCount').textContent = '0 müəllim';
+                return;
+            }
+            document.getElementById('emptyState').classList.add('hidden');
+            document.getElementById('resultCount').textContent = data.length + ' müəllim';
+
+            data.forEach(teacher => {
+                const row = document.createElement('tr');
+                row.className = 'teacher-row';
+                row.dataset.id = teacher.id;
+                row.onclick = () => openTeacherModal(teacher.id);
+
+                const statusMap = {
+                    pending: { class: 'pending', text: 'Gözləyir' },
+                    approved: { class: 'approved', text: 'Təsdiqlənib' },
+                    rejected: { class: 'rejected', text: 'Rədd edilib' },
+                    suspended: { class: 'suspended', text: 'Dayandırılıb' }
+                };
+                const status = statusMap[teacher.status] || statusMap.pending;
+
+                row.innerHTML = `
+                    <td class="px-4 sm:px-6 py-4">
+                        <div class="flex items-center gap-3">
+                            <div class="avatar-placeholder" style="background: ${teacher.color}; width: 2.5rem; height: 2.5rem; font-size: 0.9rem;">
+                                ${teacher.avatar}
+                            </div>
+                            <div>
+                                <div class="font-semibold text-gray-900">${teacher.name}</div>
+                                <div class="text-xs text-gray-400">${teacher.email}</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="px-4 sm:px-6 py-4 hidden sm:table-cell">
+                        <div class="flex flex-wrap gap-1">
+                            ${teacher.subjects.map(s => `<span class="text-xs bg-blue-50 text-primary px-2 py-0.5 rounded-full">${s}</span>`).join('')}
+                        </div>
+                    </td>
+                    <td class="px-4 sm:px-6 py-4 hidden md:table-cell text-sm text-gray-500">
+                        ${teacher.registrationDate}
+                    </td>
+                    <td class="px-4 sm:px-6 py-4 text-center">
+                        <span class="status-badge ${status.class}">${status.text}</span>
+                    </td>
+                    <td class="px-4 sm:px-6 py-4 text-center">
+                        <div class="flex items-center justify-center gap-1 flex-wrap" onclick="event.stopPropagation()">
+                            ${teacher.status === 'pending' ? `
+                                <button class="action-btn approve text-xs px-2 py-1 border border-green-400 text-green-600 rounded-lg hover:bg-green-50 transition" onclick="handleActionFromRow('approve', ${teacher.id})" title="Təsdiqlə">
+                                    <i class="fas fa-check"></i>
+                                </button>
+                                <button class="action-btn reject text-xs px-2 py-1 border border-red-400 text-red-600 rounded-lg hover:bg-red-50 transition" onclick="handleActionFromRow('reject', ${teacher.id})" title="Rədd et">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            ` : ''}
+                            ${teacher.status === 'approved' ? `
+                                <button class="action-btn suspend text-xs px-2 py-1 border border-yellow-400 text-yellow-600 rounded-lg hover:bg-yellow-50 transition" onclick="handleActionFromRow('suspend', ${teacher.id})" title="Dayandır">
+                                    <i class="fas fa-pause"></i>
+                                </button>
+                            ` : ''}
+                            ${teacher.status === 'suspended' ? `
+                                <button class="action-btn approve text-xs px-2 py-1 border border-green-400 text-green-600 rounded-lg hover:bg-green-50 transition" onclick="handleActionFromRow('approve', ${teacher.id})" title="Bərpa et">
+                                    <i class="fas fa-undo"></i>
+                                </button>
+                            ` : ''}
+                            <button class="action-btn view text-xs px-2 py-1 border border-primary text-primary rounded-lg hover:bg-blue-50 transition" onclick="handleActionFromRow('view', ${teacher.id})" title="Profilə bax">
+                                <i class="fas fa-external-link-alt"></i>
+                            </button>
+                        </div>
+                    </td>
+                `;
+
+                container.appendChild(row);
+            });
+
+            // Statistikaları yenilə
+            updateStats();
+        }
+
+        // ============================================================
+        //  STATİSTİKALAR
+        // ============================================================
+        function updateStats() {
+            const total = teachersData.length;
+            const pending = teachersData.filter(t => t.status === 'pending').length;
+            const approved = teachersData.filter(t => t.status === 'approved').length;
+            const suspended = teachersData.filter(t => t.status === 'suspended' || t.status === 'rejected').length;
+
+            document.getElementById('totalTeachers').textContent = total;
+            document.getElementById('pendingTeachers').textContent = pending;
+            document.getElementById('approvedTeachers').textContent = approved;
+            document.getElementById('suspendedTeachers').textContent = suspended;
+        }
+
+        // ============================================================
+        //  FILTERS & SEARCH
+        // ============================================================
+        function setFilter(filter) {
+            currentFilter = filter;
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active', 'bg-primary', 'text-white');
+                btn.classList.add('bg-gray-100', 'text-gray-700');
+                if (btn.dataset.filter === filter) {
+                    btn.classList.add('active', 'bg-primary', 'text-white');
+                    btn.classList.remove('bg-gray-100', 'text-gray-700');
+                }
+            });
+            filterTeachers();
+        }
+
+        function filterTeachers() {
+            searchQuery = document.getElementById('searchInput').value.toLowerCase().trim();
+
+            let filtered = [...teachersData];
+
+            if (currentFilter !== 'all') {
+                filtered = filtered.filter(t => t.status === currentFilter);
+            }
+
+            if (searchQuery) {
+                filtered = filtered.filter(t => 
+                    t.name.toLowerCase().includes(searchQuery) ||
+                    t.email.toLowerCase().includes(searchQuery) ||
+                    t.subjects.some(s => s.toLowerCase().includes(searchQuery))
+                );
+            }
+
+            renderTeachers(filtered);
+        }
+
+        // ============================================================
+        //  TEACHER MODAL
+        // ============================================================
+        const teacherModal = document.getElementById('teacherModal');
+
+        function openTeacherModal(id) {
+            const teacher = teachersData.find(t => t.id === id);
+            if (!teacher) return;
+
+            currentTeacherId = id;
+
+            document.getElementById('modalAvatar').textContent = teacher.avatar;
+            document.getElementById('modalAvatar').style.background = teacher.color;
+            document.getElementById('modalName').textContent = teacher.name;
+            document.getElementById('modalEmail').textContent = teacher.email;
+            document.getElementById('modalPhone').textContent = teacher.phone;
+            document.getElementById('modalRegion').textContent = teacher.region;
+            document.getElementById('modalExperience').textContent = teacher.experience;
+            document.getElementById('modalSessionType').textContent = teacher.sessionType;
+            document.getElementById('modalBio').textContent = teacher.bio;
+
+            // Fənnlər
+            const subjectsContainer = document.getElementById('modalSubjects');
+            subjectsContainer.innerHTML = teacher.subjects.map(s => 
+                `<span class="px-3 py-1 bg-blue-50 text-primary rounded-full text-sm">${s}</span>`
+            ).join('');
+
+            // Email qeydi
+            const emailNote = document.getElementById('modalEmailNote');
+            if (teacher.status === 'pending') {
+                emailNote.textContent = 'Müəllim təsdiqləndikdə avtomatik email göndəriləcək.';
+                emailNote.className = 'text-sm text-gray-600';
+            } else if (teacher.status === 'approved') {
+                emailNote.textContent = '✅ Təsdiq email-i artıq göndərilib.';
+                emailNote.className = 'text-sm text-green-600';
+            } else {
+                emailNote.textContent = 'Müəllim hələ təsdiqlənməyib.';
+                emailNote.className = 'text-sm text-gray-600';
+            }
+
+            // Əməliyyat düymələrini yenilə
+            const actionsContainer = document.getElementById('modalActions');
+            actionsContainer.innerHTML = '';
+            
+            if (teacher.status === 'pending') {
+                actionsContainer.innerHTML = `
+                    <button class="action-btn approve px-4 py-2 border-2 border-green-500 text-green-600 rounded-xl font-semibold text-sm hover:bg-green-50 transition" onclick="handleAction('approve')">
+                        <i class="fas fa-check mr-1"></i> Təsdiqlə
+                    </button>
+                    <button class="action-btn reject px-4 py-2 border-2 border-red-500 text-red-600 rounded-xl font-semibold text-sm hover:bg-red-50 transition" onclick="handleAction('reject')">
+                        <i class="fas fa-times mr-1"></i> Rədd et
+                    </button>
+                    <button class="action-btn view px-4 py-2 border-2 border-primary text-primary rounded-xl font-semibold text-sm hover:bg-blue-50 transition" onclick="handleAction('view')">
+                        <i class="fas fa-external-link-alt mr-1"></i> İctimai profil
+                    </button>
+                `;
+            } else if (teacher.status === 'approved') {
+                actionsContainer.innerHTML = `
+                    <button class="action-btn suspend px-4 py-2 border-2 border-yellow-500 text-yellow-600 rounded-xl font-semibold text-sm hover:bg-yellow-50 transition" onclick="handleAction('suspend')">
+                        <i class="fas fa-pause mr-1"></i> Dayandır
+                    </button>
+                    <button class="action-btn view px-4 py-2 border-2 border-primary text-primary rounded-xl font-semibold text-sm hover:bg-blue-50 transition" onclick="handleAction('view')">
+                        <i class="fas fa-external-link-alt mr-1"></i> İctimai profil
+                    </button>
+                `;
+            } else if (teacher.status === 'suspended') {
+                actionsContainer.innerHTML = `
+                    <button class="action-btn approve px-4 py-2 border-2 border-green-500 text-green-600 rounded-xl font-semibold text-sm hover:bg-green-50 transition" onclick="handleAction('approve')">
+                        <i class="fas fa-undo mr-1"></i> Bərpa et
+                    </button>
+                    <button class="action-btn view px-4 py-2 border-2 border-primary text-primary rounded-xl font-semibold text-sm hover:bg-blue-50 transition" onclick="handleAction('view')">
+                        <i class="fas fa-external-link-alt mr-1"></i> İctimai profil
+                    </button>
+                `;
+            } else {
+                actionsContainer.innerHTML = `
+                    <button class="action-btn view px-4 py-2 border-2 border-primary text-primary rounded-xl font-semibold text-sm hover:bg-blue-50 transition" onclick="handleAction('view')">
+                        <i class="fas fa-external-link-alt mr-1"></i> İctimai profil
+                    </button>
+                `;
+            }
+
+            teacherModal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeTeacherModal() {
+            teacherModal.classList.add('hidden');
+            document.body.style.overflow = '';
+            currentTeacherId = null;
+        }
+
+        // Escape ilə bağla
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && !teacherModal.classList.contains('hidden')) {
+                closeTeacherModal();
+            }
+        });
+
+        // Modal xaricində klik
+        teacherModal.addEventListener('click', (e) => {
+            if (e.target === teacherModal) closeTeacherModal();
+        });
+
+        // ============================================================
+        //  ACTIONS
+        // ============================================================
+        function handleActionFromRow(action, id) {
+            const teacher = teachersData.find(t => t.id === id);
+            if (!teacher) return;
+            currentTeacherId = id;
+            executeAction(action, teacher);
+        }
+
+        function handleAction(action) {
+            const teacher = teachersData.find(t => t.id === currentTeacherId);
+            if (!teacher) return;
+            executeAction(action, teacher);
+        }
+
+        function executeAction(action, teacher) {
+            const statusMap = {
+                approve: { status: 'approved', message: `${teacher.name} təsdiqləndi! Email göndərildi.`, icon: '✅', color: 'green' },
+                reject: { status: 'rejected', message: `${teacher.name} rədd edildi.`, icon: '❌', color: 'red' },
+                suspend: { status: 'suspended', message: `${teacher.name} dayandırıldı.`, icon: '⏸️', color: 'yellow' },
+                view: { status: null, message: `İctimai profil açılır: ${teacher.name}`, icon: '👤', color: 'blue' }
+            };
+
+            if (action === 'view') {
+                alert(`👤 ${teacher.name} - İctimai profil\n\nhttps://educan.az/teachers/${teacher.id}`);
+                return;
+            }
+
+            const result = statusMap[action];
+            if (!result) return;
+
+            // Statusu yenilə
+            const oldStatus = teacher.status;
+            teacher.status = result.status;
+
+            // Toast mesajı
+            const toast = document.getElementById('successToast');
+            const toastMessage = document.getElementById('toastMessage');
+            toastMessage.textContent = result.message;
+            toast.className = `bg-${result.color}-50 border border-${result.color}-200 rounded-xl px-4 py-3 text-${result.color}-700 flex items-center gap-3 success-toast`;
+            toast.classList.remove('hidden');
+            
+            // Email göndərmə simulyasiyası (təsdiq üçün)
+            if (action === 'approve') {
+                console.log(`📧 Email göndərildi: ${teacher.email}`);
+                console.log(`   Mövzu: EduCan - Müəllimlik təsdiqlənməsi`);
+                console.log(`   Mesaj: Hörmətli ${teacher.name}, profiliniz təsdiqləndi!`);
+            }
+
+            setTimeout(() => {
+                toast.classList.add('hidden');
+            }, 4000);
+
+            // Cədvəli yenilə
+            filterTeachers();
+
+            // Modalı bağla (əgər açıqdırsa)
+            if (!teacherModal.classList.contains('hidden')) {
+                closeTeacherModal();
+            }
+
+            console.log(`👨‍🏫 ${result.icon} ${result.message}`);
+        }
+
+        // ============================================================
+        //  SIDEBAR ACTIVE STATE
+        // ============================================================
+        document.querySelectorAll('.sidebar-item').forEach(item => {
+            item.addEventListener('click', function(e) {
+                document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // ============================================================
+        //  INIT
+        // ============================================================
+        renderTeachers(teachersData);
+
+        console.log('👨‍🏫 Müəllimləri İdarə Et səhifəsi yükləndi');
+        console.log(`   Ümumi müəllim: ${teachersData.length}`);
+        console.log(`   Gözləyən: ${teachersData.filter(t => t.status === 'pending').length}`);
+        console.log(`   Təsdiqlənib: ${teachersData.filter(t => t.status === 'approved').length}`);
+        console.log(`   Dayandırılıb: ${teachersData.filter(t => t.status === 'suspended' || t.status === 'rejected').length}`);
+    </script>
+</body>
+</html>

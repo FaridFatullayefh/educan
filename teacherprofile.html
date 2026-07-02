@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profil Redaktoru | EduCan</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: { primary: '#1A56A0', accent: '#20948B' }
+                }
+            }
+        }
+    </script>
+    <style>
+        #mobile-menu { display: none; }
+        #mobile-menu.open { display: block; }
+        .sidebar-item {
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+        .sidebar-item:hover {
+            background: #EFF6FF;
+            color: #1A56A0;
+        }
+        .sidebar-item.active {
+            background: #1A56A0;
+            color: white;
+        }
+        .sidebar-item i {
+            width: 1.5rem;
+            text-align: center;
+        }
+        .profile-photo-wrapper {
+            position: relative;
+            display: inline-block;
+        }
+        .profile-photo-wrapper .upload-overlay {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            background: #1A56A0;
+            color: white;
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 3px solid white;
+        }
+        .profile-photo-wrapper .upload-overlay:hover {
+            transform: scale(1.1);
+            background: #1A4A8A;
+        }
+        .settings-input {
+            transition: all 0.3s ease;
+        }
+        .settings-input:focus {
+            box-shadow: 0 0 0 3px rgba(26, 86, 160, 0.15);
+            border-color: #1A56A0;
+        }
+        .settings-input.error {
+            border-color: #EF4444;
+            box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15);
+        }
+        .settings-input.success {
+            border-color: #10B981;
+            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.15);
+        }
+        .toggle-switch {
+            position: relative;
+            width: 3.5rem;
+            height: 2rem;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        .toggle-slider {
+            position: absolute;
+            inset: 0;
+            background: #D1D5DB;
+            border-radius: 999px;
+            transition: all 0.3s ease;
+        }
+        .toggle-slider::before {
+            content: '';
+            position: absolute;
+            height: 1.5rem;
+            width: 1.5rem;
+            left: 0.25rem;
+            bottom: 0.25rem;
+            background: white;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        .toggle-switch input:checked + .toggle-slider {
+            background: #1A56A0;
+        }
+        .toggle-switch input:checked + .toggle-slider::before {
+            transform: translateX(1.5rem);
+        }
+        .sidebar-mobile {
+            position: fixed;
+            top: 0;
+            left: -280px;
+            width: 280px;
+            height: 100vh;
+            background: white;
+            z-index: 1000;
+            transition: left 0.3s ease;
+            box-shadow: 2px 0 20px rgba(0,0,0,0.1);
+            overflow-y: auto;
+        }
+        .sidebar-mobile.open {
+            left: 0;
+        }
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.4);
+            z-index: 999;
+            display: none;
+        }
+        .overlay.open {
+            display: block;
+        }
+        .sidebar-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            font-size: 1.5rem;
+            color: #6B7280;
+            cursor: pointer;
+        }
+        .sidebar-close:hover {
+            color: #1A56A0;
+        }
+        .subject-tag {
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+        .subject-tag:hover {
+            transform: scale(1.02);
+        }
+        .subject-tag.selected {
+            background: #1A56A0;
+            color: white;
+            border-color: #1A56A0;
+        }
+        .subject-tag.selected:hover {
+            background: #1A4A8A;
+        }
+        .status-badge {
+            font-size: 0.7rem;
+            padding: 0.25rem 0.8rem;
+            border-radius: 999px;
+            font-weight: 600;
+        }
+        .status-badge.approved { background: #D1FAE5; color: #065F46; }
+        .status-badge.pending { background: #FEF3C7; color: #92400E; }
+        .status-badge.rejected { background: #FEE2E2; color: #991B1B; }
+        .success-toast {
+            animation: slideDown 0.4s ease;
+        }
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .char-count {
+            transition: all 0.3s ease;
+        }
+        .char-count.warning { color: #F59E0B; }
+        .char-count.danger { color: #EF4444; }
+        .video-preview {
+            transition: all 0.3s ease;
+        }
+        .video-preview:hover {
+            transform: scale(1.02);
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-900 font-sans">
+
+    <!-- ============================================================ -->
+    <!-- MOBILE SIDEBAR OVERLAY -->
+    <!-- ============================================================ -->
+    <div class="overlay" id="sidebarOverlay"></div>
+
+    <!-- ============================================================ -->
+    <!-- MOBILE SIDEBAR -->
+    <!-- ============================================================ -->
+    <div class="sidebar-mobile" id="mobileSidebar">
+        <div class="p-6">
+            <span class="sidebar-close" id="sidebarClose"><i class="fas fa-times"></i></span>
+            <div class="flex items-center gap-3 mb-8 mt-2">
+                <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=80&h=80&fit=crop&crop=face&auto=format&q=80" alt="Müəllim" class="w-12 h-12 rounded-full object-cover border-2 border-primary">
+                <div>
+                    <div class="font-bold text-gray-900">Rəşad Hüseynov</div>
+                    <div class="text-sm text-gray-500">Müəllim</div>
+                </div>
+            </div>
+            <nav class="space-y-1">
+                <a href="/teacher/dashboard" class="flex items-center gap-3 px-4 py-3 rounded-xl sidebar-item">
+                    <i class="fas fa-th-large"></i> Dashboard
+                </a>
+                <a href="/teacher/profile" class="flex items-center gap-3 px-4 py-3 rounded-xl sidebar-item active">
+                    <i class="fas fa-user"></i> Profilim
+                </a>
+                <a href="/teacher/schedule" class="flex items-center gap-3 px-4 py-3 rounded-xl sidebar-item">
+                    <i class="fas fa-calendar-alt"></i> Cədvəlim
+                </a>
+                <a href="/teacher/students" class="flex items-center gap-3 px-4 py-3 rounded-xl sidebar-item">
+                    <i class="fas fa-user-graduate"></i> Tələbələrim
+                </a>
+                <a href="/teacher/lessons" class="flex items-center gap-3 px-4 py-3 rounded-xl sidebar-item">
+                    <i class="fas fa-calendar-check"></i> Dərslərim
+                </a>
+                <a href="/teacher/recordings" class="flex items-center gap-3 px-4 py-3 rounded-xl sidebar-item">
+                    <i class="fas fa-video"></i> Yazılarım
+                </a>
+                <a href="/teacher/earnings" class="flex items-center gap-3 px-4 py-3 rounded-xl sidebar-item">
+                    <i class="fas fa-money-bill-wave"></i> Qazanc
+                </a>
+                <a href="/teacher/settings" class="flex items-center gap-3 px-4 py-3 rounded-xl sidebar-item">
+                    <i class="fas fa-cog"></i> Parametrlər
+                </a>
+                <div class="border-t border-gray-100 my-3"></div>
+                <a href="/logout" class="flex items-center gap-3 px-4 py-3 rounded-xl sidebar-item text-red-500 hover:bg-red-50">
+                    <i class="fas fa-sign-out-alt"></i> Çıxış
+                </a>
+            </nav>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- HEADER -->
+    <!-- ============================================================ -->
+    <header class="sticky top-0 bg-white/95 backdrop-blur-sm z-50 border-b border-gray-100 shadow-sm">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex justify-between items-center">
+            <div class="flex items-center gap-4">
+                <button id="sidebarToggle" class="lg:hidden text-2xl text-gray-600 hover:text-primary transition p-2" aria-label="Sidebar">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <a href="/teacher/dashboard" class="text-2xl sm:text-3xl font-extrabold text-primary tracking-tighter">EduCan</a>
+            </div>
+
+            <div class="flex items-center gap-4">
+                <span class="hidden sm:inline text-sm text-gray-600">
+                    <i class="fas fa-user-circle text-primary text-xl mr-1"></i>
+                    Rəşad Hüseynov
+                </span>
+                <a href="/logout" class="text-gray-500 hover:text-red-500 transition text-sm font-medium hidden sm:inline">
+                    <i class="fas fa-sign-out-alt"></i> Çıxış
+                </a>
+                <button class="lg:hidden text-2xl text-gray-600 hover:text-primary transition" id="mobileMenuBtn">
+                    <i class="fas fa-ellipsis-v"></i>
+                </button>
+            </div>
+        </nav>
+
+        <div id="mobile-menu" class="lg:hidden border-t border-gray-100 bg-white px-4 pb-4">
+            <div class="flex flex-wrap gap-2 pt-3">
+                <a href="/teacher/dashboard" class="text-sm px-3 py-1.5 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition">Dashboard</a>
+                <a href="/teacher/profile" class="text-sm px-3 py-1.5 bg-primary text-white rounded-lg font-medium">Profilim</a>
+                <a href="/teacher/schedule" class="text-sm px-3 py-1.5 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition">Cədvəlim</a>
+                <a href="/teacher/students" class="text-sm px-3 py-1.5 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition">Tələbələrim</a>
+                <a href="/teacher/lessons" class="text-sm px-3 py-1.5 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition">Dərslərim</a>
+                <a href="/teacher/recordings" class="text-sm px-3 py-1.5 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition">Yazılarım</a>
+                <a href="/teacher/earnings" class="text-sm px-3 py-1.5 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition">Qazanc</a>
+                <a href="/teacher/settings" class="text-sm px-3 py-1.5 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition">Parametrlər</a>
+                <a href="/logout" class="text-sm px-3 py-1.5 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition">Çıxış</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- ============================================================ -->
+    <!-- MAIN CONTENT -->
+    <!-- ============================================================ -->
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 py-8">
+        <div class="flex flex-col lg:flex-row gap-8">
+            
+            <!-- ========================================================== -->
+            <!-- SIDEBAR (Desktop) -->
+            <!-- ========================================================== -->
+            <aside class="hidden lg:block w-64 flex-shrink-0">
+                <div class="bg-white rounded-2xl border border-gray-100 p-4 sticky top-24">
+                    <div class="flex items-center gap-3 mb-6 p-2">
+                        <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=80&h=80&fit=crop&crop=face&auto=format&q=80" alt="Müəllim" class="w-14 h-14 rounded-full object-cover border-2 border-primary">
+                        <div>
+                            <div class="font-bold text-gray-900">Rəşad Hüseynov</div>
+                            <div class="text-sm text-gray-500">Müəllim</div>
+                        </div>
+                    </div>
+                    <nav class="space-y-1">
+                        <a href="/teacher/dashboard" class="flex items-center gap-3 px-4 py-3 rounded-xl sidebar-item">
+                            <i class="fas fa-th-large"></i> Dashboard
+                        </a>
+                        <a href="/teacher/profile" class="flex items-center gap-3 px-4 py-3 rounded-xl sidebar-item active">
+                            <i class="fas fa-user"></i> Profilim
+                        </a>
+                        <a href="/teacher/schedule" class="flex items-center gap-3 px-4 py-3 rounded-xl sidebar-item">
+                            <i class="fas fa-calendar-alt"></i> Cədvəlim
+                        </a>
+                        <a href="/teacher/students" class="flex items-center gap-3 px-4 py-3 rounded-xl sidebar-item">
+                            <i class="fas fa-user-graduate"></i> Tələbələrim
+                        </a>
+                        <a href="/teacher/lessons" class="flex items-center gap-3 px-4 py-3 rounded-xl sidebar-item">
+                            <i class="fas fa-calendar-check"></i> Dərslərim
+                        </a>
+                        <a href="/teacher/recordings" class="flex items-center gap-3 px-4 py-3 rounded-xl sidebar-item">
+                            <i class="fas fa-video"></i> Yazılarım
+                        </a>
+                        <a href="/teacher/earnings" class="flex items-center gap-3 px-4 py-3 rounded-xl sidebar-item">
+                            <i class="fas fa-money-bill-wave"></i> Qazanc
+                        </a>
+                        <a href="/teacher/settings" class="flex items-center gap-3 px-4 py-3 rounded-xl sidebar-item">
+                            <i class="fas fa-cog"></i> Parametrlər
+                        </a>
+                        <div class="border-t border-gray-100 my-3"></div>
+                        <a href="/logout" class="flex items-center gap-3 px-4 py-3 rounded-xl sidebar-item text-red-500 hover:bg-red-50">
+                            <i class="fas fa-sign-out-alt"></i> Çıxış
+                        </a>
+                    </nav>
+                </div>
+            </aside>
+
+            <!-- ========================================================== -->
+            <!-- PROFILE EDITOR CONTENT -->
+            <!-- ========================================================== -->
+            <main class="flex-1 space-y-6">
+                
+                <!-- Başlıq -->
+                <div>
+                    <div class="flex items-center justify-between flex-wrap gap-2">
+                        <div>
+                            <h1 class="text-2xl font-extrabold text-gray-900">Profil Redaktoru</h1>
+                            <p class="text-gray-500 text-sm mt-1">Profilinizi yeniləyin və tələbələrə özünüzü tanıdın</p>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-sm text-gray-500">Status:</span>
+                            <span class="status-badge approved"><i class="fas fa-check-circle mr-1"></i>Təsdiqlənib</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Uğur mesajı (toast) -->
+                <div id="successToast" class="hidden bg-green-50 border border-green-200 rounded-xl px-4 py-3 text-green-700 flex items-center gap-3 success-toast">
+                    <i class="fas fa-check-circle text-green-500"></i>
+                    <span>Profil uğurla yeniləndi!</span>
+                </div>
+
+                <form id="profileForm" class="space-y-6">
+                    
+                    <!-- ==================================================== -->
+                    <!-- PROFİL ŞƏKİLİ -->
+                    <!-- ==================================================== -->
+                    <div class="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
+                        <h2 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
+                            <i class="fas fa-camera text-primary"></i> Profil şəkli
+                        </h2>
+                        <div class="flex flex-col sm:flex-row items-center gap-6">
+                            <div class="profile-photo-wrapper">
+                                <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=150&h=150&fit=crop&crop=face&auto=format&q=80" alt="Profil şəkli" class="w-28 h-28 rounded-full object-cover border-4 border-primary">
+                                <label for="profilePhoto" class="upload-overlay" title="Şəkli dəyiş">
+                                    <i class="fas fa-camera text-sm"></i>
+                                </label>
+                                <input type="file" id="profilePhoto" accept="image/*" class="hidden">
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-600">PNG, JPG formatı</p>
+                                <p class="text-xs text-gray-400">Minimum 400x400px, maksimum 5MB</p>
+                                <button type="button" id="removePhotoBtn" class="text-sm text-red-500 hover:text-red-700 transition font-medium mt-1">Şəkli sil</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ==================================================== -->
+                    <!-- ŞƏXSİ MƏLUMATLAR -->
+                    <!-- ==================================================== -->
+                    <div class="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
+                        <h2 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
+                            <i class="fas fa-user text-primary"></i> Şəxsi məlumatlar
+                        </h2>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1.5">Ad Soyad <span class="text-xs text-gray-400">(dəyişmək üçün admin ilə əlaqə saxlayın)</span></label>
+                                <input type="text" value="Rəşad Hüseynov" class="w-full p-3 border border-gray-200 rounded-xl bg-gray-100 text-gray-500 cursor-not-allowed" disabled>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1.5">Bio / Haqqımda <span class="text-red-500">*</span></label>
+                                <textarea id="bio" maxlength="500" placeholder="Özünüz, təcrübəniz və tədris metodunuz haqqında..." class="settings-input w-full p-4 border border-gray-200 rounded-xl h-32 focus:ring-2 focus:ring-primary outline-none text-sm resize-none">Riyaziyyat müəllimiyəm. 8 ildir DİM hazırlığı üzrə dərs deyirəm. Tələbələrimlə fərdi yanaşma ilə işləyirəm və hər birinin potensialını açmağa çalışıram.</textarea>
+                                <div class="flex justify-between text-xs mt-1">
+                                    <span class="text-gray-400">Maksimum 500 simvol</span>
+                                    <span id="bioCount" class="char-count">147 / 500</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ==================================================== -->
+                    <!-- PEŞƏKAR MƏLUMATLAR -->
+                    <!-- ==================================================== -->
+                    <div class="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
+                        <h2 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
+                            <i class="fas fa-briefcase text-primary"></i> Peşəkar məlumatlar
+                        </h2>
+                        <div class="grid md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1.5">Tədris etdiyi fənnlər <span class="text-red-500">*</span></label>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="subject-tag selected px-4 py-1.5 border-2 border-primary rounded-full text-sm font-medium bg-primary text-white" data-subject="Riyaziyyat" onclick="toggleSubject(this)">Riyaziyyat</span>
+                                    <span class="subject-tag px-4 py-1.5 border-2 border-gray-200 rounded-full text-sm font-medium text-gray-700 hover:border-primary" data-subject="Fizika" onclick="toggleSubject(this)">Fizika</span>
+                                    <span class="subject-tag px-4 py-1.5 border-2 border-gray-200 rounded-full text-sm font-medium text-gray-700 hover:border-primary" data-subject="Kimya" onclick="toggleSubject(this)">Kimya</span>
+                                    <span class="subject-tag px-4 py-1.5 border-2 border-gray-200 rounded-full text-sm font-medium text-gray-700 hover:border-primary" data-subject="İngilis dili" onclick="toggleSubject(this)">İngilis dili</span>
+                                    <span class="subject-tag px-4 py-1.5 border-2 border-gray-200 rounded-full text-sm font-medium text-gray-700 hover:border-primary" data-subject="Azərbaycan dili" onclick="toggleSubject(this)">Azərbaycan dili</span>
+                                    <span class="subject-tag px-4 py-1.5 border-2 border-gray-200 rounded-full text-sm font-medium text-gray-700 hover:border-primary" data-subject="Tarix" onclick="toggleSubject(this)">Tarix</span>
+                                    <span class="subject-tag px-4 py-1.5 border-2 border-gray-200 rounded-full text-sm font-medium text-gray-700 hover:border-primary" data-subject="Coğrafiya" onclick="toggleSubject(this)">Coğrafiya</span>
+                                    <span class="subject-tag px-4 py-1.5 border-2 border-gray-200 rounded-full text-sm font-medium text-gray-700 hover:border-primary" data-subject="Biologiya" onclick="toggleSubject(this)">Biologiya</span>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1.5">Təhsil</label>
+                                <input type="text" id="education" value="Bakı Dövlət Universiteti, Riyaziyyat fakültəsi" placeholder="Təhsil müəssisəsi və ixtisas" class="settings-input w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1.5">Tədris təcrübəsi (il) <span class="text-red-500">*</span></label>
+                                <select id="experience" class="settings-input w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary outline-none bg-white">
+                                    <option value="1">1 il</option>
+                                    <option value="2">2 il</option>
+                                    <option value="3">3 il</option>
+                                    <option value="4">4 il</option>
+                                    <option value="5">5 il</option>
+                                    <option value="6">6 il</option>
+                                    <option value="7">7 il</option>
+                                    <option value="8" selected>8 il</option>
+                                    <option value="9">9 il</option>
+                                    <option value="10">10+ il</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ==================================================== -->
+                    <!-- DƏRS NÖVLƏRİ -->
+                    <!-- ==================================================== -->
+                    <div class="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
+                        <h2 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
+                            <i class="fas fa-users text-primary"></i> Dərs növləri
+                        </h2>
+                        <div class="space-y-4">
+                            <div class="flex items-center justify-between py-2 border-b border-gray-100">
+                                <div>
+                                    <p class="font-medium text-gray-800">1-on-1 dərslər</p>
+                                    <p class="text-sm text-gray-500">Fərdi dərslər</p>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="oneOnOne" checked>
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                            <div class="flex items-center justify-between py-2">
+                                <div>
+                                    <p class="font-medium text-gray-800">Qrup dərsləri</p>
+                                    <p class="text-sm text-gray-500">Qrup dərsləri təklif edin</p>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="groupLessons">
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                            <div id="groupSettings" class="hidden pt-2 border-t border-gray-100">
+                                <label class="block text-sm font-medium text-gray-700 mb-1.5">Qrupda maksimum tələbə sayı</label>
+                                <select id="maxStudents" class="settings-input w-48 p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary outline-none bg-white">
+                                    <option value="2">2 tələbə</option>
+                                    <option value="3">3 tələbə</option>
+                                    <option value="4">4 tələbə</option>
+                                    <option value="5" selected>5 tələbə</option>
+                                    <option value="6">6 tələbə</option>
+                                    <option value="8">8 tələbə</option>
+                                    <option value="10">10 tələbə</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ==================================================== -->
+                    <!-- TƏQDİMAT VİDEOSU -->
+                    <!-- ==================================================== -->
+                    <div class="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
+                        <h2 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
+                            <i class="fas fa-video text-primary"></i> Təqdimat videosu
+                        </h2>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1.5">YouTube linki</label>
+                                <input type="url" id="videoLink" value="https://www.youtube.com/watch?v=dQw4w9WgXcQ" placeholder="https://www.youtube.com/watch?v=..." class="settings-input w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary outline-none">
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <div class="flex-1 border-t border-gray-200"></div>
+                                <span class="text-xs text-gray-400">və ya</span>
+                                <div class="flex-1 border-t border-gray-200"></div>
+                            </div>
+                            <div class="border-2 border-dashed border-gray-300 rounded-xl p-6 text-center hover:border-primary transition cursor-pointer" id="videoDrop">
+                                <i class="fas fa-cloud-upload-alt text-3xl text-gray-400 mb-2"></i>
+                                <p class="text-gray-600 font-medium">Video faylı yüklə</p>
+                                <p class="text-sm text-gray-400">MP4 (maksimum 100MB)</p>
+                                <input type="file" id="videoFile" accept="video/*" class="hidden">
+                            </div>
+                            <div id="videoPreview" class="hidden mt-3">
+                                <div class="video-preview bg-gray-100 rounded-xl p-4 flex items-center gap-4">
+                                    <i class="fas fa-file-video text-3xl text-primary"></i>
+                                    <div class="flex-1">
+                                        <p class="font-medium text-gray-800" id="videoFileName">video.mp4</p>
+                                        <p class="text-sm text-gray-400" id="videoFileSize">45 MB</p>
+                                    </div>
+                                    <button type="button" id="removeVideoBtn" class="text-red-500 hover:text-red-700 transition">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ==================================================== -->
+                    <!-- SAVE BUTTON -->
+                    <!-- ==================================================== -->
+                    <div class="flex flex-col sm:flex-row gap-3 justify-end">
+                        <button type="button" onclick="resetForm()" class="px-8 py-3 border border-gray-300 text-gray-700 rounded-xl font-semibold hover:bg-gray-50 transition">
+                            Ləğv et
+                        </button>
+                        <button type="submit" id="saveBtn" class="bg-primary text-white px-10 py-3.5 rounded-xl font-bold hover:bg-blue-800 transition shadow-lg shadow-primary/20 flex items-center justify-center gap-2">
+                            <i class="fas fa-save"></i> Profili yadda saxla
+                        </button>
+                    </div>
+
+                    <!-- Profil dəyişiklikləri haqqında qeyd -->
+                    <div class="bg-blue-50 border border-blue-200 rounded-xl p-4">
+                        <p class="text-sm text-blue-800 flex items-start gap-2">
+                            <i class="fas fa-info-circle mt-0.5"></i>
+                            <span><strong>Qeyd:</strong> Fənn dəyişiklikləri admin tərəfindən yenidən təsdiqlənməlidir. Bio, şəkil və video kimi kiçik dəyişikliklər avtomatik təsdiqlənir.</span>
+                        </p>
+                    </div>
+
+                </form>
+
+            </main>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- FOOTER -->
+    <!-- ============================================================ -->
+    <footer class="bg-white border-t border-gray-100 py-12 mt-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6">
+            <div class="grid sm:grid-cols-2 md:grid-cols-4 gap-10 text-gray-600">
+                <div>
+                    <a href="/" class="text-2xl font-extrabold text-primary mb-4 block">EduCan</a>
+                    <p class="text-sm leading-relaxed">Azərbaycanın DİM hazırlığı üçün onlayn müəllim platforması.</p>
+                </div>
+                <div>
+                    <h4 class="font-bold text-gray-900 mb-4">Naviqasiya</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="/teachers" class="hover:text-primary transition">Müəllim tap</a></li>
+                        <li><a href="/how-it-works" class="hover:text-primary transition">Necə işləyir</a></li>
+                        <li><a href="/about" class="hover:text-primary transition">Haqqımızda</a></li>
+                        <li><a href="/contact" class="hover:text-primary transition">Əlaqə</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold text-gray-900 mb-4">Hüquqi</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="/privacy" class="hover:text-primary transition">Məxfilik Siyasəti</a></li>
+                        <li><a href="/terms" class="hover:text-primary transition">İstifadə Qaydaları</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold text-gray-900 mb-4">Sosial şəbəkələr</h4>
+                    <div class="flex gap-4 text-2xl">
+                        <a href="https://instagram.com/educan" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-primary transition" aria-label="Instagram">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="https://facebook.com/educan" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-primary transition" aria-label="Facebook">
+                            <i class="fab fa-facebook"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-12 pt-8 border-t border-gray-100 text-center text-sm text-gray-400">
+                © 2026 EduCan. Bütün hüquqlar qorunur.
+            </div>
+        </div>
+    </footer>
+
+    <!-- ============================================================ -->
+    <!-- SCRIPTS -->
+    <!-- ============================================================ -->
+    <script>
+        // ============================================================
+        //  SIDEBAR TOGGLE
+        // ============================================================
+        const sidebarToggle = document.getElementById('sidebarToggle');
+        const mobileSidebar = document.getElementById('mobileSidebar');
+        const sidebarOverlay = document.getElementById('sidebarOverlay');
+        const sidebarClose = document.getElementById('sidebarClose');
+
+        function openSidebar() {
+            mobileSidebar.classList.add('open');
+            sidebarOverlay.classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeSidebar() {
+            mobileSidebar.classList.remove('open');
+            sidebarOverlay.classList.remove('open');
+            document.body.style.overflow = '';
+        }
+
+        sidebarToggle.addEventListener('click', openSidebar);
+        sidebarClose.addEventListener('click', closeSidebar);
+        sidebarOverlay.addEventListener('click', closeSidebar);
+
+        // ============================================================
+        //  MOBILE TOP MENU
+        // ============================================================
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            const isOpen = mobileMenu.classList.toggle('open');
+            mobileMenuBtn.querySelector('i').className = isOpen ? 'fas fa-times' : 'fas fa-ellipsis-v';
+        });
+
+        // ============================================================
+        //  PROFILE PHOTO
+        // ============================================================
+        const profilePhotoInput = document.getElementById('profilePhoto');
+        const profilePhotoImg = document.querySelector('.profile-photo-wrapper img');
+        const removePhotoBtn = document.getElementById('removePhotoBtn');
+
+        profilePhotoInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(ev) {
+                    profilePhotoImg.src = ev.target.result;
+                    showToast('Şəkil uğurla yeniləndi!');
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        removePhotoBtn.addEventListener('click', () => {
+            profilePhotoImg.src = 'https://ui-avatars.com/api/?name=Rashad+Huseynov&background=1A56A0&color=fff&size=150';
+            profilePhotoInput.value = '';
+            showToast('Şəkil silindi');
+        });
+
+        // ============================================================
+        //  BIO CHARACTER COUNT
+        // ============================================================
+        const bio = document.getElementById('bio');
+        const bioCount = document.getElementById('bioCount');
+
+        bio.addEventListener('input', function() {
+            const count = this.value.length;
+            bioCount.textContent = count + ' / 500';
+            bioCount.className = 'char-count';
+            if (count > 450) bioCount.classList.add('danger');
+            else if (count > 400) bioCount.classList.add('warning');
+        });
+
+        // ============================================================
+        //  SUBJECT TOGGLE
+        // ============================================================
+        function toggleSubject(element) {
+            element.classList.toggle('selected');
+            element.classList.toggle('bg-primary');
+            element.classList.toggle('text-white');
+            element.classList.toggle('border-primary');
+            element.classList.toggle('text-gray-700');
+            element.classList.toggle('border-gray-200');
+        }
+
+        // ============================================================
+        //  GROUP LESSONS TOGGLE
+        // ============================================================
+        const groupLessons = document.getElementById('groupLessons');
+        const groupSettings = document.getElementById('groupSettings');
+
+        groupLessons.addEventListener('change', function() {
+            groupSettings.classList.toggle('hidden', !this.checked);
+        });
+
+        // ============================================================
+        //  VIDEO UPLOAD
+        // ============================================================
+        const videoDrop = document.getElementById('videoDrop');
+        const videoFile = document.getElementById('videoFile');
+        const videoPreview = document.getElementById('videoPreview');
+        const videoFileName = document.getElementById('videoFileName');
+        const videoFileSize = document.getElementById('videoFileSize');
+        const removeVideoBtn = document.getElementById('removeVideoBtn');
+
+        videoDrop.addEventListener('click', () => videoFile.click());
+
+        videoFile.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                videoFileName.textContent = file.name;
+                videoFileSize.textContent = (file.size / 1024 / 1024).toFixed(1) + ' MB';
+                videoPreview.classList.remove('hidden');
+                videoDrop.querySelector('p:first-of-type').textContent = file.name;
+                showToast('Video faylı yükləndi!');
+            }
+        });
+
+        removeVideoBtn.addEventListener('click', () => {
+            videoFile.value = '';
+            videoPreview.classList.add('hidden');
+            videoDrop.querySelector('p:first-of-type').textContent = 'Video faylı yüklə';
+        });
+
+        // ============================================================
+        //  TOAST MESSAGE
+        // ============================================================
+        const successToast = document.getElementById('successToast');
+        let toastTimeout;
+
+        function showToast(message) {
+            successToast.querySelector('span').textContent = message;
+            successToast.classList.remove('hidden');
+            clearTimeout(toastTimeout);
+            toastTimeout = setTimeout(() => {
+                successToast.classList.add('hidden');
+            }, 3000);
+        }
+
+        // ============================================================
+        //  SAVE PROFILE
+        // ============================================================
+        const profileForm = document.getElementById('profileForm');
+
+        profileForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const bioText = bio.value.trim();
+            const selectedSubjects = document.querySelectorAll('.subject-tag.selected');
+            const education = document.getElementById('education').value.trim();
+            const experience = document.getElementById('experience').value;
+            const oneOnOne = document.getElementById('oneOnOne').checked;
+            const group = document.getElementById('groupLessons').checked;
+            const maxStudents = document.getElementById('maxStudents').value;
+            const videoLink = document.getElementById('videoLink').value.trim();
+
+            // Validasiya
+            if (!bioText) {
+                showToast('Bio sahəsini doldurun!');
+                bio.classList.add('error');
+                setTimeout(() => bio.classList.remove('error'), 3000);
+                return;
+            }
+            if (selectedSubjects.length === 0) {
+                showToast('Ən azı 1 fənn seçin!');
+                return;
+            }
+            if (!oneOnOne && !group) {
+                showToast('Ən azı 1 dərs növü seçin!');
+                return;
+            }
+
+            // Məlumatları topla
+            const profileData = {
+                name: 'Rəşad Hüseynov',
+                bio: bioText,
+                subjects: Array.from(selectedSubjects).map(el => el.dataset.subject),
+                education: education || 'Qeyd edilməyib',
+                experience: experience + ' il',
+                sessionTypes: {
+                    oneOnOne: oneOnOne,
+                    group: group,
+                    maxStudents: group ? maxStudents : null
+                },
+                video: videoLink || (videoFile.files[0] ? videoFile.files[0].name : 'Yüklənməyib')
+            };
+
+            console.log('📝 Profil məlumatları yeniləndi:', profileData);
+
+            // Uğur mesajı
+            const saveBtn = document.getElementById('saveBtn');
+            saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Yadda saxlanılır...';
+            saveBtn.disabled = true;
+
+            setTimeout(() => {
+                saveBtn.innerHTML = '<i class="fas fa-check"></i> Yadda saxlanıldı!';
+                saveBtn.className = 'bg-green-600 text-white px-10 py-3.5 rounded-xl font-bold shadow-lg shadow-green-600/20 flex items-center justify-center gap-2';
+                showToast('✅ Profil uğurla yeniləndi!');
+
+                setTimeout(() => {
+                    saveBtn.innerHTML = '<i class="fas fa-save"></i> Profili yadda saxla';
+                    saveBtn.className = 'bg-primary text-white px-10 py-3.5 rounded-xl font-bold hover:bg-blue-800 transition shadow-lg shadow-primary/20 flex items-center justify-center gap-2';
+                    saveBtn.disabled = false;
+                }, 1500);
+            }, 1200);
+        });
+
+        // ============================================================
+        //  RESET FORM
+        // ============================================================
+        function resetForm() {
+            if (confirm('Dəyişiklikləri ləğv etmək istədiyinizə əminsiniz?')) {
+                location.reload();
+            }
+        }
+
+        // ============================================================
+        //  SIDEBAR ACTIVE STATE
+        // ============================================================
+        document.querySelectorAll('.sidebar-item').forEach(item => {
+            item.addEventListener('click', function(e) {
+                document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // ============================================================
+        //  INIT
+        // ============================================================
+        console.log('📝 Müəllim Profil Redaktoru yükləndi');
+        console.log('   Müəllim: Rəşad Hüseynov');
+        console.log('   Profil statusu: Təsdiqlənib');
+        console.log('   Fənn dəyişiklikləri yenidən təsdiqlənməlidir');
+    </script>
+</body>
+</html>
