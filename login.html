@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daxil Ol | EduCan</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: { primary: '#1A56A0', accent: '#20948B' }
+                }
+            }
+        }
+    </script>
+    <style>
+        #mobile-menu { display: none; }
+        #mobile-menu.open { display: block; }
+        .login-bg {
+            background-image: linear-gradient(135deg, rgba(26, 86, 160, 0.05) 0%, rgba(32, 148, 139, 0.05) 100%);
+        }
+        .input-group {
+            position: relative;
+        }
+        .input-group input {
+            padding-right: 3rem;
+            padding-left: 3rem;
+        }
+        .toggle-password {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #9CA3AF;
+            transition: color 0.2s;
+        }
+        .toggle-password:hover {
+            color: #1A56A0;
+        }
+        .input-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #9CA3AF;
+        }
+        .demo-card {
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+        .demo-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+        .demo-card.active-demo {
+            border-color: #1A56A0;
+            background: #EFF6FF;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-900 font-sans">
+
+    <header class="sticky top-0 bg-white/95 backdrop-blur-sm z-50 border-b border-gray-100 shadow-sm">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex justify-between items-center">
+            <a href="/" class="text-2xl sm:text-3xl font-extrabold text-primary tracking-tighter">EduCan</a>
+
+            <div class="hidden md:flex gap-8 font-medium text-gray-600">
+                <a href="/teachers" class="hover:text-primary transition">Müəllim tap</a>
+                <a href="/how-it-works" class="hover:text-primary transition">Necə işləyir</a>
+                <a href="/about" class="hover:text-primary transition">Haqqımızda</a>
+                <a href="/contact" class="hover:text-primary transition">Əlaqə</a>
+            </div>
+
+            <div class="hidden md:flex gap-3 items-center">
+                <a href="/login" class="px-5 py-2 font-semibold text-primary hover:text-blue-800 transition">Daxil ol</a>
+                <a href="/register/student" class="bg-primary text-white px-6 py-2 rounded-xl font-semibold hover:bg-blue-800 transition">Qeydiyyat</a>
+            </div>
+
+            <button id="menu-btn" class="md:hidden text-2xl text-primary p-2" aria-label="Menyu" aria-expanded="false">
+                <i class="fas fa-bars" id="menu-icon"></i>
+            </button>
+        </nav>
+
+        <div id="mobile-menu" class="md:hidden border-t border-gray-100 bg-white px-4 pb-4">
+            <div class="flex flex-col gap-1 pt-2 font-medium text-gray-600">
+                <a href="/teachers" class="py-3 px-2 hover:text-primary border-b border-gray-50">Müəllim tap</a>
+                <a href="/how-it-works" class="py-3 px-2 hover:text-primary border-b border-gray-50">Necə işləyir</a>
+                <a href="/about" class="py-3 px-2 hover:text-primary border-b border-gray-50">Haqqımızda</a>
+                <a href="/contact" class="py-3 px-2 hover:text-primary border-b border-gray-50">Əlaqə</a>
+                <div class="flex gap-3 pt-4">
+                    <a href="/login" class="flex-1 text-center py-2 font-semibold text-primary border border-primary rounded-xl">Daxil ol</a>
+                    <a href="/register/student" class="flex-1 text-center bg-primary text-white py-2 rounded-xl font-semibold">Qeydiyyat</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="min-h-[calc(100vh-200px)] flex items-center justify-center px-4 py-12 login-bg">
+        <div class="w-full max-w-md">
+            <div class="text-center mb-8">
+                <div class="inline-flex items-center justify-center w-20 h-20 bg-primary/10 rounded-2xl mb-4">
+                    <i class="fas fa-graduation-cap text-4xl text-primary"></i>
+                </div>
+                <h1 class="text-3xl font-extrabold text-primary">Xoş gəldiniz</h1>
+                <p class="text-gray-500 mt-2">Hesabınıza daxil olun və başlayın</p>
+            </div>
+
+            <div class="bg-white rounded-3xl shadow-xl border border-gray-100 p-8">
+                <form id="login-form" novalidate>
+                    <!-- Email -->
+                    <div class="mb-4">
+                        <label for="login-email" class="block text-sm font-medium text-gray-700 mb-1.5">
+                            E-poçt <span class="text-red-500">*</span>
+                        </label>
+                        <div class="input-group">
+                            <i class="fas fa-envelope input-icon"></i>
+                            <input 
+                                type="email" 
+                                id="login-email" 
+                                placeholder="example@email.com" 
+                                required
+                                class="w-full p-3.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition bg-gray-50/50"
+                                autocomplete="email"
+                            >
+                        </div>
+                    </div>
+
+                    <!-- Şifrə -->
+                    <div class="mb-4">
+                        <label for="login-password" class="block text-sm font-medium text-gray-700 mb-1.5">
+                            Şifrə <span class="text-red-500">*</span>
+                        </label>
+                        <div class="input-group">
+                            <i class="fas fa-lock input-icon"></i>
+                            <input 
+                                type="password" 
+                                id="login-password" 
+                                placeholder="••••••••" 
+                                required
+                                minlength="8"
+                                class="w-full p-3.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition bg-gray-50/50"
+                                autocomplete="current-password"
+                            >
+                            <span class="toggle-password" id="togglePassword" role="button" aria-label="Şifrəni göstər/gizlət">
+                                <i class="fas fa-eye"></i>
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Şifrəni unutdum -->
+                    <div class="flex justify-end mb-6">
+                        <a href="/forgot-password" class="text-sm text-primary hover:text-blue-800 hover:underline font-medium transition">
+                            Şifrəni unutmusan?
+                        </a>
+                    </div>
+
+                    <div id="login-error" class="hidden bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-xl text-sm mb-4 flex items-start gap-2">
+                        <i class="fas fa-exclamation-circle mt-0.5"></i>
+                        <span id="error-text">Düzgün e-poçt və ya şifrə daxil edin.</span>
+                    </div>
+
+                    <!-- Login Düyməsi -->
+                    <button 
+                        type="submit" 
+                        id="login-btn"
+                        class="w-full bg-primary text-white p-3.5 rounded-xl font-bold hover:bg-blue-800 transition shadow-lg shadow-primary/20 hover:shadow-primary/30 flex items-center justify-center gap-2 text-lg"
+                    >
+                        <i class="fas fa-sign-in-alt"></i>
+                        Daxil ol
+                    </button>
+
+                    <div class="text-center mt-6 text-gray-600">
+                        <span>Hesabın yoxdur? </span>
+                        <a href="/register/student" class="text-primary font-semibold hover:text-blue-800 hover:underline transition">
+                            Qeydiyyatdan keç
+                        </a>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-white border-t border-gray-100 py-12 sm:py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6">
+            <div class="grid sm:grid-cols-2 md:grid-cols-4 gap-10 text-gray-600">
+                <div>
+                    <a href="/" class="text-2xl font-extrabold text-primary mb-4 block">EduCan</a>
+                    <p class="text-sm leading-relaxed">Azərbaycanın DİM hazırlığı üçün onlayn müəllim platforması.</p>
+                </div>
+                <div>
+                    <h4 class="font-bold text-gray-900 mb-4">Naviqasiya</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="/teachers" class="hover:text-primary transition">Müəllim tap</a></li>
+                        <li><a href="/how-it-works" class="hover:text-primary transition">Necə işləyir</a></li>
+                        <li><a href="/about" class="hover:text-primary transition">Haqqımızda</a></li>
+                        <li><a href="/contact" class="hover:text-primary transition">Əlaqə</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold text-gray-900 mb-4">Hüquqi</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="/privacy" class="hover:text-primary transition">Məxfilik Siyasəti</a></li>
+                        <li><a href="/terms" class="hover:text-primary transition">İstifadə Qaydaları</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold text-gray-900 mb-4">Sosial şəbəkələr</h4>
+                    <div class="flex gap-4 text-2xl">
+                        <a href="https://instagram.com/educan" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-primary transition" aria-label="Instagram">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="https://facebook.com/educan" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-primary transition" aria-label="Facebook">
+                            <i class="fab fa-facebook"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-12 pt-8 border-t border-gray-100 text-center text-sm text-gray-400">
+                © 2026 EduCan. Bütün hüquqlar qorunur.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const menuBtn = document.getElementById('menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const menuIcon = document.getElementById('menu-icon');
+
+        menuBtn.addEventListener('click', () => {
+            const isOpen = mobileMenu.classList.toggle('open');
+            menuBtn.setAttribute('aria-expanded', isOpen);
+            menuIcon.classList.toggle('fa-bars', !isOpen);
+            menuIcon.classList.toggle('fa-times', isOpen);
+        });
+
+        const togglePassword = document.getElementById('togglePassword');
+        const passwordInput = document.getElementById('login-password');
+        let passwordVisible = false;
+
+        togglePassword.addEventListener('click', () => {
+            passwordVisible = !passwordVisible;
+            passwordInput.type = passwordVisible ? 'text' : 'password';
+            togglePassword.querySelector('i').className = passwordVisible ? 'fas fa-eye-slash' : 'fas fa-eye';
+        });
+
+        const demoCards = document.querySelectorAll('.demo-card');
+        const emailInput = document.getElementById('login-email');
+        
+        demoCards.forEach(card => {
+            card.addEventListener('click', () => {
+                demoCards.forEach(c => c.classList.remove('active-demo'));
+                card.classList.add('active-demo');
+            
+                const email = card.dataset.email;
+                const password = card.dataset.password;
+                emailInput.value = email;
+                passwordInput.value = password;
+                
+                hideLoginError();
+                
+                if (passwordVisible) {
+                    passwordVisible = false;
+                    passwordInput.type = 'password';
+                    togglePassword.querySelector('i').className = 'fas fa-eye';
+                }
+            });
+        });
+
+    </script>
+</body>
+</html>

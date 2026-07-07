@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yazılarım | EduCan</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: { primary: '#1A56A0', accent: '#20948B' }
+                }
+            }
+        }
+    </script>
+    <style>
+        #mobile-menu { display: none; }
+        #mobile-menu.open { display: block; }
+        .sidebar-item {
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+        .sidebar-item:hover {
+            background: #EFF6FF;
+            color: #1A56A0;
+        }
+        .sidebar-item.active {
+            background: #1A56A0;
+            color: white;
+        }
+        .sidebar-item i {
+            width: 1.5rem;
+            text-align: center;
+        }
+        .recording-card {
+            transition: all 0.3s ease;
+        }
+        .recording-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+        }
+        .watch-btn {
+            transition: all 0.3s ease;
+        }
+        .watch-btn:hover {
+            transform: scale(1.02);
+            box-shadow: 0 4px 15px rgba(26, 86, 160, 0.3);
+        }
+        .filter-btn {
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+        .filter-btn.active {
+            background: #1A56A0;
+            color: white;
+        }
+        .filter-btn.active:hover {
+            background: #1A4A8A;
+        }
+        .filter-btn:not(.active):hover {
+            background: #F3F4F6;
+        }
+        .sidebar-mobile {
+            position: fixed;
+            top: 0;
+            left: -280px;
+            width: 280px;
+            height: 100vh;
+            background: white;
+            z-index: 1000;
+            transition: left 0.3s ease;
+            box-shadow: 2px 0 20px rgba(0,0,0,0.1);
+            overflow-y: auto;
+        }
+        .sidebar-mobile.open {
+            left: 0;
+        }
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.4);
+            z-index: 999;
+            display: none;
+        }
+        .overlay.open {
+            display: block;
+        }
+        .sidebar-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            font-size: 1.5rem;
+            color: #6B7280;
+            cursor: pointer;
+        }
+        .sidebar-close:hover {
+            color: #1A56A0;
+        }
+        .empty-state {
+            animation: fadeIn 0.5s ease;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .duration-badge {
+            font-size: 0.7rem;
+            padding: 0.15rem 0.6rem;
+            border-radius: 999px;
+            background: #EFF6FF;
+            color: #1A56A0;
+            font-weight: 600;
+        }
+        .search-input:focus {
+            box-shadow: 0 0 0 3px rgba(26, 86, 160, 0.15);
+        }
+        .modal-overlay {
+            animation: fadeIn 0.3s ease;
+        }
+        .modal-content {
+            animation: slideUp 0.3s ease;
+        }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        .video-wrapper {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+            border-radius: 0.75rem;
+            background: #000;
+        }
+        .video-wrapper video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 0.75rem;
+        }
+        .date-input:focus {
+            box-shadow: 0 0 0 3px rgba(26, 86, 160, 0.15);
+            border-color: #1A56A0;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-900 font-sans">
+
+    <!-- ============================================================ -->
+    <!-- MOBILE SIDEBAR OVERLAY -->
+    <!-- ============================================================ -->
+    <div class="overlay" id="sidebarOverlay"></div>
+
+    <!-- ============================================================ -->
+    <!-- MOBILE SIDEBAR -->
+    <!-- ============================================================ -->
+    <div class="sidebar-mobile" id="mobileSidebar">
+        <div class="p-6">
+            <span class="sidebar-close" id="sidebarClose"><i class="fas fa-times"></i></span>
+            <div class="flex items-center gap-3 mb-8 mt-2">
+                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&h=80&fit=crop&crop=face&auto=format&q=80" alt="Tələbə" class="w-12 h-12 rounded-full object-cover border-2 border-primary">
+                <div>
+                    <div class="font-bold text-gray-900">Əli Məmmədov</div>
+                    <div class="text-sm text-gray-500">Tələbə</div>
+                </div>
+            </div>
+            <nav class="space-y-1">
+                <a href="/student/dashboard" class="flex items-center gap-3 px-4 py-3 rounded-xl sidebar-item">
+                    <i class="fas fa-th-large"></i> Dashboard
+                </a>
+                <a href="/student/teachers" class="flex items-center gap-3 px-4 py-3 rounded-xl sidebar-item">
+                    <i class="fas fa-search"></i> Müəllim tap
+                </a>
+                <a href="/student/lessons" class="flex items-center gap-3 px-4 py-3 rounded-xl sidebar-item">
+                    <i class="fas fa-calendar-check"></i> Dərslərim
+                </a>
+                <a href="/student/recordings" class="flex items-center gap-3 px-4 py-3 rounded-xl sidebar-item active">
+                    <i class="fas fa-video"></i> Yazılarım
+                </a>
+                <a href="/student/payments" class="flex items-center gap-3 px-4 py-3 rounded-xl sidebar-item">
+                    <i class="fas fa-credit-card"></i> Ödənişlər
+                </a>
+                <a href="/student/settings" class="flex items-center gap-3 px-4 py-3 rounded-xl sidebar-item">
+                    <i class="fas fa-cog"></i> Parametrlər
+                </a>
+                <div class="border-t border-gray-100 my-3"></div>
+                <a href="/logout" class="flex items-center gap-3 px-4 py-3 rounded-xl sidebar-item text-red-500 hover:bg-red-50">
+                    <i class="fas fa-sign-out-alt"></i> Çıxış
+                </a>
+            </nav>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- HEADER -->
+    <!-- ============================================================ -->
+    <header class="sticky top-0 bg-white/95 backdrop-blur-sm z-50 border-b border-gray-100 shadow-sm">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex justify-between items-center">
+            <div class="flex items-center gap-4">
+                <button id="sidebarToggle" class="lg:hidden text-2xl text-gray-600 hover:text-primary transition p-2" aria-label="Sidebar">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <a href="/student/dashboard" class="text-2xl sm:text-3xl font-extrabold text-primary tracking-tighter">EduCan</a>
+            </div>
+
+            <div class="flex items-center gap-4">
+                <span class="hidden sm:inline text-sm text-gray-600">
+                    <i class="fas fa-user-circle text-primary text-xl mr-1"></i>
+                    Əli Məmmədov
+                </span>
+                <a href="/logout" class="text-gray-500 hover:text-red-500 transition text-sm font-medium hidden sm:inline">
+                    <i class="fas fa-sign-out-alt"></i> Çıxış
+                </a>
+                <button class="lg:hidden text-2xl text-gray-600 hover:text-primary transition" id="mobileMenuBtn">
+                    <i class="fas fa-ellipsis-v"></i>
+                </button>
+            </div>
+        </nav>
+
+        <div id="mobile-menu" class="lg:hidden border-t border-gray-100 bg-white px-4 pb-4">
+            <div class="flex flex-wrap gap-2 pt-3">
+                <a href="/student/dashboard" class="text-sm px-3 py-1.5 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition">Dashboard</a>
+                <a href="/student/teachers" class="text-sm px-3 py-1.5 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition">Müəllim tap</a>
+                <a href="/student/lessons" class="text-sm px-3 py-1.5 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition">Dərslərim</a>
+                <a href="/student/recordings" class="text-sm px-3 py-1.5 bg-primary text-white rounded-lg font-medium">Yazılar</a>
+                <a href="/student/payments" class="text-sm px-3 py-1.5 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition">Ödənişlər</a>
+                <a href="/student/settings" class="text-sm px-3 py-1.5 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition">Parametrlər</a>
+                <a href="/logout" class="text-sm px-3 py-1.5 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition">Çıxış</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- ============================================================ -->
+    <!-- MAIN CONTENT -->
+    <!-- ============================================================ -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-8">
+        <div class="flex flex-col lg:flex-row gap-8">
+            
+            <!-- ========================================================== -->
+            <!-- SIDEBAR (Desktop) -->
+            <!-- ========================================================== -->
+            <aside class="hidden lg:block w-64 flex-shrink-0">
+                <div class="bg-white rounded-2xl border border-gray-100 p-4 sticky top-24">
+                    <div class="flex items-center gap-3 mb-6 p-2">
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&h=80&fit=crop&crop=face&auto=format&q=80" alt="Tələbə" class="w-14 h-14 rounded-full object-cover border-2 border-primary">
+                        <div>
+                            <div class="font-bold text-gray-900">Əli Məmmədov</div>
+                            <div class="text-sm text-gray-500">Tələbə</div>
+                        </div>
+                    </div>
+                    <nav class="space-y-1">
+                        <a href="/student/dashboard" class="flex items-center gap-3 px-4 py-3 rounded-xl sidebar-item">
+                            <i class="fas fa-th-large"></i> Dashboard
+                        </a>
+                        <a href="/student/teachers" class="flex items-center gap-3 px-4 py-3 rounded-xl sidebar-item">
+                            <i class="fas fa-search"></i> Müəllim tap
+                        </a>
+                        <a href="/student/lessons" class="flex items-center gap-3 px-4 py-3 rounded-xl sidebar-item">
+                            <i class="fas fa-calendar-check"></i> Dərslərim
+                        </a>
+                        <a href="/student/recordings" class="flex items-center gap-3 px-4 py-3 rounded-xl sidebar-item active">
+                            <i class="fas fa-video"></i> Yazılarım
+                        </a>
+                        <a href="/student/payments" class="flex items-center gap-3 px-4 py-3 rounded-xl sidebar-item">
+                            <i class="fas fa-credit-card"></i> Ödənişlər
+                        </a>
+                        <a href="/student/settings" class="flex items-center gap-3 px-4 py-3 rounded-xl sidebar-item">
+                            <i class="fas fa-cog"></i> Parametrlər
+                        </a>
+                        <div class="border-t border-gray-100 my-3"></div>
+                        <a href="/logout" class="flex items-center gap-3 px-4 py-3 rounded-xl sidebar-item text-red-500 hover:bg-red-50">
+                            <i class="fas fa-sign-out-alt"></i> Çıxış
+                        </a>
+                    </nav>
+                </div>
+            </aside>
+
+            <!-- ========================================================== -->
+            <!-- RECORDINGS CONTENT -->
+            <!-- ========================================================== -->
+            <main class="flex-1 space-y-6">
+                
+                <!-- Başlıq -->
+                <div>
+                    <h1 class="text-2xl font-extrabold text-gray-900">Yazılarım</h1>
+                    <p class="text-gray-500 text-sm mt-1">Keçmiş dərslərinizin yazılışları</p>
+                </div>
+
+                <!-- ======================================================== -->
+                <!-- SEARCH & FILTERS -->
+                <!-- ======================================================== -->
+                <div class="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm">
+                    <div class="flex flex-col md:flex-row gap-4">
+                        <!-- Axtarış -->
+                        <div class="flex-1 relative">
+                            <i class="fas fa-search absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                            <input 
+                                type="text" 
+                                id="searchInput"
+                                placeholder="Müəllim adı, fənn axtar..." 
+                                class="search-input w-full p-3 pl-10 bg-gray-50 rounded-xl border-0 focus:ring-2 focus:ring-primary outline-none transition text-sm"
+                                oninput="filterRecordings()"
+                            >
+                        </div>
+                        <!-- Fənn filtri -->
+                        <div class="flex flex-wrap gap-2">
+                            <button class="filter-btn active px-4 py-2 rounded-full text-sm font-medium bg-primary text-white" data-filter="all" onclick="setFilter('all')">
+                                Hamısı
+                            </button>
+                            <button class="filter-btn px-4 py-2 rounded-full text-sm font-medium bg-gray-100 text-gray-700" data-filter="Riyaziyyat" onclick="setFilter('Riyaziyyat')">
+                                Riyaziyyat
+                            </button>
+                            <button class="filter-btn px-4 py-2 rounded-full text-sm font-medium bg-gray-100 text-gray-700" data-filter="Fizika" onclick="setFilter('Fizika')">
+                                Fizika
+                            </button>
+                            <button class="filter-btn px-4 py-2 rounded-full text-sm font-medium bg-gray-100 text-gray-700" data-filter="Kimya" onclick="setFilter('Kimya')">
+                                Kimya
+                            </button>
+                            <button class="filter-btn px-4 py-2 rounded-full text-sm font-medium bg-gray-100 text-gray-700" data-filter="İngilis dili" onclick="setFilter('İngilis dili')">
+                                İngilis dili
+                            </button>
+                            <button class="filter-btn px-4 py-2 rounded-full text-sm font-medium bg-gray-100 text-gray-700" data-filter="Azərbaycan dili" onclick="setFilter('Azərbaycan dili')">
+                                Azərbaycan dili
+                            </button>
+                        </div>
+                    </div>
+                    <!-- Tarix aralığı -->
+                    <div class="flex flex-wrap items-center gap-4 mt-4 pt-4 border-t border-gray-100">
+                        <div class="flex items-center gap-2">
+                            <span class="text-sm text-gray-600">Tarix aralığı:</span>
+                            <input type="date" id="dateFrom" class="date-input px-3 py-2 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-primary outline-none" onchange="filterRecordings()">
+                            <span class="text-gray-400 text-sm">—</span>
+                            <input type="date" id="dateTo" class="date-input px-3 py-2 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-primary outline-none" onchange="filterRecordings()">
+                        </div>
+                        <button onclick="clearFilters()" class="text-sm text-primary hover:underline font-medium">
+                            <i class="fas fa-times mr-1"></i> Təmizlə
+                        </button>
+                        <span class="text-sm text-gray-400 ml-auto" id="resultCount">6 yazılış</span>
+                    </div>
+                </div>
+
+                <!-- ======================================================== -->
+                <!-- RECORDINGS LIST -->
+                <!-- ======================================================== -->
+                <div id="recordingsList" class="space-y-4">
+                    
+                    <!-- Recording 1 -->
+                    <div class="recording-card bg-white rounded-2xl border border-gray-100 p-5 shadow-sm flex flex-col sm:flex-row sm:items-center gap-4">
+                        <div class="flex items-center gap-4 flex-1 min-w-0">
+                            <div class="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-video text-2xl text-primary"></i>
+                            </div>
+                            <div class="min-w-0">
+                                <div class="flex items-center gap-2 flex-wrap">
+                                    <h3 class="font-bold text-gray-900">Rəşad Hüseynov</h3>
+                                    <span class="duration-badge">45 dəq</span>
+                                </div>
+                                <p class="text-sm text-gray-500">Riyaziyyat · DİM</p>
+                                <div class="flex items-center gap-3 mt-1 text-xs text-gray-400">
+                                    <span><i class="fas fa-calendar-alt mr-1"></i>15 İyun 2026</span>
+                                    <span><i class="fas fa-cloud text-primary mr-1"></i>Zoom Cloud</span>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="watch-btn bg-primary text-white px-6 py-2.5 rounded-xl font-semibold hover:bg-blue-800 transition text-sm flex items-center gap-2 whitespace-nowrap" onclick="openVideo('Rəşad Hüseynov', 'Riyaziyyat', '15 İyun 2026')">
+                            <i class="fas fa-play-circle"></i> Videoya bax
+                        </button>
+                    </div>
+
+                    <!-- Recording 2 -->
+                    <div class="recording-card bg-white rounded-2xl border border-gray-100 p-5 shadow-sm flex flex-col sm:flex-row sm:items-center gap-4">
+                        <div class="flex items-center gap-4 flex-1 min-w-0">
+                            <div class="w-16 h-16 bg-accent/10 rounded-2xl flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-video text-2xl text-accent"></i>
+                            </div>
+                            <div class="min-w-0">
+                                <div class="flex items-center gap-2 flex-wrap">
+                                    <h3 class="font-bold text-gray-900">Leyla Quliyeva</h3>
+                                    <span class="duration-badge">52 dəq</span>
+                                </div>
+                                <p class="text-sm text-gray-500">Fizika · DİM</p>
+                                <div class="flex items-center gap-3 mt-1 text-xs text-gray-400">
+                                    <span><i class="fas fa-calendar-alt mr-1"></i>12 İyun 2026</span>
+                                    <span><i class="fas fa-cloud text-primary mr-1"></i>Zoom Cloud</span>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="watch-btn bg-primary text-white px-6 py-2.5 rounded-xl font-semibold hover:bg-blue-800 transition text-sm flex items-center gap-2 whitespace-nowrap" onclick="openVideo('Leyla Quliyeva', 'Fizika', '12 İyun 2026')">
+                            <i class="fas fa-play-circle"></i> Videoya bax
+                        </button>
+                    </div>
+
+                    <!-- Recording 3 -->
+                    <div class="recording-card bg-white rounded-2xl border border-gray-100 p-5 shadow-sm flex flex-col sm:flex-row sm:items-center gap-4">
+                        <div class="flex items-center gap-4 flex-1 min-w-0">
+                            <div class="w-16 h-16 bg-green-100 rounded-2xl flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-video text-2xl text-green-600"></i>
+                            </div>
+                            <div class="min-w-0">
+                                <div class="flex items-center gap-2 flex-wrap">
+                                    <h3 class="font-bold text-gray-900">Elvin Məmmədov</h3>
+                                    <span class="duration-badge">38 dəq</span>
+                                </div>
+                                <p class="text-sm text-gray-500">Kimya · DİM</p>
+                                <div class="flex items-center gap-3 mt-1 text-xs text-gray-400">
+                                    <span><i class="fas fa-calendar-alt mr-1"></i>10 İyun 2026</span>
+                                    <span><i class="fas fa-cloud text-primary mr-1"></i>Zoom Cloud</span>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="watch-btn bg-primary text-white px-6 py-2.5 rounded-xl font-semibold hover:bg-blue-800 transition text-sm flex items-center gap-2 whitespace-nowrap" onclick="openVideo('Elvin Məmmədov', 'Kimya', '10 İyun 2026')">
+                            <i class="fas fa-play-circle"></i> Videoya bax
+                        </button>
+                    </div>
+
+                    <!-- Recording 4 -->
+                    <div class="recording-card bg-white rounded-2xl border border-gray-100 p-5 shadow-sm flex flex-col sm:flex-row sm:items-center gap-4">
+                        <div class="flex items-center gap-4 flex-1 min-w-0">
+                            <div class="w-16 h-16 bg-purple-100 rounded-2xl flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-video text-2xl text-purple-600"></i>
+                            </div>
+                            <div class="min-w-0">
+                                <div class="flex items-center gap-2 flex-wrap">
+                                    <h3 class="font-bold text-gray-900">Günay Əliyeva</h3>
+                                    <span class="duration-badge">1 saat</span>
+                                </div>
+                                <p class="text-sm text-gray-500">İngilis dili · DİM</p>
+                                <div class="flex items-center gap-3 mt-1 text-xs text-gray-400">
+                                    <span><i class="fas fa-calendar-alt mr-1"></i>8 İyun 2026</span>
+                                    <span><i class="fas fa-cloud text-primary mr-1"></i>Zoom Cloud</span>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="watch-btn bg-primary text-white px-6 py-2.5 rounded-xl font-semibold hover:bg-blue-800 transition text-sm flex items-center gap-2 whitespace-nowrap" onclick="openVideo('Günay Əliyeva', 'İngilis dili', '8 İyun 2026')">
+                            <i class="fas fa-play-circle"></i> Videoya bax
+                        </button>
+                    </div>
+
+                    <!-- Recording 5 -->
+                    <div class="recording-card bg-white rounded-2xl border border-gray-100 p-5 shadow-sm flex flex-col sm:flex-row sm:items-center gap-4">
+                        <div class="flex items-center gap-4 flex-1 min-w-0">
+                            <div class="w-16 h-16 bg-yellow-100 rounded-2xl flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-video text-2xl text-yellow-600"></i>
+                            </div>
+                            <div class="min-w-0">
+                                <div class="flex items-center gap-2 flex-wrap">
+                                    <h3 class="font-bold text-gray-900">Tural Rəhimov</h3>
+                                    <span class="duration-badge">42 dəq</span>
+                                </div>
+                                <p class="text-sm text-gray-500">Azərbaycan dili · DİM</p>
+                                <div class="flex items-center gap-3 mt-1 text-xs text-gray-400">
+                                    <span><i class="fas fa-calendar-alt mr-1"></i>5 İyun 2026</span>
+                                    <span><i class="fas fa-cloud text-primary mr-1"></i>Zoom Cloud</span>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="watch-btn bg-primary text-white px-6 py-2.5 rounded-xl font-semibold hover:bg-blue-800 transition text-sm flex items-center gap-2 whitespace-nowrap" onclick="openVideo('Tural Rəhimov', 'Azərbaycan dili', '5 İyun 2026')">
+                            <i class="fas fa-play-circle"></i> Videoya bax
+                        </button>
+                    </div>
+
+                    <!-- Recording 6 -->
+                    <div class="recording-card bg-white rounded-2xl border border-gray-100 p-5 shadow-sm flex flex-col sm:flex-row sm:items-center gap-4">
+                        <div class="flex items-center gap-4 flex-1 min-w-0">
+                            <div class="w-16 h-16 bg-red-100 rounded-2xl flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-video text-2xl text-red-600"></i>
+                            </div>
+                            <div class="min-w-0">
+                                <div class="flex items-center gap-2 flex-wrap">
+                                    <h3 class="font-bold text-gray-900">Nərgiz Səfərova</h3>
+                                    <span class="duration-badge">35 dəq</span>
+                                </div>
+                                <p class="text-sm text-gray-500">Tarix · DİM</p>
+                                <div class="flex items-center gap-3 mt-1 text-xs text-gray-400">
+                                    <span><i class="fas fa-calendar-alt mr-1"></i>3 İyun 2026</span>
+                                    <span><i class="fas fa-cloud text-primary mr-1"></i>Zoom Cloud</span>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="watch-btn bg-primary text-white px-6 py-2.5 rounded-xl font-semibold hover:bg-blue-800 transition text-sm flex items-center gap-2 whitespace-nowrap" onclick="openVideo('Nərgiz Səfərova', 'Tarix', '3 İyun 2026')">
+                            <i class="fas fa-play-circle"></i> Videoya bax
+                        </button>
+                    </div>
+
+                </div>
+
+                <!-- ======================================================== -->
+                <!-- EMPTY STATE (hidden by default) -->
+                <!-- ======================================================== -->
+                <div id="emptyState" class="hidden text-center py-12 empty-state">
+                    <i class="fas fa-video-slash text-5xl text-gray-300 mb-4 block"></i>
+                    <h3 class="text-lg font-bold text-gray-700">Heç bir yazılış tapılmadı</h3>
+                    <p class="text-gray-400 text-sm mt-1">Filtirləri dəyişərək yenidən cəhd edin</p>
+                </div>
+
+                <!-- ======================================================== -->
+                <!-- LOAD MORE -->
+                <!-- ======================================================== -->
+                <div class="text-center pt-2">
+                    <button class="text-primary font-medium text-sm hover:underline transition" onclick="loadMore()">
+                        <i class="fas fa-chevron-down mr-1"></i> Daha çox yüklə
+                    </button>
+                </div>
+
+            </main>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- VIDEO PLAYER MODAL -->
+    <!-- ============================================================ -->
+    <div id="videoModal" class="fixed inset-0 z-50 flex items-center justify-center px-4 hidden">
+        <div class="absolute inset-0 bg-black/70 modal-overlay" onclick="closeVideo()"></div>
+        <div class="bg-white rounded-3xl max-w-3xl w-full p-6 shadow-2xl relative z-10 modal-content">
+            <div class="flex items-center justify-between mb-4">
+                <div>
+                    <h3 class="text-xl font-bold text-gray-900" id="videoTitle">Dərs yazılışı</h3>
+                    <p class="text-sm text-gray-500" id="videoMeta">Müəllim · Fənn · Tarix</p>
+                </div>
+                <button onclick="closeVideo()" class="text-gray-400 hover:text-gray-600 transition text-2xl">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="video-wrapper">
+                <video id="videoPlayer" controls>
+                    <source src="https://sample-videos.com/video321/mp4/720/big_buck_bunny_720p_1mb.mp4" type="video/mp4">
+                    Brauzeriniz video dəstəkləmir.
+                </video>
+            </div>
+            <div class="flex items-center gap-4 mt-4 text-sm text-gray-500">
+                <span><i class="fas fa-cloud text-primary mr-1"></i> Zoom Cloud-da saxlanılır</span>
+                <span><i class="fas fa-download mr-1"></i> Yükləmək mümkündür</span>
+                <button onclick="downloadVideo()" class="ml-auto text-primary hover:underline font-medium">
+                    <i class="fas fa-download mr-1"></i> Yüklə
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- FOOTER -->
+    <!-- ============================================================ -->
+    <footer class="bg-white border-t border-gray-100 py-12 mt-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6">
+            <div class="grid sm:grid-cols-2 md:grid-cols-4 gap-10 text-gray-600">
+                <div>
+                    <a href="/" class="text-2xl font-extrabold text-primary mb-4 block">EduCan</a>
+                    <p class="text-sm leading-relaxed">Azərbaycanın DİM hazırlığı üçün onlayn müəllim platforması.</p>
+                </div>
+                <div>
+                    <h4 class="font-bold text-gray-900 mb-4">Naviqasiya</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="/teachers" class="hover:text-primary transition">Müəllim tap</a></li>
+                        <li><a href="/how-it-works" class="hover:text-primary transition">Necə işləyir</a></li>
+                        <li><a href="/about" class="hover:text-primary transition">Haqqımızda</a></li>
+                        <li><a href="/contact" class="hover:text-primary transition">Əlaqə</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold text-gray-900 mb-4">Hüquqi</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="/privacy" class="hover:text-primary transition">Məxfilik Siyasəti</a></li>
+                        <li><a href="/terms" class="hover:text-primary transition">İstifadə Qaydaları</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold text-gray-900 mb-4">Sosial şəbəkələr</h4>
+                    <div class="flex gap-4 text-2xl">
+                        <a href="https://instagram.com/educan" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-primary transition" aria-label="Instagram">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="https://facebook.com/educan" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-primary transition" aria-label="Facebook">
+                            <i class="fab fa-facebook"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-12 pt-8 border-t border-gray-100 text-center text-sm text-gray-400">
+                © 2026 EduCan. Bütün hüquqlar qorunur.
+            </div>
+        </div>
+    </footer>
+
+    <!-- ============================================================ -->
+    <!-- SCRIPTS -->
+    <!-- ============================================================ -->
+    <script>
+        // ============================================================
+        //  SIDEBAR TOGGLE
+        // ============================================================
+        const sidebarToggle = document.getElementById('sidebarToggle');
+        const mobileSidebar = document.getElementById('mobileSidebar');
+        const sidebarOverlay = document.getElementById('sidebarOverlay');
+        const sidebarClose = document.getElementById('sidebarClose');
+
+        function openSidebar() {
+            mobileSidebar.classList.add('open');
+            sidebarOverlay.classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeSidebar() {
+            mobileSidebar.classList.remove('open');
+            sidebarOverlay.classList.remove('open');
+            document.body.style.overflow = '';
+        }
+
+        sidebarToggle.addEventListener('click', openSidebar);
+        sidebarClose.addEventListener('click', closeSidebar);
+        sidebarOverlay.addEventListener('click', closeSidebar);
+
+        // ============================================================
+        //  MOBILE TOP MENU
+        // ============================================================
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            const isOpen = mobileMenu.classList.toggle('open');
+            mobileMenuBtn.querySelector('i').className = isOpen ? 'fas fa-times' : 'fas fa-ellipsis-v';
+        });
+
+        // ============================================================
+        //  FILTERS & SEARCH
+        // ============================================================
+        let currentFilter = 'all';
+        let searchQuery = '';
+
+        function setFilter(filter) {
+            currentFilter = filter;
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active', 'bg-primary', 'text-white');
+                btn.classList.add('bg-gray-100', 'text-gray-700');
+                if (btn.dataset.filter === filter) {
+                    btn.classList.add('active', 'bg-primary', 'text-white');
+                    btn.classList.remove('bg-gray-100', 'text-gray-700');
+                }
+            });
+            filterRecordings();
+        }
+
+        function filterRecordings() {
+            searchQuery = document.getElementById('searchInput').value.toLowerCase().trim();
+            const dateFrom = document.getElementById('dateFrom').value;
+            const dateTo = document.getElementById('dateTo').value;
+
+            const cards = document.querySelectorAll('.recording-card');
+            let visibleCount = 0;
+
+            cards.forEach(card => {
+                const name = card.querySelector('h3').textContent.toLowerCase();
+                const subject = card.querySelector('.text-gray-500').textContent.toLowerCase();
+                const dateText = card.querySelector('.fa-calendar-alt').parentElement.textContent.trim();
+
+                let show = true;
+
+                // Fənn filtri
+                if (currentFilter !== 'all') {
+                    if (!subject.includes(currentFilter.toLowerCase())) {
+                        show = false;
+                    }
+                }
+
+                // Axtarış
+                if (searchQuery) {
+                    if (!name.includes(searchQuery) && !subject.includes(searchQuery)) {
+                        show = false;
+                    }
+                }
+
+                // Tarix aralığı
+                if (dateFrom || dateTo) {
+                    // Sadə tarix müqayisəsi (format: "DD Month YYYY")
+                    const dateParts = dateText.match(/(\d+)\s+(\w+)\s+(\d+)/);
+                    if (dateParts) {
+                        const day = parseInt(dateParts[1]);
+                        const monthMap = { 'Yanvar': 1, 'Fevral': 2, 'Mart': 3, 'Aprel': 4, 'May': 5, 'İyun': 6, 'İyul': 7, 'Avqust': 8, 'Sentyabr': 9, 'Oktyabr': 10, 'Noyabr': 11, 'Dekabr': 12 };
+                        const month = monthMap[dateParts[2]];
+                        const year = parseInt(dateParts[3]);
+                        const cardDate = new Date(year, month - 1, day);
+                        
+                        if (dateFrom) {
+                            const fromDate = new Date(dateFrom);
+                            if (cardDate < fromDate) show = false;
+                        }
+                        if (dateTo && show) {
+                            const toDate = new Date(dateTo);
+                            if (cardDate > toDate) show = false;
+                        }
+                    }
+                }
+
+                card.style.display = show ? '' : 'none';
+                if (show) visibleCount++;
+            });
+
+            document.getElementById('resultCount').textContent = visibleCount + ' yazılış';
+            document.getElementById('emptyState').classList.toggle('hidden', visibleCount > 0);
+        }
+
+        function clearFilters() {
+            document.getElementById('searchInput').value = '';
+            document.getElementById('dateFrom').value = '';
+            document.getElementById('dateTo').value = '';
+            setFilter('all');
+        }
+
+        // ============================================================
+        //  VIDEO PLAYER MODAL
+        // ============================================================
+        const videoModal = document.getElementById('videoModal');
+        const videoPlayer = document.getElementById('videoPlayer');
+        const videoTitle = document.getElementById('videoTitle');
+        const videoMeta = document.getElementById('videoMeta');
+
+        function openVideo(teacher, subject, date) {
+            videoTitle.textContent = teacher + ' - ' + subject;
+            videoMeta.textContent = teacher + ' · ' + subject + ' · ' + date;
+            videoPlayer.currentTime = 0;
+            videoPlayer.play();
+            videoModal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeVideo() {
+            videoPlayer.pause();
+            videoModal.classList.add('hidden');
+            document.body.style.overflow = '';
+        }
+
+        function downloadVideo() {
+            alert('📥 Video yüklənir...\n\nZoom Cloud-dan yükləmə linki göndərilir.');
+        }
+
+        // Escape ilə bağla
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                if (!videoModal.classList.contains('hidden')) {
+                    closeVideo();
+                }
+            }
+        });
+
+        // Modal xaricində klik
+        videoModal.addEventListener('click', (e) => {
+            if (e.target === videoModal) closeVideo();
+        });
+
+        // ============================================================
+        //  LOAD MORE
+        // ============================================================
+        function loadMore() {
+            alert('📚 Daha çox yazılış yüklənir...');
+        }
+
+        // ============================================================
+        //  SIDEBAR ACTIVE STATE
+        // ============================================================
+        document.querySelectorAll('.sidebar-item').forEach(item => {
+            item.addEventListener('click', function(e) {
+                document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // ============================================================
+        //  INIT
+        // ============================================================
+        // İlkin olaraq bütün recording-ları göstər
+        filterRecordings();
+
+        console.log('📹 Yazılarım səhifəsi yükləndi');
+        console.log('   Zoom Cloud inteqrasiyası aktivdir');
+        console.log('   ' + document.querySelectorAll('.recording-card').length + ' yazılış mövcuddur');
+    </script>
+</body>
+</html>
