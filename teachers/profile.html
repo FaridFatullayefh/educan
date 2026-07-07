@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Müəllim profili | EduCan</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = { theme: { extend: { colors: { primary: '#1A56A0', accent: '#20948B' } } } }
+    </script>
+</head>
+<body class="bg-gray-50 pb-20 md:pb-0">
+
+    <header class="bg-white border-b border-gray-100 sticky top-0 z-50">
+        <nav class="max-w-5xl mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="text-2xl font-extrabold text-primary">EduCan</div>
+            <a href="/teachers" class="text-sm font-semibold text-gray-600 hover:text-primary transition">← Müəllimlərə qayıt</a>
+        </nav>
+    </header>
+
+    <main class="max-w-5xl mx-auto px-6 py-8">
+        <div class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 mb-8 flex flex-col md:flex-row gap-8">
+            <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=300&h=300&fit=crop" class="w-40 h-40 rounded-3xl object-cover">
+            <div class="flex-1">
+                <h1 class="text-3xl font-bold mb-1">Aygün Məmmədova</h1>
+                <p class="text-accent font-semibold mb-2">DİM Riyaziyyat üzrə mütəxəssis</p>
+                <div class="flex items-center gap-4 mb-4">
+                    <span class="text-yellow-500 font-bold"><i class="fas fa-star"></i> 4.9 <span class="text-gray-400 font-normal">(124 rəy)</span></span>
+                </div>
+                <div class="flex flex-wrap gap-3">
+                    <div class="bg-blue-50 px-4 py-2 rounded-xl text-primary font-bold">1-on-1: 19 ₼</div>
+                    <div class="bg-teal-50 px-4 py-2 rounded-xl text-accent font-bold">Qrup (max 5 tələbə): 9 ₼</div>
+                </div>
+            </div>
+            <button class="bg-primary text-white px-8 py-4 rounded-2xl font-bold h-fit hover:bg-blue-800 transition shadow-lg">Dərs rezerv et</button>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-8">
+            <div class="md:col-span-2 space-y-8">
+                <section class="bg-white p-8 rounded-3xl border border-gray-100">
+                    <h2 class="text-xl font-bold mb-4">Haqqımda</h2>
+                    <p class="text-gray-600 leading-relaxed mb-4">10 illik pedaqoji təcrübə. DİM proqramı üzrə qəbul imtahanlarına hazırlıq, məntiqi təfəkkürün inkişafı və zəif nəticəli şagirdlərlə fərdi iş.</p>
+                    <div class="bg-gray-50 p-4 rounded-xl border border-gray-100 text-sm italic text-gray-500">
+                        "Məqsədim şagirdlərin sadəcə imtahanı deyil, həm də fənnin mantığını qavramasını təmin etməkdir."
+                    </div>
+                </section>
+
+                <section class="bg-white p-8 rounded-3xl border border-gray-100">
+                    <h2 class="text-xl font-bold mb-4">Tədris olunan mövzular</h2>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="bg-gray-100 px-3 py-1 rounded-full text-sm font-medium">Tənliklər və Bərabərsizliklər</span>
+                        <span class="bg-gray-100 px-3 py-1 rounded-full text-sm font-medium">Həndəsə</span>
+                        <span class="bg-gray-100 px-3 py-1 rounded-full text-sm font-medium">Triqonometriya</span>
+                        <span class="bg-gray-100 px-3 py-1 rounded-full text-sm font-medium">Loqarifm</span>
+                    </div>
+                </section>
+
+                <section class="bg-white p-8 rounded-3xl border border-gray-100">
+                    <h2 class="text-xl font-bold mb-4">Tanışlıq videosu</h2>
+                    <div class="aspect-video bg-gray-900 rounded-2xl flex items-center justify-center relative overflow-hidden">
+                        <i class="fas fa-play text-white text-4xl"></i>
+                    </div>
+                </section>
+
+                <section>
+                    <h2 class="text-xl font-bold mb-6">Tələbə rəyləri</h2>
+                    <div class="space-y-4">
+                        <div class="bg-white p-6 rounded-2xl border border-gray-100">
+                            <div class="flex justify-between mb-2">
+                                <span class="font-bold">Əli Məmmədov</span>
+                                <span class="text-yellow-500 text-sm"><i class="fas fa-star"></i> 5.0</span>
+                            </div>
+                            <p class="text-gray-600 text-sm">Çox razı qaldım, yüksək bal toplamağımda köməyi əvəzsiz oldu.</p>
+                            <span class="text-xs text-gray-400 mt-2 block">12 İyun 2026</span>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <aside class="md:col-span-1">
+                <div class="bg-white p-6 rounded-3xl border border-gray-100 sticky top-24">
+                    <h2 class="font-bold mb-4">Cədvəl</h2>
+                    <div class="grid grid-cols-7 gap-1 text-center text-xs text-gray-500 mb-2">
+                        <span>B</span><span>B.e</span><span>Ç.a</span><span>Ç</span><span>C.a</span><span>C</span><span>Ş</span>
+                    </div>
+                    <div class="grid grid-cols-7 gap-1">
+                        <button class="aspect-square rounded-lg bg-green-500 text-white font-bold text-xs">10</button>
+                        <button class="aspect-square rounded-lg bg-gray-200 text-gray-400 text-xs cursor-not-allowed">11</button>
+                        <button class="aspect-square rounded-lg bg-green-500 text-white font-bold text-xs">12</button>
+                    </div>
+                    <div class="mt-6 space-y-2 text-sm text-gray-600">
+                        <p><i class="fas fa-square text-green-500"></i> Boş yerlər</p>
+                        <p><i class="fas fa-square text-gray-200"></i> Dolu yerlər</p>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </main>
+
+    <div class="md:hidden fixed bottom-0 left-0 right-0 p-4 bg-white border-t border-gray-200 z-50">
+        <button class="w-full bg-primary text-white py-4 rounded-xl font-bold text-lg shadow-lg">Dərs rezerv et</button>
+    </div>
+
+</body>
+</html>

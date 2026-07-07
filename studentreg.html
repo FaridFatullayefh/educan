@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Qeydiyyat | EduCan</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = { theme: { extend: { colors: { primary: '#1A56A0', accent: '#20948B' } } } }
+    </script>
+</head>
+<body class="bg-gray-50 text-gray-900 font-sans">
+
+    <header class="sticky top-0 bg-white/95 backdrop-blur-sm z-50 border-b border-gray-100 shadow-sm">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex justify-between items-center">
+            <a href="/" class="text-2xl sm:text-3xl font-extrabold text-primary tracking-tighter">EduCan</a>
+            <div class="hidden md:flex gap-8 font-medium text-gray-600">
+                <a href="/teachers" class="hover:text-primary transition">Müəllim tap</a>
+                <a href="/how-it-works" class="hover:text-primary transition">Necə işləyir</a>
+                <a href="/about" class="hover:text-primary transition">Haqqımızda</a>
+                <a href="/contact" class="hover:text-primary transition">Əlaqə</a>
+            </div>
+            <div class="hidden md:flex gap-3 items-center">
+                <a href="/login" class="px-5 py-2 font-semibold text-primary hover:text-blue-800 transition">Daxil ol</a>
+                <a href="/register/student" class="bg-primary text-white px-6 py-2 rounded-xl font-semibold hover:bg-blue-800 transition">Qeydiyyat</a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- REGISTER SECTION -->
+    <main class="max-w-6xl mx-auto px-4 py-16">
+        <div class="grid md:grid-cols-2 gap-12 items-center bg-white p-8 md:p-12 rounded-3xl shadow-xl shadow-blue-50 border border-gray-100">
+            
+            <!-- Form Bölməsi -->
+            <div>
+                <h1 class="text-3xl font-extrabold mb-2">EduCan-a qoşul!</h1>
+                <p class="text-gray-600 mb-8">DİM hazırlığı üçün ilk addımı at, peşəkar müəllimlərlə tanış ol.</p>
+                
+                <form action="/dashboard/student" class="space-y-4">
+                    <div class="grid grid-cols-1 gap-4">
+                        <div>
+                            <label class="block text-sm font-bold mb-1">Ad və Soyad</label>
+                            <input type="text" placeholder="Adınız Soyadınız" required class="w-full p-3 bg-gray-50 rounded-xl border border-gray-200 focus:ring-2 focus:ring-primary outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-bold mb-1">E-poçt ünvanı</label>
+                            <input type="email" placeholder="example@mail.com" required class="w-full p-3 bg-gray-50 rounded-xl border border-gray-200 focus:ring-2 focus:ring-primary outline-none">
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-bold mb-1">Şifrə</label>
+                                <input type="password" placeholder="••••••••" required class="w-full p-3 bg-gray-50 rounded-xl border border-gray-200 focus:ring-2 focus:ring-primary outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-bold mb-1">Region</label>
+                                <select required class="w-full p-3 bg-gray-50 rounded-xl border border-gray-200 focus:ring-2 focus:ring-primary outline-none">
+                                    <option value="">Seçin...</option>
+                                    <option>Bakı</option>
+                                    <option>Gəncə</option>
+                                    <option>Sumqayıt</option>
+                                    <option>Naxçıvan</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center gap-2">
+                        <input type="checkbox" id="terms" required class="w-4 h-4 text-primary">
+                        <label for="terms" class="text-sm text-gray-600">İstifadəçi şərtlərini qəbul edirəm</label>
+                    </div>
+
+                    <button type="submit" class="w-full bg-primary text-white py-4 rounded-xl font-bold hover:bg-blue-800 transition shadow-lg shadow-blue-200">
+                        Qeydiyyatdan keç
+                    </button>
+                </form>
+
+                <p class="text-center text-sm text-gray-600 mt-6">
+                    Artıq hesabın var? <a href="/login" class="text-primary font-bold hover:underline">Daxil ol</a>
+                </p>
+            </div>
+
+            <!-- Motivasiya Bölməsi -->
+            <div class="hidden md:block bg-blue-50 p-8 rounded-3xl">
+                <div class="text-primary text-4xl mb-6"><i class="fas fa-graduation-cap"></i></div>
+                <h3 class="text-2xl font-bold mb-4">Niyə EduCan?</h3>
+                <ul class="space-y-4 text-gray-700">
+                    <li class="flex items-start gap-3"><i class="fas fa-check-circle text-accent mt-1"></i> 500+ peşəkar müəllim seçimi.</li>
+                    <li class="flex items-start gap-3"><i class="fas fa-check-circle text-accent mt-1"></i> Evdən çıxmadan, rahat onlayn dərslər.</li>
+                    <li class="flex items-start gap-3"><i class="fas fa-check-circle text-accent mt-1"></i> Şəffaf reytinq və rəy sistemi.</li>
+                    <li class="flex items-start gap-3"><i class="fas fa-check-circle text-accent mt-1"></i> Hər büdcəyə uyğun qiymətlər.</li>
+                </ul>
+              
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-white border-t border-gray-100 py-12 sm:py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6">
+            <div class="grid sm:grid-cols-2 md:grid-cols-4 gap-10 text-gray-600">
+                <div>
+                    <a href="/" class="text-2xl font-extrabold text-primary mb-4 block">EduCan</a>
+                    <p class="text-sm leading-relaxed">Azərbaycanın DİM hazırlığı üçün onlayn müəllim platforması.</p>
+                </div>
+                <div>
+                    <h4 class="font-bold text-gray-900 mb-4">Naviqasiya</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="/teachers" class="hover:text-primary transition">Müəllim tap</a></li>
+                        <li><a href="/how-it-works" class="hover:text-primary transition">Necə işləyir</a></li>
+                        <li><a href="/about" class="hover:text-primary transition">Haqqımızda</a></li>
+                        <li><a href="/contact" class="hover:text-primary transition">Əlaqə</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold text-gray-900 mb-4">Hüquqi</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="/privacy" class="hover:text-primary transition">Məxfilik Siyasəti</a></li>
+                        <li><a href="/terms" class="hover:text-primary transition">İstifadə Qaydaları</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold text-gray-900 mb-4">Sosial şəbəkələr</h4>
+                    <div class="flex gap-4 text-2xl">
+                        <a href="https://instagram.com/educan" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-primary transition" aria-label="Instagram">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="https://facebook.com/educan" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-primary transition" aria-label="Facebook">
+                            <i class="fab fa-facebook"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-12 pt-8 border-t border-gray-100 text-center text-sm text-gray-400">
+                © 2026 EduCan. Bütün hüquqlar qorunur.
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

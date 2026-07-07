@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rəy Bildir | EduCan</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: { primary: '#1A56A0', accent: '#20948B' }
+                }
+            }
+        }
+    </script>
+    <style>
+        #mobile-menu { display: none; }
+        #mobile-menu.open { display: block; }
+        .sidebar-item {
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+        .sidebar-item:hover {
+            background: #EFF6FF;
+            color: #1A56A0;
+        }
+        .sidebar-item.active {
+            background: #1A56A0;
+            color: white;
+        }
+        .sidebar-item i {
+            width: 1.5rem;
+            text-align: center;
+        }
+        .star-rating {
+            display: flex;
+            flex-direction: row-reverse;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+        .star-rating input {
+            display: none;
+        }
+        .star-rating label {
+            font-size: 3rem;
+            color: #D1D5DB;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .star-rating label:hover,
+        .star-rating label:hover ~ label,
+        .star-rating input:checked ~ label {
+            color: #F59E0B;
+            transform: scale(1.1);
+        }
+        .star-rating input:checked + label {
+            color: #F59E0B;
+        }
+        .star-rating.readonly label {
+            cursor: default;
+        }
+        .star-rating.readonly label:hover,
+        .star-rating.readonly label:hover ~ label {
+            transform: none;
+        }
+        .star-rating.readonly input:checked ~ label {
+            color: #F59E0B;
+        }
+        .feedback-textarea {
+            resize: none;
+            transition: all 0.3s ease;
+        }
+        .feedback-textarea:focus {
+            box-shadow: 0 0 0 3px rgba(26, 86, 160, 0.15);
+            border-color: #1A56A0;
+        }
+        .submit-btn {
+            transition: all 0.3s ease;
+        }
+        .submit-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(26, 86, 160, 0.3);
+        }
+        .submit-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .sidebar-mobile {
+            position: fixed;
+            top: 0;
+            left: -280px;
+            width: 280px;
+            height: 100vh;
+            background: white;
+            z-index: 1000;
+            transition: left 0.3s ease;
+            box-shadow: 2px 0 20px rgba(0,0,0,0.1);
+            overflow-y: auto;
+        }
+        .sidebar-mobile.open {
+            left: 0;
+        }
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.4);
+            z-index: 999;
+            display: none;
+        }
+        .overlay.open {
+            display: block;
+        }
+        .sidebar-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            font-size: 1.5rem;
+            color: #6B7280;
+            cursor: pointer;
+        }
+        .sidebar-close:hover {
+            color: #1A56A0;
+        }
+        .feedback-bg {
+            background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%);
+        }
+        .success-check {
+            animation: scaleIn 0.6s ease;
+        }
+        @keyframes scaleIn {
+            0% { transform: scale(0) rotate(-10deg); opacity: 0; }
+            50% { transform: scale(1.2) rotate(2deg); }
+            100% { transform: scale(1) rotate(0deg); opacity: 1; }
+        }
+        .confetti-piece {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            pointer-events: none;
+            z-index: 100;
+            animation: confettiFall 4s ease-in forwards;
+        }
+        @keyframes confettiFall {
+            0% { transform: translateY(-100px) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+        }
+        .readonly-box {
+            background: #F9FAFB;
+            border: 1px solid #E5E7EB;
+            border-radius: 0.75rem;
+            padding: 1rem;
+            color: #4B5563;
+        }
+        .readonly-box .stars-display {
+            font-size: 1.5rem;
+            color: #F59E0B;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-900 font-sans">
+
+    <!-- ============================================================ -->
+    <!-- MOBILE SIDEBAR OVERLAY -->
+    <!-- ============================================================ -->
+    <div class="overlay" id="sidebarOverlay"></div>
+
+    <!-- ============================================================ -->
+    <!-- MOBILE SIDEBAR -->
+    <!-- ============================================================ -->
+    <div class="sidebar-mobile" id="mobileSidebar">
+        <div class="p-6">
+            <span class="sidebar-close" id="sidebarClose"><i class="fas fa-times"></i></span>
+            <div class="flex items-center gap-3 mb-8 mt-2">
+                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&h=80&fit=crop&crop=face&auto=format&q=80" alt="Tələbə" class="w-12 h-12 rounded-full object-cover border-2 border-primary">
+                <div>
+                    <div class="font-bold text-gray-900">Əli Məmmədov</div>
+                    <div class="text-sm text-gray-500">Tələbə</div>
+                </div>
+            </div>
+            <nav class="space-y-1">
+                <a href="/student/dashboard" class="flex items-center gap-3 px-4 py-3 rounded-xl sidebar-item">
+                    <i class="fas fa-th-large"></i> Dashboard
+                </a>
+                <a href="/student/teachers" class="flex items-center gap-3 px-4 py-3 rounded-xl sidebar-item">
+                    <i class="fas fa-search"></i> Müəllim tap
+                </a>
+                <a href="/student/lessons" class="flex items-center gap-3 px-4 py-3 rounded-xl sidebar-item active">
+                    <i class="fas fa-calendar-check"></i> Dərslərim
+                </a>
+                <a href="/student/recordings" class="flex items-center gap-3 px-4 py-3 rounded-xl sidebar-item">
+                    <i class="fas fa-video"></i> Yazılarım
+                </a>
+                <a href="/student/payments" class="flex items-center gap-3 px-4 py-3 rounded-xl sidebar-item">
+                    <i class="fas fa-credit-card"></i> Ödənişlər
+                </a>
+                <a href="/student/settings" class="flex items-center gap-3 px-4 py-3 rounded-xl sidebar-item">
+                    <i class="fas fa-cog"></i> Parametrlər
+                </a>
+                <div class="border-t border-gray-100 my-3"></div>
+                <a href="/logout" class="flex items-center gap-3 px-4 py-3 rounded-xl sidebar-item text-red-500 hover:bg-red-50">
+                    <i class="fas fa-sign-out-alt"></i> Çıxış
+                </a>
+            </nav>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- HEADER -->
+    <!-- ============================================================ -->
+    <header class="sticky top-0 bg-white/95 backdrop-blur-sm z-50 border-b border-gray-100 shadow-sm">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex justify-between items-center">
+            <div class="flex items-center gap-4">
+                <button id="sidebarToggle" class="lg:hidden text-2xl text-gray-600 hover:text-primary transition p-2" aria-label="Sidebar">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <a href="/student/dashboard" class="text-2xl sm:text-3xl font-extrabold text-primary tracking-tighter">EduCan</a>
+            </div>
+
+            <div class="flex items-center gap-4">
+                <span class="hidden sm:inline text-sm text-gray-600">
+                    <i class="fas fa-user-circle text-primary text-xl mr-1"></i>
+                    Əli Məmmədov
+                </span>
+                <a href="/logout" class="text-gray-500 hover:text-red-500 transition text-sm font-medium hidden sm:inline">
+                    <i class="fas fa-sign-out-alt"></i> Çıxış
+                </a>
+                <button class="lg:hidden text-2xl text-gray-600 hover:text-primary transition" id="mobileMenuBtn">
+                    <i class="fas fa-ellipsis-v"></i>
+                </button>
+            </div>
+        </nav>
+
+        <div id="mobile-menu" class="lg:hidden border-t border-gray-100 bg-white px-4 pb-4">
+            <div class="flex flex-wrap gap-2 pt-3">
+                <a href="/student/dashboard" class="text-sm px-3 py-1.5 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition">Dashboard</a>
+                <a href="/student/teachers" class="text-sm px-3 py-1.5 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition">Müəllim tap</a>
+                <a href="/student/lessons" class="text-sm px-3 py-1.5 bg-primary text-white rounded-lg font-medium">Dərslərim</a>
+                <a href="/student/recordings" class="text-sm px-3 py-1.5 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition">Yazılar</a>
+                <a href="/student/payments" class="text-sm px-3 py-1.5 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition">Ödənişlər</a>
+                <a href="/student/settings" class="text-sm px-3 py-1.5 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition">Parametrlər</a>
+                <a href="/logout" class="text-sm px-3 py-1.5 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition">Çıxış</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- ============================================================ -->
+    <!-- MAIN CONTENT - FEEDBACK -->
+    <!-- ============================================================ -->
+    <main class="min-h-[calc(100vh-200px)] feedback-bg flex items-center justify-center px-4 py-12">
+        <div class="w-full max-w-2xl">
+            
+            <!-- ======================================================== -->
+            <!-- FEEDBACK CARD -->
+            <!-- ======================================================== -->
+            <div class="bg-white rounded-3xl shadow-2xl border border-gray-100 overflow-hidden">
+                
+                <!-- Header -->
+                <div class="bg-gradient-to-r from-primary to-accent p-6 text-white">
+                    <div class="flex items-center gap-4">
+                        <div class="w-14 h-14 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0">
+                            <i class="fas fa-star text-2xl text-white"></i>
+                        </div>
+                        <div>
+                            <h1 class="text-xl font-bold">Rəy Bildir</h1>
+                            <p class="text-blue-100 text-sm">Dərs təcrübənizi paylaşın</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Body -->
+                <div class="p-8">
+                    
+                    <!-- ==================================================== -->
+                    <!-- LESSON INFO -->
+                    <!-- ==================================================== -->
+                    <div class="flex items-center gap-4 mb-6 p-4 bg-gray-50 rounded-xl">
+                        <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=60&h=60&fit=crop&crop=face&auto=format&q=80" alt="Rəşad Hüseynov" class="w-14 h-14 rounded-full object-cover border-2 border-primary flex-shrink-0">
+                        <div>
+                            <h3 class="font-bold text-gray-900">Rəşad Hüseynov</h3>
+                            <p class="text-sm text-gray-500">Riyaziyyat · DİM</p>
+                            <div class="flex items-center gap-3 mt-1 text-xs text-gray-400">
+                                <span><i class="fas fa-calendar-alt mr-1"></i>15 İyun 2026, 15:00</span>
+                                <span><i class="fas fa-clock mr-1"></i>1 saat</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ==================================================== -->
+                    <!-- FEEDBACK FORM (aktiv) -->
+                    <!-- ==================================================== -->
+                    <div id="feedbackForm">
+                        <div class="mb-6">
+                            <label class="block text-sm font-medium text-gray-700 mb-3 text-center">
+                                Dərsi necə qiymətləndirirsiniz?
+                            </label>
+                            <div class="star-rating" id="starRating">
+                                <input type="radio" name="rating" id="star5" value="5">
+                                <label for="star5" title="5 ulduz - Əla"><i class="fas fa-star"></i></label>
+                                
+                                <input type="radio" name="rating" id="star4" value="4">
+                                <label for="star4" title="4 ulduz - Yaxşı"><i class="fas fa-star"></i></label>
+                                
+                                <input type="radio" name="rating" id="star3" value="3">
+                                <label for="star3" title="3 ulduz - Orta"><i class="fas fa-star"></i></label>
+                                
+                                <input type="radio" name="rating" id="star2" value="2">
+                                <label for="star2" title="2 ulduz - Zəif"><i class="fas fa-star"></i></label>
+                                
+                                <input type="radio" name="rating" id="star1" value="1">
+                                <label for="star1" title="1 ulduz - Çox zəif"><i class="fas fa-star"></i></label>
+                            </div>
+                            <p id="ratingLabel" class="text-center text-sm text-gray-400 mt-2">Zəhmət olmasa ulduz seçin</p>
+                        </div>
+
+                        <div class="mb-6">
+                            <label for="feedbackText" class="block text-sm font-medium text-gray-700 mb-1.5">
+                                Bu dərs haqqında fikrinizi yazın
+                            </label>
+                            <textarea 
+                                id="feedbackText" 
+                                placeholder="Dərs, müəllim və təcrübə haqqında fikirlərinizi bölüşün..." 
+                                maxlength="500"
+                                class="feedback-textarea w-full p-4 border border-gray-200 rounded-xl h-32 focus:ring-2 focus:ring-primary outline-none text-sm"
+                            ></textarea>
+                            <div class="flex justify-between text-xs text-gray-400 mt-1">
+                                <span>Maksimum 500 simvol</span>
+                                <span id="charCount">0 / 500</span>
+                            </div>
+                        </div>
+
+                        <button id="submitBtn" class="submit-btn w-full bg-primary text-white py-3.5 rounded-xl font-bold hover:bg-blue-800 transition shadow-lg shadow-primary/20 flex items-center justify-center gap-2 text-lg" disabled>
+                            <i class="fas fa-paper-plane"></i> Rəy göndər
+                        </button>
+                    </div>
+
+                    <!-- ==================================================== -->
+                    <!-- READONLY (əgər rəy artıq verilibsə) -->
+                    <!-- ==================================================== -->
+                    <div id="readonlyFeedback" class="hidden">
+                        <div class="text-center mb-4">
+                            <i class="fas fa-check-circle text-3xl text-green-500 mb-2"></i>
+                            <p class="text-sm text-gray-500">Bu dərs üçün artıq rəy vermisiniz</p>
+                        </div>
+                        <div class="readonly-box">
+                            <div class="flex items-center justify-between mb-3">
+                                <span class="font-medium text-gray-700">Qiymətləndirmə:</span>
+                                <div class="stars-display" id="readonlyStars">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                </div>
+                            </div>
+                            <div class="border-t border-gray-200 pt-3">
+                                <p class="text-sm text-gray-600" id="readonlyText">
+                                    "Müəllim çox peşəkardı. Hər şeyi aydın izah etdi. Çox razı qaldım!"
+                                </p>
+                            </div>
+                            <div class="mt-3 text-xs text-gray-400">
+                                <i class="fas fa-clock mr-1"></i> Rəy verilib: 15 İyun 2026, 17:30
+                            </div>
+                        </div>
+                        <div class="mt-4 text-center">
+                            <a href="/student/lessons" class="text-primary hover:underline font-medium text-sm">
+                                <i class="fas fa-arrow-left mr-1"></i> Dərslərimə qayıt
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- ======================================================== -->
+            <!-- BACK BUTTON -->
+            <!-- ======================================================== -->
+            <div class="mt-6 text-center">
+                <a href="/student/lessons" class="text-gray-500 hover:text-primary transition text-sm font-medium">
+                    <i class="fas fa-arrow-left mr-1"></i> Dərslərimə qayıt
+                </a>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- ============================================================ -->
+    <!-- SUCCESS MODAL -->
+    <!-- ============================================================ -->
+    <div id="successModal" class="fixed inset-0 z-50 flex items-center justify-center px-4 hidden">
+        <div class="absolute inset-0 bg-black/60" onclick="closeSuccess()"></div>
+        <div class="bg-white rounded-3xl max-w-md w-full p-8 shadow-2xl relative z-10 text-center">
+            <div class="success-check mb-4">
+                <i class="fas fa-check-circle text-6xl text-green-500"></i>
+            </div>
+            <h3 class="text-2xl font-extrabold text-gray-900 mb-2">Rəyiniz üçün təşəkkür edirik!</h3>
+            <p class="text-gray-500 text-sm mb-6">Rəyiniz müəllimə və digər tələbələrə kömək edəcək.</p>
+            <div class="bg-yellow-50 border border-yellow-200 rounded-xl p-4 text-left mb-6">
+                <div class="flex items-center gap-3">
+                    <div class="flex text-yellow-400" id="successStars">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <span class="text-sm text-gray-500" id="successRating">5 ulduz</span>
+                </div>
+                <p class="text-sm text-gray-600 mt-2 italic" id="successText">"Müəllim çox peşəkardı."</p>
+            </div>
+            <div class="flex gap-3">
+                <a href="/student/lessons" class="flex-1 bg-primary text-white py-3 rounded-xl font-semibold hover:bg-blue-800 transition text-center">
+                    <i class="fas fa-calendar-check mr-2"></i> Dərslərim
+                </a>
+                <a href="/student/dashboard" class="flex-1 bg-gray-100 text-gray-700 py-3 rounded-xl font-semibold hover:bg-gray-200 transition text-center">
+                    <i class="fas fa-home mr-2"></i> Dashboard
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- FOOTER -->
+    <!-- ============================================================ -->
+    <footer class="bg-white border-t border-gray-100 py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6">
+            <div class="grid sm:grid-cols-2 md:grid-cols-4 gap-10 text-gray-600">
+                <div>
+                    <a href="/" class="text-2xl font-extrabold text-primary mb-4 block">EduCan</a>
+                    <p class="text-sm leading-relaxed">Azərbaycanın DİM hazırlığı üçün onlayn müəllim platforması.</p>
+                </div>
+                <div>
+                    <h4 class="font-bold text-gray-900 mb-4">Naviqasiya</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="/teachers" class="hover:text-primary transition">Müəllim tap</a></li>
+                        <li><a href="/how-it-works" class="hover:text-primary transition">Necə işləyir</a></li>
+                        <li><a href="/about" class="hover:text-primary transition">Haqqımızda</a></li>
+                        <li><a href="/contact" class="hover:text-primary transition">Əlaqə</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold text-gray-900 mb-4">Hüquqi</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="/privacy" class="hover:text-primary transition">Məxfilik Siyasəti</a></li>
+                        <li><a href="/terms" class="hover:text-primary transition">İstifadə Qaydaları</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold text-gray-900 mb-4">Sosial şəbəkələr</h4>
+                    <div class="flex gap-4 text-2xl">
+                        <a href="https://instagram.com/educan" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-primary transition" aria-label="Instagram">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="https://facebook.com/educan" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-primary transition" aria-label="Facebook">
+                            <i class="fab fa-facebook"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-12 pt-8 border-t border-gray-100 text-center text-sm text-gray-400">
+                © 2026 EduCan. Bütün hüquqlar qorunur.
+            </div>
+        </div>
+    </footer>
+
+    <!-- ============================================================ -->
+    <!-- SCRIPTS -->
+    <!-- ============================================================ -->
+    <script>
+        // ============================================================
+        //  SIDEBAR TOGGLE
+        // ============================================================
+        const sidebarToggle = document.getElementById('sidebarToggle');
+        const mobileSidebar = document.getElementById('mobileSidebar');
+        const sidebarOverlay = document.getElementById('sidebarOverlay');
+        const sidebarClose = document.getElementById('sidebarClose');
+
+        function openSidebar() {
+            mobileSidebar.classList.add('open');
+            sidebarOverlay.classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeSidebar() {
+            mobileSidebar.classList.remove('open');
+            sidebarOverlay.classList.remove('open');
+            document.body.style.overflow = '';
+        }
+
+        sidebarToggle.addEventListener('click', openSidebar);
+        sidebarClose.addEventListener('click', closeSidebar);
+        sidebarOverlay.addEventListener('click', closeSidebar);
+
+        // ============================================================
+        //  MOBILE TOP MENU
+        // ============================================================
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            const isOpen = mobileMenu.classList.toggle('open');
+            mobileMenuBtn.querySelector('i').className = isOpen ? 'fas fa-times' : 'fas fa-ellipsis-v';
+        });
+
+        // ============================================================
+        //  STAR RATING
+        // ============================================================
+        const stars = document.querySelectorAll('.star-rating input');
+        const ratingLabel = document.getElementById('ratingLabel');
+        const submitBtn = document.getElementById('submitBtn');
+        const feedbackText = document.getElementById('feedbackText');
+        const charCount = document.getElementById('charCount');
+        let selectedRating = 0;
+
+        const ratingLabels = {
+            1: 'Çox zəif 😞',
+            2: 'Zəif 😕',
+            3: 'Orta 😐',
+            4: 'Yaxşı 😊',
+            5: 'Əla 🤩'
+        };
+
+        stars.forEach(star => {
+            star.addEventListener('change', function() {
+                selectedRating = parseInt(this.value);
+                ratingLabel.textContent = ratingLabels[selectedRating] || 'Zəhmət olmasa ulduz seçin';
+                ratingLabel.className = 'text-center text-sm font-medium mt-2 ' + 
+                    (selectedRating >= 4 ? 'text-green-600' : 
+                     selectedRating >= 3 ? 'text-yellow-600' : 'text-red-500');
+                validateForm();
+            });
+        });
+
+        // ============================================================
+        //  TEXTAREA CHARACTER COUNT
+        // ============================================================
+        feedbackText.addEventListener('input', function() {
+            const count = this.value.length;
+            charCount.textContent = count + ' / 500';
+            if (count > 450) {
+                charCount.className = 'text-red-500';
+            } else {
+                charCount.className = 'text-gray-400';
+            }
+            validateForm();
+        });
+
+        // ============================================================
+        //  FORM VALIDATION
+        // ============================================================
+        function validateForm() {
+            const hasRating = selectedRating > 0;
+            const hasText = feedbackText.value.trim().length > 0;
+            submitBtn.disabled = !(hasRating && hasText);
+        }
+
+        // ============================================================
+        //  SUBMIT FEEDBACK
+        // ============================================================
+        submitBtn.addEventListener('click', function() {
+            if (this.disabled) return;
+
+            // Konfetti effekti
+            createConfetti();
+
+            // Uğur mesajını göstər
+            const starsDisplay = document.getElementById('successStars');
+            starsDisplay.innerHTML = '';
+            for (let i = 0; i < selectedRating; i++) {
+                starsDisplay.innerHTML += '<i class="fas fa-star"></i>';
+            }
+            document.getElementById('successRating').textContent = ratingLabels[selectedRating] || selectedRating + ' ulduz';
+            document.getElementById('successText').textContent = '"' + feedbackText.value.trim() + '"';
+
+            document.getElementById('successModal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+
+            // Formu söndür
+            document.getElementById('feedbackForm').classList.add('hidden');
+
+            console.log('📝 Rəy göndərildi:');
+            console.log(`   Qiymət: ${selectedRating} ulduz`);
+            console.log(`   Rəy: ${feedbackText.value.trim()}`);
+            console.log(`   Dərs ID: lesson-123`);
+            console.log(`   Müəllim: Rəşad Hüseynov`);
+        });
+
+        function closeSuccess() {
+            document.getElementById('successModal').classList.add('hidden');
+            document.body.style.overflow = '';
+            // Dərslərim səhifəsinə yönləndir
+            // window.location.href = '/student/lessons';
+        }
+
+        // Escape ilə bağla
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                if (!document.getElementById('successModal').classList.contains('hidden')) {
+                    closeSuccess();
+                }
+            }
+        });
+
+        // ============================================================
+        //  READONLY MODE (simulyasiya - əgər rəy artıq verilibsə)
+        // ============================================================
+        // Bu hissə simulyasiya üçündür. URL-də ?readonly=true əlavə etsəniz işləyir.
+        // Əsl səhnədə bu, database-də yoxlanılacaq.
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('readonly') === 'true') {
+            document.getElementById('feedbackForm').classList.add('hidden');
+            document.getElementById('readonlyFeedback').classList.remove('hidden');
+            // Readonly stars
+            const starsDisplay = document.getElementById('readonlyStars');
+            starsDisplay.innerHTML = '';
+            for (let i = 0; i < 5; i++) {
+                starsDisplay.innerHTML += '<i class="fas fa-star"></i>';
+            }
+        }
+
+        // ============================================================
+        //  CONFETTI EFFECT
+        // ============================================================
+        function createConfetti() {
+            const colors = ['#F59E0B', '#1A56A0', '#20948B', '#EF4444', '#8B5CF6', '#EC4899', '#10B981', '#3B82F6'];
+            for (let i = 0; i < 60; i++) {
+                const piece = document.createElement('div');
+                piece.className = 'confetti-piece';
+                piece.style.left = Math.random() * 100 + '%';
+                piece.style.top = '-10px';
+                piece.style.background = colors[Math.floor(Math.random() * colors.length)];
+                piece.style.width = (Math.random() * 8 + 4) + 'px';
+                piece.style.height = (Math.random() * 8 + 4) + 'px';
+                piece.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+                piece.style.animationDuration = (Math.random() * 2 + 2) + 's';
+                piece.style.animationDelay = (Math.random() * 1.5) + 's';
+                document.body.appendChild(piece);
+                setTimeout(() => piece.remove(), 4000);
+            }
+        }
+
+        // ============================================================
+        //  SIDEBAR ACTIVE STATE
+        // ============================================================
+        document.querySelectorAll('.sidebar-item').forEach(item => {
+            item.addEventListener('click', function(e) {
+                document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // ============================================================
+        //  INIT
+        // ============================================================
+        console.log('⭐ Rəy bildirmə səhifəsi yükləndi');
+        console.log('   Dərs ID: lesson-123');
+        console.log('   Müəllim: Rəşad Hüseynov');
+    </script>
+</body>
+</html>

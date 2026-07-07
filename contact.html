@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="EduCan — Bizimlə əlaqə saxlayın. Suallarınız varsa bizə yazın.">
+    <title>Əlaqə | EduCan</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: { colors: { primary: '#1A56A0', accent: '#20948B' } }
+            }
+        }
+    </script>
+    <style>
+        #mobile-menu { display: none; }
+        #mobile-menu.open { display: block; }
+    </style>
+</head>
+<body class="bg-white text-gray-900 font-sans">
+
+    <!-- HEADER (index.html ilə eyni) -->
+    <header class="sticky top-0 bg-white/95 backdrop-blur-sm z-50 border-b border-gray-100 shadow-sm">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex justify-between items-center">
+            <a href="/" class="text-2xl sm:text-3xl font-extrabold text-primary tracking-tighter">EduCan</a>
+            <div class="hidden md:flex gap-8 font-medium text-gray-600">
+                <a href="/teachers" class="hover:text-primary transition">Müəllim tap</a>
+                <a href="/how-it-works" class="hover:text-primary transition">Necə işləyir</a>
+                <a href="/about" class="hover:text-primary transition">Haqqımızda</a>
+                <a href="/contact" class="text-primary font-bold">Əlaqə</a>
+            </div>
+            <div class="hidden md:flex gap-3 items-center">
+                <a href="/login" class="px-5 py-2 font-semibold text-primary hover:text-blue-800 transition">Daxil ol</a>
+                <a href="/register/student" class="bg-primary text-white px-6 py-2 rounded-xl font-semibold hover:bg-blue-800 transition">Qeydiyyat</a>
+            </div>
+            <button id="menu-btn" class="md:hidden text-2xl text-primary p-2" aria-label="Menyu" aria-expanded="false">
+                <i class="fas fa-bars" id="menu-icon"></i>
+            </button>
+        </nav>
+        <div id="mobile-menu" class="md:hidden border-t border-gray-100 bg-white px-4 pb-4">
+            <div class="flex flex-col gap-1 pt-2 font-medium text-gray-600">
+                <a href="/teachers" class="py-3 px-2 hover:text-primary border-b border-gray-50">Müəllim tap</a>
+                <a href="/how-it-works" class="py-3 px-2 hover:text-primary border-b border-gray-50">Necə işləyir</a>
+                <a href="/about" class="py-3 px-2 hover:text-primary border-b border-gray-50">Haqqımızda</a>
+                <a href="/contact" class="py-3 px-2 hover:text-primary border-b border-gray-50">Əlaqə</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- CONTACT SECTION -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 py-16">
+        <h1 class="text-3xl sm:text-4xl font-bold mb-8 text-center">Bizimlə əlaqə saxlayın</h1>
+        
+        <div class="grid md:grid-cols-2 gap-12">
+            <!-- Form -->
+            <div class="bg-gray-50 p-8 rounded-3xl">
+                <form id="contact-form" class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-bold mb-1">Adınız</label>
+                        <input type="text" required class="w-full p-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-primary outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold mb-1">E-poçt</label>
+                        <input type="email" required class="w-full p-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-primary outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold mb-1">Mövzu</label>
+                        <select class="w-full p-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-primary outline-none">
+                            <option>Ümumi sual</option>
+                            <option>Texniki problem</option>
+                            <option>Müəllim kimi qoşul</option>
+                            <option>Digər</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold mb-1">Mesajınız</label>
+                        <textarea rows="4" required class="w-full p-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-primary outline-none"></textarea>
+                    </div>
+                    <button type="submit" class="w-full bg-primary text-white py-3 rounded-xl font-bold hover:bg-blue-800 transition">Göndər</button>
+                </form>
+                <div id="success-message" class="hidden mt-4 p-4 bg-green-100 text-green-700 rounded-xl text-center font-bold">
+                    Mesajınız göndərildi. Tezliklə sizinlə əlaqə saxlayacağıq.
+                </div>
+            </div>
+
+            <!-- Contact Details -->
+            <div class="flex flex-col justify-center space-y-6">
+                <h2 class="text-2xl font-bold">Digər əlaqə vasitələri</h2>
+                <p class="text-gray-600">Bizimlə birbaşa e-poçt və ya sosial şəbəkələr vasitəsilə əlaqə saxlaya bilərsiniz.</p>
+                <div class="space-y-4">
+                    <p><i class="fas fa-envelope text-primary mr-3"></i> info@educan.az</p>
+                    <div class="flex gap-4 text-2xl">
+                        <a href="#" class="text-gray-400 hover:text-primary"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-primary"><i class="fab fa-facebook"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- FOOTER (index.html ilə eyni) -->
+    <footer class="bg-white border-t border-gray-100 py-12 sm:py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6">
+            <div class="grid sm:grid-cols-2 md:grid-cols-4 gap-10 text-gray-600">
+                <div>
+                    <a href="/" class="text-2xl font-extrabold text-primary mb-4 block">EduCan</a>
+                    <p class="text-sm leading-relaxed">Azərbaycanın DİM hazırlığı üçün onlayn müəllim platforması.</p>
+                </div>
+                <div>
+                    <h4 class="font-bold text-gray-900 mb-4">Naviqasiya</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="/teachers" class="hover:text-primary transition">Müəllim tap</a></li>
+                        <li><a href="/how-it-works" class="hover:text-primary transition">Necə işləyir</a></li>
+                        <li><a href="/about" class="hover:text-primary transition">Haqqımızda</a></li>
+                        <li><a href="/contact" class="hover:text-primary transition">Əlaqə</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold text-gray-900 mb-4">Hüquqi</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="/privacy" class="hover:text-primary transition">Məxfilik Siyasəti</a></li>
+                        <li><a href="/terms" class="hover:text-primary transition">İstifadə Qaydaları</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold text-gray-900 mb-4">Sosial şəbəkələr</h4>
+                    <div class="flex gap-4 text-2xl">
+                        <a href="#" class="text-gray-400 hover:text-primary transition"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-primary transition"><i class="fab fa-facebook"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-12 pt-8 border-t border-gray-100 text-center text-sm text-gray-400">
+                © 2026 EduCan. Bütün hüquqlar qorunur.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Menyu scripti
+        const menuBtn = document.getElementById('menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const menuIcon = document.getElementById('menu-icon');
+        menuBtn.addEventListener('click', () => {
+            const isOpen = mobileMenu.classList.toggle('open');
+            menuIcon.classList.toggle('fa-bars', !isOpen);
+            menuIcon.classList.toggle('fa-times', isOpen);
+        });
+
+        // Form uğurlu göndərilmə scripti
+        document.getElementById('contact-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            this.classList.add('hidden');
+            document.getElementById('success-message').classList.remove('hidden');
+        });
+    </script>
+</body>
+</html>

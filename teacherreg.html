@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Müəllim Qeydiyyatı | EduCan</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: { primary: '#1A56A0', accent: '#20948B' }
+                }
+            }
+        }
+    </script>
+    <style>
+        #mobile-menu { display: none; }
+        #mobile-menu.open { display: block; }
+        .step { transition: opacity 0.3s ease; }
+        .step.hidden { display: none; }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-900 font-sans">
+
+    <!-- HEADER (index.html ilə eyni) -->
+    <header class="sticky top-0 bg-white/95 backdrop-blur-sm z-50 border-b border-gray-100 shadow-sm">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex justify-between items-center">
+            <a href="/" class="text-2xl sm:text-3xl font-extrabold text-primary tracking-tighter">EduCan</a>
+
+            <div class="hidden md:flex gap-8 font-medium text-gray-600">
+                <a href="/teachers" class="hover:text-primary transition">Müəllim tap</a>
+                <a href="/how-it-works" class="hover:text-primary transition">Necə işləyir</a>
+                <a href="/about" class="hover:text-primary transition">Haqqımızda</a>
+                <a href="/contact" class="hover:text-primary transition">Əlaqə</a>
+            </div>
+
+            <div class="hidden md:flex gap-3 items-center">
+                <a href="/login" class="px-5 py-2 font-semibold text-primary hover:text-blue-800 transition">Daxil ol</a>
+                <a href="/register/student" class="bg-primary text-white px-6 py-2 rounded-xl font-semibold hover:bg-blue-800 transition">Qeydiyyat</a>
+            </div>
+
+            <button id="menu-btn" class="md:hidden text-2xl text-primary p-2" aria-label="Menyu" aria-expanded="false">
+                <i class="fas fa-bars" id="menu-icon"></i>
+            </button>
+        </nav>
+
+        <div id="mobile-menu" class="md:hidden border-t border-gray-100 bg-white px-4 pb-4">
+            <div class="flex flex-col gap-1 pt-2 font-medium text-gray-600">
+                <a href="/teachers" class="py-3 px-2 hover:text-primary border-b border-gray-50">Müəllim tap</a>
+                <a href="/how-it-works" class="py-3 px-2 hover:text-primary border-b border-gray-50">Necə işləyir</a>
+                <a href="/about" class="py-3 px-2 hover:text-primary border-b border-gray-50">Haqqımızda</a>
+                <a href="/contact" class="py-3 px-2 hover:text-primary border-b border-gray-50">Əlaqə</a>
+                <div class="flex gap-3 pt-4">
+                    <a href="/login" class="flex-1 text-center py-2 font-semibold text-primary border border-primary rounded-xl">Daxil ol</a>
+                    <a href="/register/student" class="flex-1 text-center bg-primary text-white py-2 rounded-xl font-semibold">Qeydiyyat</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN - QEYDİYYAT FORMU -->
+    <main class="max-w-3xl mx-auto px-4 py-12">
+        <div class="mb-10">
+            <div class="flex justify-between text-xs font-bold text-primary mb-2 uppercase tracking-wider">
+                <span id="step-name">Addım 1: Şəxsi Məlumatlar</span>
+                <span id="step-count">1 / 5</span>
+            </div>
+            <div class="w-full bg-gray-200 h-2 rounded-full overflow-hidden">
+                <div id="progress-bar" class="bg-primary h-full transition-all duration-500 ease-out" style="width: 20%;"></div>
+            </div>
+        </div>
+
+        <form id="teacher-reg-form" class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100" novalidate>
+            <!-- Step 1: Şəxsi Məlumatlar -->
+            <div class="step" id="step1">
+                <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+                    <i class="fas fa-user-circle text-primary"></i> Şəxsi Məlumatlar
+                </h2>
+                <div class="grid md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Ad Soyad <span class="text-red-500">*</span></label>
+                        <input type="text" id="full_name" placeholder="Ad Soyad" required class="w-full p-3 border rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">E-poçt <span class="text-red-500">*</span></label>
+                        <input type="email" id="email" placeholder="E-poçt" required class="w-full p-3 border rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Şifrə <span class="text-red-500">*</span></label>
+                        <input type="password" id="pass1" placeholder="Şifrə (min 8 simvol)" required minlength="8" class="w-full p-3 border rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Şifrəni təsdiqlə <span class="text-red-500">*</span></label>
+                        <input type="password" id="pass2" placeholder="Şifrəni təsdiqlə" required class="w-full p-3 border rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 2: Peşəkar Məlumatlar -->
+            <div class="step hidden" id="step2">
+                <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+                    <i class="fas fa-briefcase text-primary"></i> Peşəkar Məlumatlar
+                </h2>
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">İş təcrübəsi (il) <span class="text-red-500">*</span></label>
+                        <input type="number" id="experience" placeholder="İş təcrübəsi (il)" min="0" required class="w-full p-3 border rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Qısa Bio (max 500 simvol)</label>
+                        <textarea id="bio" placeholder="Özünüz haqqında qısa məlumat..." maxlength="500" class="w-full p-3 border rounded-xl h-28 focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition resize-none"></textarea>
+                        <div class="text-right text-xs text-gray-400 mt-1"><span id="bio-count">0</span> / 500</div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Dərs növü <span class="text-red-500">*</span></label>
+                        <select id="session_type" required class="w-full p-3 border rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition appearance-none bg-white">
+                            <option value="">Dərs növü seçin...</option>
+                            <option value="1-on-1">1-on-1</option>
+                            <option value="Qrup">Qrup</option>
+                            <option value="Hər ikisi">Hər ikisi</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 3: Media -->
+            <div class="step hidden" id="step3">
+                <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+                    <i class="fas fa-camera text-primary"></i> Media
+                </h2>
+                <div class="space-y-6">
+                    <div class="border-2 border-dashed border-gray-300 rounded-2xl p-8 text-center hover:border-primary transition cursor-pointer" id="photo-drop">
+                        <i class="fas fa-cloud-upload-alt text-4xl text-gray-400 mb-3"></i>
+                        <p class="text-gray-600 font-medium">Profil şəkli yüklə</p>
+                        <p class="text-sm text-gray-400">PNG, JPG (max 5MB)</p>
+                        <input type="file" id="profile_photo" accept="image/*" class="hidden">
+                        <div id="photo-preview" class="mt-4 hidden">
+                            <img src="" alt="Profil şəkli" class="w-32 h-32 rounded-full mx-auto object-cover border-4 border-primary">
+                            <button type="button" id="remove-photo" class="text-red-500 text-sm mt-2 hover:underline">Şəkli sil</button>
+                        </div>
+                    </div>
+                    <div class="border-2 border-dashed border-gray-300 rounded-2xl p-8 text-center hover:border-primary transition cursor-pointer" id="video-drop">
+                        <i class="fas fa-video text-4xl text-gray-400 mb-3"></i>
+                        <p class="text-gray-600 font-medium">Təqdimat videosu yüklə</p>
+                        <p class="text-sm text-gray-400">MP4 (max 100MB)</p>
+                        <input type="file" id="intro_video" accept="video/*" class="hidden">
+                        <div id="video-preview" class="mt-4 hidden">
+                            <video src="" controls class="w-full max-w-xs mx-auto rounded-xl"></video>
+                            <button type="button" id="remove-video" class="text-red-500 text-sm mt-2 hover:underline">Videonu sil</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 4: Cədvəl -->
+            <div class="step hidden" id="step4">
+                <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+                    <i class="fas fa-calendar-alt text-primary"></i> Həftəlik Cədvəl
+                </h2>
+                <div class="space-y-4">
+                    <p class="text-sm text-gray-500">Boş vaxtlarınızı seçin (tələbələr bu vaxtlarda dərs rezerv edə biləcək)</p>
+                    <div id="schedule-container" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+                        <!-- Dinamik olaraq yaradılacaq -->
+                    </div>
+                    <input type="hidden" id="schedule_data" value="">
+                </div>
+            </div>
+
+            <!-- Step 5: Təsdiq -->
+            <div class="step hidden" id="step5">
+                <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+                    <i class="fas fa-check-circle text-primary"></i> Təsdiq
+                </h2>
+                <div class="bg-gray-50 rounded-2xl p-6 space-y-4 text-gray-700">
+                    <div class="flex justify-between border-b pb-3">
+                        <span class="font-medium">Ad Soyad:</span>
+                        <span id="confirm-name">-</span>
+                    </div>
+                    <div class="flex justify-between border-b pb-3">
+                        <span class="font-medium">E-poçt:</span>
+                        <span id="confirm-email">-</span>
+                    </div>
+                    <div class="flex justify-between border-b pb-3">
+                        <span class="font-medium">Təcrübə:</span>
+                        <span id="confirm-experience">-</span>
+                    </div>
+                    <div class="flex justify-between border-b pb-3">
+                        <span class="font-medium">Dərs növü:</span>
+                        <span id="confirm-session">-</span>
+                    </div>
+                    <div class="flex justify-between border-b pb-3">
+                        <span class="font-medium">Profil şəkli:</span>
+                        <span id="confirm-photo" class="text-green-600">Yüklənməyib</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="font-medium">Video:</span>
+                        <span id="confirm-video" class="text-green-600">Yüklənməyib</span>
+                    </div>
+                </div>
+                <div class="mt-6 flex items-start gap-3">
+                    <input type="checkbox" id="terms_check" required class="mt-1 w-5 h-5 text-primary border-gray-300 rounded focus:ring-primary">
+                    <label for="terms_check" class="text-sm text-gray-600">
+                        Mən <a href="/terms" class="text-primary hover:underline">İstifadə Qaydalarını</a> və <a href="/privacy" class="text-primary hover:underline">Məxfilik Siyasətini</a> oxudum və qəbul edirəm. <span class="text-red-500">*</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Naviqasiya düymələri -->
+            <div class="mt-10 flex justify-between items-center">
+                <button type="button" id="prevBtn" class="hidden text-gray-500 font-bold px-6 py-2 hover:text-gray-700 transition flex items-center gap-2">
+                    <i class="fas fa-arrow-left"></i> Geri
+                </button>
+                <button type="button" id="nextBtn" class="bg-primary text-white px-8 py-3 rounded-xl font-bold hover:bg-blue-800 transition shadow-md flex items-center gap-2 ml-auto">
+                    Növbəti <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+            <p id="error-msg" class="text-red-500 text-sm mt-4 text-center font-bold hidden"></p>
+        </form>
+    </main>
+
+    <!-- FOOTER (index.html ilə eyni) -->
+    <footer class="bg-white border-t border-gray-100 py-12 sm:py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6">
+            <div class="grid sm:grid-cols-2 md:grid-cols-4 gap-10 text-gray-600">
+                <div>
+                    <a href="/" class="text-2xl font-extrabold text-primary mb-4 block">EduCan</a>
+                    <p class="text-sm leading-relaxed">Azərbaycanın DİM hazırlığı üçün onlayn müəllim platforması.</p>
+                </div>
+                <div>
+                    <h4 class="font-bold text-gray-900 mb-4">Naviqasiya</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="/teachers" class="hover:text-primary transition">Müəllim tap</a></li>
+                        <li><a href="/how-it-works" class="hover:text-primary transition">Necə işləyir</a></li>
+                        <li><a href="/about" class="hover:text-primary transition">Haqqımızda</a></li>
+                        <li><a href="/contact" class="hover:text-primary transition">Əlaqə</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold text-gray-900 mb-4">Hüquqi</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="/privacy" class="hover:text-primary transition">Məxfilik Siyasəti</a></li>
+                        <li><a href="/terms" class="hover:text-primary transition">İstifadə Qaydaları</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold text-gray-900 mb-4">Sosial şəbəkələr</h4>
+                    <div class="flex gap-4 text-2xl">
+                        <a href="https://instagram.com/educan" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-primary transition" aria-label="Instagram">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="https://facebook.com/educan" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-primary transition" aria-label="Facebook">
+                            <i class="fab fa-facebook"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-12 pt-8 border-t border-gray-100 text-center text-sm text-gray-400">
+                © 2026 EduCan. Bütün hüquqlar qorunur.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // ============================================================
+        //  1. MENU TOGGLE (index ilə eyni)
+        // ============================================================
+        const menuBtn = document.getElementById('menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const menuIcon = document.getElementById('menu-icon');
+
+        menuBtn.addEventListener('click', () => {
+            const isOpen = mobileMenu.classList.toggle('open');
+            menuBtn.setAttribute('aria-expanded', isOpen);
+            menuIcon.classList.toggle('fa-bars', !isOpen);
+            menuIcon.classList.toggle('fa-times', isOpen);
+        });
+
+        // ============================================================
+        //  2. QEYDİYYAT FORM - STEP NAVİQASİYA
+        // ============================================================
+        let currentStep = 1;
+        const totalSteps = 5;
+        const nextBtn = document.getElementById('nextBtn');
+        const prevBtn = document.getElementById('prevBtn');
+        const errorMsg = document.getElementById('error-msg');
+
+        const stepNames = {
+            1: 'Addım 1: Şəxsi Məlumatlar',
+            2: 'Addım 2: Peşəkar Məlumatlar',
+            3: 'Addım 3: Media',
+            4: 'Addım 4: Həftəlik Cədvəl',
+            5: 'Addım 5: Təsdiq'
+        };
+
+        // Elementlər
+        const fullName = document.getElementById('full_name');
+        const email = document.getElementById('email');
+        const pass1 = document.getElementById('pass1');
+        const pass2 = document.getElementById('pass2');
+        const experience = document.getElementById('experience');
+        const bio = document.getElementById('bio');
+        const sessionType = document.getElementById('session_type');
+        const profilePhoto = document.getElementById('profile_photo');
+        const introVideo = document.getElementById('intro_video');
+        const termsCheck = document.getElementById('terms_check');
+
+        // Cədvəl üçün
+        const scheduleContainer = document.getElementById('schedule-container');
+        const scheduleDataInput = document.getElementById('schedule_data');
+
+        // Təsdiq sahələri
+        const confirmName = document.getElementById('confirm-name');
+        const confirmEmail = document.getElementById('confirm-email');
+        const confirmExperience = document.getElementById('confirm-experience');
+        const confirmSession = document.getElementById('confirm-session');
+        const confirmPhoto = document.getElementById('confirm-photo');
+        const confirmVideo = document.getElementById('confirm-video');
+
+        // Step-ləri göstər/gizlət
+        function showStep(step) {
+            for (let i = 1; i <= totalSteps; i++) {
+                const el = document.getElementById('step' + i);
+                if (el) el.classList.toggle('hidden', i !== step);
+            }
+        }
+
+        // UI-nı yenilə
+        function updateUI() {
+            document.getElementById('step-name').textContent = stepNames[currentStep] || `Addım ${currentStep}`;
+            document.getElementById('step-count').textContent = `${currentStep} / ${totalSteps}`;
+            document.getElementById('progress-bar').style.width = ((currentStep / totalSteps) * 100) + '%';
+
+            prevBtn.classList.toggle('hidden', currentStep === 1);
+            if (currentStep === totalSteps) {
+                nextBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Göndər';
+            } else {
+                nextBtn.innerHTML = 'Növbəti <i class="fas fa-arrow-right"></i>';
+            }
+
+            // Təsdiq səhifəsini yenilə
+            if (currentStep === 5) {
+                confirmName.textContent = fullName.value || '-';
+                confirmEmail.textContent = email.value || '-';
+                confirmExperience.textContent = experience.value ? experience.value + ' il' : '-';
+                confirmSession.textContent = sessionType.value || '-';
+                confirmPhoto.textContent = profilePhoto.files.length > 0 ? '✅ Yüklənib' : 'Yüklənməyib';
+                confirmVideo.textContent = introVideo.files.length > 0 ? '✅ Yüklənib' : 'Yüklənməyib';
+            }
+
+            errorMsg.classList.add('hidden');
+        }
+
+        // Xəta göstər
+        function showError(msg) {
+            errorMsg.textContent = msg;
+            errorMsg.classList.remove('hidden');
+        }
+
+        // Keçid et
+        function goToStep(step) {
+            if (step < 1 || step > totalSteps) return;
+            currentStep = step;
+            showStep(step);
+            updateUI();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // ============================================================
+        //  3. HƏFTƏLİK CƏDVƏL - İNTERAKTİV
+        // ============================================================
+        const days = ['Bazar ertəsi', 'Çərşənbə axşamı', 'Çərşənbə', 'Cümə axşamı', 'Cümə', 'Şənbə', 'Bazar'];
+        const timeSlots = ['09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00'];
+        let selectedSlots = new Set();
+
+        function buildSchedule() {
+            scheduleContainer.innerHTML = '';
+            days.forEach(day => {
+                const dayDiv = document.createElement('div');
+                dayDiv.className = 'col-span-2 sm:col-span-1';
+                dayDiv.innerHTML = `<div class="font-bold text-sm text-primary mb-2">${day}</div>`;
+                const slotGrid = document.createElement('div');
+                slotGrid.className = 'grid grid-cols-2 gap-1';
+                timeSlots.forEach(time => {
+                    const key = `${day}-${time}`;
+                    const btn = document.createElement('button');
+                    btn.type = 'button';
+                    btn.textContent = time;
+                    btn.className = 'text-xs px-2 py-1 rounded-lg border transition hover:bg-primary/10';
+                    if (selectedSlots.has(key)) {
+                        btn.classList.add('bg-primary', 'text-white', 'border-primary');
+                    } else {
+                        btn.classList.add('bg-white', 'text-gray-700', 'border-gray-200');
+                    }
+                    btn.addEventListener('click', () => {
+                        if (selectedSlots.has(key)) {
+                            selectedSlots.delete(key);
+                            btn.classList.remove('bg-primary', 'text-white', 'border-primary');
+                            btn.classList.add('bg-white', 'text-gray-700', 'border-gray-200');
+                        } else {
+                            selectedSlots.add(key);
+                            btn.classList.add('bg-primary', 'text-white', 'border-primary');
+                            btn.classList.remove('bg-white', 'text-gray-700', 'border-gray-200');
+                        }
+                        updateScheduleData();
+                    });
+                    slotGrid.appendChild(btn);
+                });
+                dayDiv.appendChild(slotGrid);
+                scheduleContainer.appendChild(dayDiv);
+            });
+        }
+
+        function updateScheduleData() {
+            scheduleDataInput.value = JSON.stringify([...selectedSlots]);
+        }
+
+        buildSchedule();
+
+        // Bio sayğac
+        bio.addEventListener('input', () => {
+            document.getElementById('bio-count').textContent = bio.value.length;
+        });
+
+        // ============================================================
+        //  4. MEDIA YÜKLƏMƏ (Preview)
+        // ============================================================
+        // Profil şəkli
+        const photoDrop = document.getElementById('photo-drop');
+        const photoPreview = document.getElementById('photo-preview');
+        const removePhoto = document.getElementById('remove-photo');
+
+        profilePhoto.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (ev) => {
+                    const img = photoPreview.querySelector('img');
+                    img.src = ev.target.result;
+                    photoPreview.classList.remove('hidden');
+                    photoDrop.querySelector('p:first-of-type').textContent = file.name;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        photoDrop.addEventListener('click', () => profilePhoto.click());
+        removePhoto.addEventListener('click', (e) => {
+            e.stopPropagation();
+            profilePhoto.value = '';
+            photoPreview.classList.add('hidden');
+            photoDrop.querySelector('p:first-of-type').textContent = 'Profil şəkli yüklə';
+        });
+
+        // Video
+        const videoDrop = document.getElementById('video-drop');
+        const videoPreview = document.getElementById('video-preview');
+        const removeVideo = document.getElementById('remove-video');
+
+        introVideo.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const url = URL.createObjectURL(file);
+                const video = videoPreview.querySelector('video');
+                video.src = url;
+                videoPreview.classList.remove('hidden');
+                videoDrop.querySelector('p:first-of-type').textContent = file.name;
+            }
+        });
+
+        videoDrop.addEventListener('click', () => introVideo.click());
+        removeVideo.addEventListener('click', (e) => {
+            e.stopPropagation();
+            introVideo.value = '';
+            videoPreview.classList.add('hidden');
+            videoDrop.querySelector('p:first-of-type').textContent = 'Təqdimat videosu yüklə';
+        });
+
+        // ============================================================
+        //  5. NAVİQASİYA: NÖVBƏTİ / GERİ
+        // ============================================================
+        function validateStep(step) {
+            if (step === 1) {
+                if (!fullName.value.trim()) { showError('Ad Soyad daxil edin!'); return false; }
+                if (!email.value.trim() || !email.value.includes('@')) { showError('Düzgün e-poçt daxil edin!'); return false; }
+                if (pass1.value.length < 8) { showError('Şifrə minimum 8 simvol olmalıdır!'); return false; }
+                if (pass1.value !== pass2.value) { showError('Şifrələr eyni deyil!'); return false; }
+                return true;
+            }
+            if (step === 2) {
+                if (!experience.value || parseInt(experience.value) < 0) { showError('Düzgün təcrübə ili daxil edin!'); return false; }
+                if (!sessionType.value) { showError('Dərs növünü seçin!'); return false; }
+                return true;
+            }
+            if (step === 3) {
+                // Media - məcburi deyil, keçə bilər
+                return true;
+            }
+            if (step === 4) {
+                // Cədvəl - ən azı 1 vaxt seçilməlidir
+                if (selectedSlots.size === 0) {
+                    showError('Ən azı 1 dərs vaxtı seçin!');
+                    return false;
+                }
+                return true;
+            }
+            if (step === 5) {
+                if (!termsCheck.checked) {
+                    showError('İstifadə qaydalarını qəbul etməlisiniz!');
+                    return false;
+                }
+                return true;
+            }
+            return true;
+        }
+
+        nextBtn.addEventListener('click', () => {
+            // Valide et
+            if (!validateStep(currentStep)) return;
+
+            if (currentStep === totalSteps) {
+                // BÜTÜN MƏLUMATLARI TOPLA
+                const formData = {
+                    full_name: fullName.value,
+                    email: email.value,
+                    password: pass1.value,
+                    experience: experience.value,
+                    bio: bio.value,
+                    session_type: sessionType.value,
+                    schedule: [...selectedSlots],
+                    photo: profilePhoto.files[0] ? profilePhoto.files[0].name : null,
+                    video: introVideo.files[0] ? introVideo.files[0].name : null
+                };
+                console.log('📦 Göndərilən məlumatlar:', formData);
+                alert('✅ Profiliniz uğurla göndərildi! 24-48 saat ərzində sizinlə əlaqə saxlanılacaq.');
+                // Formu sıfırla və ya başqa bir səhifəyə yönləndir
+                // window.location.href = '/';
+                return;
+            }
+
+            // Növbəti step
+            goToStep(currentStep + 1);
+        });
+
+        prevBtn.addEventListener('click', () => {
+            goToStep(currentStep - 1);
+        });
+
+        // Enter düyməsi ilə növbəti addıma keçid
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                const active = document.activeElement;
+                if (active && active.tagName !== 'TEXTAREA' && active.tagName !== 'INPUT') {
+                    e.preventDefault();
+                    nextBtn.click();
+                }
+            }
+        });
+
+        // İlkin UI
+        showStep(1);
+        updateUI();
+    </script>
+</body>
+</html>
