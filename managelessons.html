@@ -174,14 +174,10 @@
 </head>
 <body class="bg-gray-50 text-gray-900 font-sans">
 
-    <!-- ============================================================ -->
     <!-- MOBILE SIDEBAR OVERLAY -->
-    <!-- ============================================================ -->
     <div class="overlay" id="sidebarOverlay"></div>
 
-    <!-- ============================================================ -->
     <!-- MOBILE SIDEBAR -->
-    <!-- ============================================================ -->
     <div class="sidebar-mobile" id="mobileSidebar">
         <div class="p-6">
             <span class="sidebar-close" id="sidebarClose"><i class="fas fa-times"></i></span>
@@ -222,9 +218,7 @@
         </div>
     </div>
 
-    <!-- ============================================================ -->
     <!-- HEADER -->
-    <!-- ============================================================ -->
     <header class="sticky top-0 bg-white/95 backdrop-blur-sm z-50 border-b border-gray-100 shadow-sm">
         <nav class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex justify-between items-center">
             <div class="flex items-center gap-4">
@@ -266,15 +260,11 @@
         </div>
     </header>
 
-    <!-- ============================================================ -->
     <!-- MAIN CONTENT -->
-    <!-- ============================================================ -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 py-8">
         <div class="flex flex-col lg:flex-row gap-8">
             
-            <!-- ========================================================== -->
             <!-- SIDEBAR (Desktop) -->
-            <!-- ========================================================== -->
             <aside class="hidden lg:block w-64 flex-shrink-0">
                 <div class="bg-white rounded-2xl border border-gray-100 p-4 sticky top-24">
                     <div class="flex items-center gap-3 mb-6 p-2">
@@ -314,9 +304,7 @@
                 </div>
             </aside>
 
-            <!-- ========================================================== -->
             <!-- LESSONS CONTENT -->
-            <!-- ========================================================== -->
             <main class="flex-1 space-y-6">
                 
                 <!-- Başlıq -->
@@ -331,9 +319,7 @@
                     <span id="toastMessage">Əməliyyat uğurla tamamlandı!</span>
                 </div>
 
-                <!-- ======================================================== -->
                 <!-- STATISTICS -->
-                <!-- ======================================================== -->
                 <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
                     <div class="stat-card bg-white rounded-2xl border border-gray-100 p-4 shadow-sm text-center">
                         <div class="text-2xl font-extrabold text-primary" id="totalLessons">342</div>
@@ -353,9 +339,7 @@
                     </div>
                 </div>
 
-                <!-- ======================================================== -->
                 <!-- SEARCH & FILTERS -->
-                <!-- ======================================================== -->
                 <div class="bg-white rounded-2xl border border-gray-100 p-4 shadow-sm">
                     <div class="flex flex-col sm:flex-row gap-3">
                         <div class="flex-1 relative">
@@ -388,9 +372,7 @@
                     </div>
                 </div>
 
-                <!-- ======================================================== -->
                 <!-- LESSONS TABLE -->
-                <!-- ======================================================== -->
                 <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
                     <div class="overflow-x-auto">
                         <table class="w-full">
@@ -413,9 +395,7 @@
                     </div>
                 </div>
 
-                <!-- ======================================================== -->
                 <!-- EMPTY STATE -->
-                <!-- ======================================================== -->
                 <div id="emptyState" class="hidden text-center py-12">
                     <i class="fas fa-calendar-times text-4xl text-gray-300 mb-3 block"></i>
                     <p class="text-gray-400 text-sm">Bu filtrlərə uyğun dərs tapılmadı</p>
@@ -425,9 +405,7 @@
         </div>
     </div>
 
-    <!-- ============================================================ -->
     <!-- CANCEL MODAL -->
-    <!-- ============================================================ -->
     <div id="cancelModal" class="fixed inset-0 z-50 flex items-center justify-center px-4 hidden">
         <div class="absolute inset-0 bg-black/50 modal-overlay" onclick="closeCancelModal()"></div>
         <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl relative z-10 modal-content">
@@ -460,9 +438,7 @@
         </div>
     </div>
 
-    <!-- ============================================================ -->
     <!-- FOOTER -->
-    <!-- ============================================================ -->
     <footer class="bg-white border-t border-gray-100 py-12 mt-8">
         <div class="max-w-7xl mx-auto px-4 sm:px-6">
             <div class="grid sm:grid-cols-2 md:grid-cols-4 gap-10 text-gray-600">
@@ -504,13 +480,9 @@
         </div>
     </footer>
 
-    <!-- ============================================================ -->
     <!-- SCRIPTS -->
-    <!-- ============================================================ -->
     <script>
-        // ============================================================
         //  SIDEBAR TOGGLE
-        // ============================================================
         const sidebarToggle = document.getElementById('sidebarToggle');
         const mobileSidebar = document.getElementById('mobileSidebar');
         const sidebarOverlay = document.getElementById('sidebarOverlay');
@@ -532,9 +504,7 @@
         sidebarClose.addEventListener('click', closeSidebar);
         sidebarOverlay.addEventListener('click', closeSidebar);
 
-        // ============================================================
         //  MOBILE TOP MENU
-        // ============================================================
         const mobileMenuBtn = document.getElementById('mobileMenuBtn');
         const mobileMenu = document.getElementById('mobile-menu');
 
@@ -543,9 +513,7 @@
             mobileMenuBtn.querySelector('i').className = isOpen ? 'fas fa-times' : 'fas fa-ellipsis-v';
         });
 
-        // ============================================================
         //  MƏLUMATLAR
-        // ============================================================
         const lessonsData = [
             { id: 1, student: 'Əli Məmmədov', studentAvatar: 'A', studentColor: '#1A56A0', teacher: 'Rəşad Hüseynov', teacherAvatar: 'R', teacherColor: '#1A56A0', subject: 'Riyaziyyat', date: 'Bu gün, 15:00', sessionType: '1-on-1', price: 20.00, status: 'live' },
             { id: 2, student: 'Aynur Əliyeva', studentAvatar: 'A', studentColor: '#20948B', teacher: 'Leyla Quliyeva', teacherAvatar: 'L', teacherColor: '#20948B', subject: 'Fizika', date: 'Sabah, 11:00', sessionType: 'Qrup', price: 9.00, status: 'upcoming' },
@@ -561,16 +529,12 @@
             { id: 12, student: 'Nərgiz Rüstəmova', studentAvatar: 'N', studentColor: '#F472B6', teacher: 'Nərgiz Səfərova', teacherAvatar: 'N', teacherColor: '#EF4444', subject: 'Tarix', date: '2 həftə əvvəl, 15:00', sessionType: 'Qrup', price: 15.00, status: 'completed' }
         ];
 
-        // ============================================================
         //  STATE
-        // ============================================================
         let currentFilter = 'all';
         let searchQuery = '';
         let cancelTargetId = null;
 
-        // ============================================================
         //  RENDER LESSONS
-        // ============================================================
         function renderLessons(data) {
             const container = document.getElementById('lessonsTable');
             container.innerHTML = '';
@@ -650,9 +614,7 @@
             updateStats();
         }
 
-        // ============================================================
         //  STATİSTİKALAR
-        // ============================================================
         function updateStats() {
             const total = lessonsData.length;
             const upcoming = lessonsData.filter(l => l.status === 'upcoming' || l.status === 'live').length;
@@ -665,9 +627,7 @@
             document.getElementById('cancelledLessons').textContent = cancelled;
         }
 
-        // ============================================================
         //  FILTERS & SEARCH
-        // ============================================================
         function setFilter(filter) {
             currentFilter = filter;
             document.querySelectorAll('.filter-btn').forEach(btn => {
@@ -705,9 +665,7 @@
             renderLessons(filtered);
         }
 
-        // ============================================================
         //  CANCEL MODAL
-        // ============================================================
         const cancelModal = document.getElementById('cancelModal');
 
         function openCancelModal(id) {
@@ -759,18 +717,14 @@
             }
         });
 
-        // ============================================================
         //  VIEW LESSON
-        // ============================================================
         function viewLesson(id) {
             const lesson = lessonsData.find(l => l.id === id);
             if (!lesson) return;
             alert(`📚 Dərs detalları\n\nTələbə: ${lesson.student}\nMüəllim: ${lesson.teacher}\nFənn: ${lesson.subject}\nTarix: ${lesson.date}\nNöv: ${lesson.sessionType}\nQiymət: ₼${lesson.price.toFixed(2)}\nStatus: ${lesson.status}`);
         }
 
-        // ============================================================
         //  TOAST MESSAGE
-        // ============================================================
         const successToast = document.getElementById('successToast');
         const toastMessage = document.getElementById('toastMessage');
         let toastTimeout;
@@ -784,9 +738,7 @@
             }, 4000);
         }
 
-        // ============================================================
         //  ESCAPE İLƏ BAĞLA
-        // ============================================================
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
                 if (!cancelModal.classList.contains('hidden')) {
@@ -800,9 +752,7 @@
             if (e.target === cancelModal) closeCancelModal();
         });
 
-        // ============================================================
         //  SIDEBAR ACTIVE STATE
-        // ============================================================
         document.querySelectorAll('.sidebar-item').forEach(item => {
             item.addEventListener('click', function(e) {
                 document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
@@ -810,9 +760,7 @@
             });
         });
 
-        // ============================================================
         //  INIT
-        // ============================================================
         renderLessons(lessonsData);
 
         console.log('📚 Dərsləri İdarə Et səhifəsi yükləndi');

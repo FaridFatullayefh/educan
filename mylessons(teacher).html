@@ -179,14 +179,10 @@
 </head>
 <body class="bg-gray-50 text-gray-900 font-sans">
 
-    <!-- ============================================================ -->
     <!-- MOBILE SIDEBAR OVERLAY -->
-    <!-- ============================================================ -->
     <div class="overlay" id="sidebarOverlay"></div>
 
-    <!-- ============================================================ -->
     <!-- MOBILE SIDEBAR -->
-    <!-- ============================================================ -->
     <div class="sidebar-mobile" id="mobileSidebar">
         <div class="p-6">
             <span class="sidebar-close" id="sidebarClose"><i class="fas fa-times"></i></span>
@@ -230,9 +226,7 @@
         </div>
     </div>
 
-    <!-- ============================================================ -->
     <!-- HEADER -->
-    <!-- ============================================================ -->
     <header class="sticky top-0 bg-white/95 backdrop-blur-sm z-50 border-b border-gray-100 shadow-sm">
         <nav class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex justify-between items-center">
             <div class="flex items-center gap-4">
@@ -271,15 +265,11 @@
         </div>
     </header>
 
-    <!-- ============================================================ -->
     <!-- MAIN CONTENT -->
-    <!-- ============================================================ -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 py-8">
         <div class="flex flex-col lg:flex-row gap-8">
             
-            <!-- ========================================================== -->
             <!-- SIDEBAR (Desktop) -->
-            <!-- ========================================================== -->
             <aside class="hidden lg:block w-64 flex-shrink-0">
                 <div class="bg-white rounded-2xl border border-gray-100 p-4 sticky top-24">
                     <div class="flex items-center gap-3 mb-6 p-2">
@@ -322,9 +312,7 @@
                 </div>
             </aside>
 
-            <!-- ========================================================== -->
             <!-- LESSONS CONTENT -->
-            <!-- ========================================================== -->
             <main class="flex-1 space-y-6">
                 
                 <!-- Başlıq -->
@@ -333,9 +321,7 @@
                     <p class="text-gray-500 text-sm mt-1">Bütün dərslərinizə buradan baxın</p>
                 </div>
 
-                <!-- ======================================================== -->
                 <!-- TABS -->
-                <!-- ======================================================== -->
                 <div class="bg-white rounded-2xl border border-gray-100 shadow-sm">
                     <div class="flex border-b border-gray-100 overflow-x-auto">
                         <button class="tab-btn active px-6 py-4 text-sm font-medium text-gray-600 whitespace-nowrap" data-tab="upcoming" onclick="switchTab('upcoming')">
@@ -352,30 +338,22 @@
                         </button>
                     </div>
 
-                    <!-- ==================================================== -->
                     <!-- TAB CONTENT: UPCOMING -->
-                    <!-- ==================================================== -->
                     <div id="tab-upcoming" class="p-4 space-y-4">
                         <!-- JS ilə doldurulacaq -->
                     </div>
 
-                    <!-- ==================================================== -->
                     <!-- TAB CONTENT: COMPLETED -->
-                    <!-- ==================================================== -->
                     <div id="tab-completed" class="p-4 space-y-4 hidden">
                         <!-- JS ilə doldurulacaq -->
                     </div>
 
-                    <!-- ==================================================== -->
                     <!-- TAB CONTENT: CANCELLED -->
-                    <!-- ==================================================== -->
                     <div id="tab-cancelled" class="p-4 space-y-4 hidden">
                         <!-- JS ilə doldurulacaq -->
                     </div>
 
-                    <!-- ==================================================== -->
                     <!-- PAGINATION -->
-                    <!-- ==================================================== -->
                     <div id="paginationContainer" class="flex items-center justify-between px-6 py-4 border-t border-gray-100">
                         <p class="text-sm text-gray-500" id="paginationInfo">1-3 / 12 dərs</p>
                         <div class="flex gap-2" id="paginationButtons">
@@ -389,9 +367,7 @@
         </div>
     </div>
 
-    <!-- ============================================================ -->
     <!-- CANCEL CONFIRMATION MODAL -->
-    <!-- ============================================================ -->
     <div id="cancelModal" class="fixed inset-0 z-50 flex items-center justify-center px-4 hidden">
         <div class="absolute inset-0 bg-black/50 modal-overlay" onclick="closeCancelModal()"></div>
         <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl relative z-10 modal-content">
@@ -420,9 +396,7 @@
         </div>
     </div>
 
-    <!-- ============================================================ -->
     <!-- FOOTER -->
-    <!-- ============================================================ -->
     <footer class="bg-white border-t border-gray-100 py-12 mt-8">
         <div class="max-w-7xl mx-auto px-4 sm:px-6">
             <div class="grid sm:grid-cols-2 md:grid-cols-4 gap-10 text-gray-600">
@@ -464,13 +438,9 @@
         </div>
     </footer>
 
-    <!-- ============================================================ -->
     <!-- SCRIPTS -->
-    <!-- ============================================================ -->
     <script>
-        // ============================================================
         //  SIDEBAR TOGGLE
-        // ============================================================
         const sidebarToggle = document.getElementById('sidebarToggle');
         const mobileSidebar = document.getElementById('mobileSidebar');
         const sidebarOverlay = document.getElementById('sidebarOverlay');
@@ -492,9 +462,7 @@
         sidebarClose.addEventListener('click', closeSidebar);
         sidebarOverlay.addEventListener('click', closeSidebar);
 
-        // ============================================================
         //  MOBILE TOP MENU
-        // ============================================================
         const mobileMenuBtn = document.getElementById('mobileMenuBtn');
         const mobileMenu = document.getElementById('mobile-menu');
 
@@ -503,9 +471,7 @@
             mobileMenuBtn.querySelector('i').className = isOpen ? 'fas fa-times' : 'fas fa-ellipsis-v';
         });
 
-        // ============================================================
         //  MƏLUMATLAR
-        // ============================================================
         const allLessons = [
             // Upcoming
             {
@@ -718,17 +684,13 @@
             }
         ];
 
-        // ============================================================
         //  STATE
-        // ============================================================
         let currentTab = 'upcoming';
         let currentPage = 1;
         const itemsPerPage = 3;
         let cancelTargetId = null;
 
-        // ============================================================
         //  RENDER LESSONS
-        // ============================================================
         function renderLessons(tab, page) {
             const container = document.getElementById(`tab-${tab}`);
             if (!container) return;
@@ -780,9 +742,7 @@
             renderPagination(totalItems, totalPages);
         }
 
-        // ============================================================
         //  CREATE LESSON CARD
-        // ============================================================
         function createLessonCard(lesson, tab) {
             const div = document.createElement('div');
             div.className = 'lesson-card bg-white rounded-2xl border border-gray-100 p-5 shadow-sm';
@@ -849,9 +809,7 @@
             return div;
         }
 
-        // ============================================================
         //  PAGINATION
-        // ============================================================
         function renderPagination(totalItems, totalPages) {
             const info = document.getElementById('paginationInfo');
             const container = document.getElementById('paginationButtons');
@@ -893,9 +851,7 @@
             container.appendChild(nextBtn);
         }
 
-        // ============================================================
         //  TABS
-        // ============================================================
         function switchTab(tab) {
             currentTab = tab;
             currentPage = 1;
@@ -915,9 +871,7 @@
             renderLessons(tab, currentPage);
         }
 
-        // ============================================================
         //  JOIN LESSON
-        // ============================================================
         function joinLesson(id) {
             const lesson = allLessons.find(l => l.id === id);
             if (lesson) {
@@ -925,9 +879,7 @@
             }
         }
 
-        // ============================================================
         //  VIEW RECORDING
-        // ============================================================
         function viewRecording(id) {
             const lesson = allLessons.find(l => l.id === id);
             if (lesson) {
@@ -935,9 +887,7 @@
             }
         }
 
-        // ============================================================
         //  CANCEL MODAL
-        // ============================================================
         const cancelModal = document.getElementById('cancelModal');
 
         function openCancelModal(id) {
@@ -988,9 +938,7 @@
             if (e.target === cancelModal) closeCancelModal();
         });
 
-        // ============================================================
         //  SIDEBAR ACTIVE STATE
-        // ============================================================
         document.querySelectorAll('.sidebar-item').forEach(item => {
             item.addEventListener('click', function(e) {
                 document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
@@ -998,9 +946,7 @@
             });
         });
 
-        // ============================================================
         //  INIT
-        // ============================================================
         renderLessons('upcoming', 1);
 
         console.log('📚 Müəllim Dərslərim səhifəsi yükləndi');

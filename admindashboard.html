@@ -182,14 +182,10 @@
 </head>
 <body class="bg-gray-50 text-gray-900 font-sans">
 
-    <!-- ============================================================ -->
     <!-- MOBILE SIDEBAR OVERLAY -->
-    <!-- ============================================================ -->
     <div class="overlay" id="sidebarOverlay"></div>
 
-    <!-- ============================================================ -->
     <!-- MOBILE SIDEBAR -->
-    <!-- ============================================================ -->
     <div class="sidebar-mobile" id="mobileSidebar">
         <div class="p-6">
             <span class="sidebar-close" id="sidebarClose"><i class="fas fa-times"></i></span>
@@ -231,9 +227,7 @@
         </div>
     </div>
 
-    <!-- ============================================================ -->
     <!-- HEADER -->
-    <!-- ============================================================ -->
     <header class="sticky top-0 bg-white/95 backdrop-blur-sm z-50 border-b border-gray-100 shadow-sm">
         <nav class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex justify-between items-center">
             <div class="flex items-center gap-4">
@@ -276,15 +270,11 @@
         </div>
     </header>
 
-    <!-- ============================================================ -->
     <!-- MAIN CONTENT -->
-    <!-- ============================================================ -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 py-8">
         <div class="flex flex-col lg:flex-row gap-8">
             
-            <!-- ========================================================== -->
             <!-- SIDEBAR (Desktop) -->
-            <!-- ========================================================== -->
             <aside class="hidden lg:block w-64 flex-shrink-0">
                 <div class="bg-white rounded-2xl border border-gray-100 p-4 sticky top-24">
                     <div class="flex items-center gap-3 mb-6 p-2">
@@ -325,14 +315,10 @@
                 </div>
             </aside>
 
-            <!-- ========================================================== -->
             <!-- DASHBOARD CONTENT -->
-            <!-- ========================================================== -->
             <main class="flex-1 space-y-6">
                 
-                <!-- ======================================================== -->
                 <!-- WELCOME MESSAGE -->
-                <!-- ======================================================== -->
                 <div class="bg-gradient-to-r from-primary to-accent rounded-3xl p-6 sm:p-8 text-white">
                     <div class="flex items-center gap-4">
                         <div>
@@ -348,9 +334,7 @@
                     </div>
                 </div>
 
-                <!-- ======================================================== -->
                 <!-- STATISTICS -->
-                <!-- ======================================================== -->
                 <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
                     <div class="stat-card bg-white rounded-2xl border border-gray-100 p-5 shadow-sm">
                         <div class="flex items-center justify-between">
@@ -402,9 +386,7 @@
                     </div>
                 </div>
 
-                <!-- ======================================================== -->
                 <!-- QUICK LINKS -->
-                <!-- ======================================================== -->
                 <div>
                     <h2 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
                         <i class="fas fa-bolt text-primary"></i> Sürətli keçidlər
@@ -441,9 +423,7 @@
                     </div>
                 </div>
 
-                <!-- ======================================================== -->
                 <!-- RECENT ACTIVITY & QUICK STATS -->
-                <!-- ======================================================== -->
                 <div class="grid lg:grid-cols-3 gap-6">
                     
                     <!-- Recent Activity -->
@@ -566,9 +546,7 @@
         </div>
     </div>
 
-    <!-- ============================================================ -->
     <!-- FOOTER -->
-    <!-- ============================================================ -->
     <footer class="bg-white border-t border-gray-100 py-12 mt-8">
         <div class="max-w-7xl mx-auto px-4 sm:px-6">
             <div class="grid sm:grid-cols-2 md:grid-cols-4 gap-10 text-gray-600">
@@ -610,13 +588,9 @@
         </div>
     </footer>
 
-    <!-- ============================================================ -->
     <!-- SCRIPTS -->
-    <!-- ============================================================ -->
     <script>
-        // ============================================================
         //  SIDEBAR TOGGLE
-        // ============================================================
         const sidebarToggle = document.getElementById('sidebarToggle');
         const mobileSidebar = document.getElementById('mobileSidebar');
         const sidebarOverlay = document.getElementById('sidebarOverlay');
@@ -638,9 +612,7 @@
         sidebarClose.addEventListener('click', closeSidebar);
         sidebarOverlay.addEventListener('click', closeSidebar);
 
-        // ============================================================
         //  MOBILE TOP MENU
-        // ============================================================
         const mobileMenuBtn = document.getElementById('mobileMenuBtn');
         const mobileMenu = document.getElementById('mobile-menu');
 
@@ -649,9 +621,7 @@
             mobileMenuBtn.querySelector('i').className = isOpen ? 'fas fa-times' : 'fas fa-ellipsis-v';
         });
 
-        // ============================================================
         //  SIDEBAR ACTIVE STATE
-        // ============================================================
         document.querySelectorAll('.sidebar-item').forEach(item => {
             item.addEventListener('click', function(e) {
                 document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
@@ -659,16 +629,12 @@
             });
         });
 
-        // ============================================================
         //  NOTIFICATION BELL
-        // ============================================================
         document.querySelector('.fa-bell')?.addEventListener('click', function() {
             alert('🔔 3 yeni bildiriş:\n\n1. 2 müəllim təsdiq gözləyir\n2. 5 ödəniş sorğusu\n3. 1 yeni rəy');
         });
 
-        // ============================================================
         //  INIT
-        // ============================================================
         console.log('👑 Admin Dashboard yükləndi');
         console.log('   Tələbələr: 1,284');
         console.log('   Müəllimlər: 168 (3 gözləyən)');

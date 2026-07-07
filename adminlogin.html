@@ -256,9 +256,7 @@
     <!-- Partiküllər -->
     <div class="particles" id="particles"></div>
 
-    <!-- ============================================================ -->
     <!-- LOGIN CARD -->
-    <!-- ============================================================ -->
     <div class="w-full max-w-md login-card rounded-3xl p-8 shadow-2xl">
         
         <!-- Logo -->
@@ -392,13 +390,9 @@
 
     </div>
 
-    <!-- ============================================================ -->
     <!-- SCRIPTS -->
-    <!-- ============================================================ -->
     <script>
-        // ============================================================
         //  PARTİKÜLLƏR
-        // ============================================================
         (function createParticles() {
             const container = document.getElementById('particles');
             for (let i = 0; i < 30; i++) {
@@ -414,9 +408,7 @@
             }
         })();
 
-        // ============================================================
         //  ŞİFRƏNİ GÖSTER / GİZLƏT
-        // ============================================================
         const togglePassword = document.getElementById('togglePassword');
         const passwordInput = document.getElementById('loginPassword');
         let passwordVisible = false;
@@ -427,9 +419,7 @@
             togglePassword.querySelector('i').className = passwordVisible ? 'fas fa-eye-slash' : 'fas fa-eye';
         });
 
-        // ============================================================
         //  DEMO MƏLUMATLARI DOLDUR
-        // ============================================================
         function fillDemoCredentials() {
             document.getElementById('loginEmail').value = 'admin@educan.az';
             document.getElementById('loginPassword').value = 'admin12345';
@@ -442,9 +432,7 @@
             }, 2000);
         }
 
-        // ============================================================
         //  iki faktorlu autentifikasiya (future)
-        // ============================================================
         const otpInputs = document.querySelectorAll('.two-factor-input');
         otpInputs.forEach((input, index) => {
             input.addEventListener('input', function() {
@@ -467,9 +455,7 @@
             });
         });
 
-        // ============================================================
         //  LOGIN
-        // ============================================================
         const loginForm = document.getElementById('loginForm');
         const loginBtn = document.getElementById('loginBtn');
         const loginError = document.getElementById('loginError');
@@ -603,9 +589,7 @@
             input.addEventListener('input', hideError);
         });
 
-        // ============================================================
         //  INIT
-        // ============================================================
         console.log('👑 Admin Login səhifəsi yükləndi');
         console.log('   Demo hesablar: admin@educan.az / admin12345');
         console.log('   2FA opsional - future versiyada aktiv olacaq');

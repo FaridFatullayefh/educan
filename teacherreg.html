@@ -263,9 +263,7 @@
     </footer>
 
     <script>
-        // ============================================================
         //  1. MENU TOGGLE (index ilə eyni)
-        // ============================================================
         const menuBtn = document.getElementById('menu-btn');
         const mobileMenu = document.getElementById('mobile-menu');
         const menuIcon = document.getElementById('menu-icon');
@@ -277,9 +275,7 @@
             menuIcon.classList.toggle('fa-times', isOpen);
         });
 
-        // ============================================================
         //  2. QEYDİYYAT FORM - STEP NAVİQASİYA
-        // ============================================================
         let currentStep = 1;
         const totalSteps = 5;
         const nextBtn = document.getElementById('nextBtn');
@@ -367,9 +363,7 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // ============================================================
         //  3. HƏFTƏLİK CƏDVƏL - İNTERAKTİV
-        // ============================================================
         const days = ['Bazar ertəsi', 'Çərşənbə axşamı', 'Çərşənbə', 'Cümə axşamı', 'Cümə', 'Şənbə', 'Bazar'];
         const timeSlots = ['09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00'];
         let selectedSlots = new Set();
@@ -423,9 +417,7 @@
             document.getElementById('bio-count').textContent = bio.value.length;
         });
 
-        // ============================================================
         //  4. MEDIA YÜKLƏMƏ (Preview)
-        // ============================================================
         // Profil şəkli
         const photoDrop = document.getElementById('photo-drop');
         const photoPreview = document.getElementById('photo-preview');
@@ -477,9 +469,7 @@
             videoDrop.querySelector('p:first-of-type').textContent = 'Təqdimat videosu yüklə';
         });
 
-        // ============================================================
         //  5. NAVİQASİYA: NÖVBƏTİ / GERİ
-        // ============================================================
         function validateStep(step) {
             if (step === 1) {
                 if (!fullName.value.trim()) { showError('Ad Soyad daxil edin!'); return false; }

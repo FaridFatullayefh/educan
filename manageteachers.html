@@ -182,14 +182,10 @@
 </head>
 <body class="bg-gray-50 text-gray-900 font-sans">
 
-    <!-- ============================================================ -->
     <!-- MOBILE SIDEBAR OVERLAY -->
-    <!-- ============================================================ -->
     <div class="overlay" id="sidebarOverlay"></div>
 
-    <!-- ============================================================ -->
     <!-- MOBILE SIDEBAR -->
-    <!-- ============================================================ -->
     <div class="sidebar-mobile" id="mobileSidebar">
         <div class="p-6">
             <span class="sidebar-close" id="sidebarClose"><i class="fas fa-times"></i></span>
@@ -231,9 +227,7 @@
         </div>
     </div>
 
-    <!-- ============================================================ -->
     <!-- HEADER -->
-    <!-- ============================================================ -->
     <header class="sticky top-0 bg-white/95 backdrop-blur-sm z-50 border-b border-gray-100 shadow-sm">
         <nav class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex justify-between items-center">
             <div class="flex items-center gap-4">
@@ -275,15 +269,11 @@
         </div>
     </header>
 
-    <!-- ============================================================ -->
     <!-- MAIN CONTENT -->
-    <!-- ============================================================ -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 py-8">
         <div class="flex flex-col lg:flex-row gap-8">
             
-            <!-- ========================================================== -->
             <!-- SIDEBAR (Desktop) -->
-            <!-- ========================================================== -->
             <aside class="hidden lg:block w-64 flex-shrink-0">
                 <div class="bg-white rounded-2xl border border-gray-100 p-4 sticky top-24">
                     <div class="flex items-center gap-3 mb-6 p-2">
@@ -324,9 +314,7 @@
                 </div>
             </aside>
 
-            <!-- ========================================================== -->
             <!-- TEACHERS CONTENT -->
-            <!-- ========================================================== -->
             <main class="flex-1 space-y-6">
                 
                 <!-- Başlıq -->
@@ -341,9 +329,7 @@
                     <span id="toastMessage">Müəllim uğurla təsdiqləndi!</span>
                 </div>
 
-                <!-- ======================================================== -->
                 <!-- STATISTICS -->
-                <!-- ======================================================== -->
                 <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
                     <div class="bg-white rounded-2xl border border-gray-100 p-4 shadow-sm text-center">
                         <div class="text-2xl font-extrabold text-primary" id="totalTeachers">12</div>
@@ -363,9 +349,7 @@
                     </div>
                 </div>
 
-                <!-- ======================================================== -->
                 <!-- SEARCH & FILTERS -->
-                <!-- ======================================================== -->
                 <div class="bg-white rounded-2xl border border-gray-100 p-4 shadow-sm">
                     <div class="flex flex-col sm:flex-row gap-3">
                         <div class="flex-1 relative">
@@ -401,9 +385,7 @@
                     </div>
                 </div>
 
-                <!-- ======================================================== -->
                 <!-- TEACHERS TABLE -->
-                <!-- ======================================================== -->
                 <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
                     <div class="overflow-x-auto">
                         <table class="w-full">
@@ -423,9 +405,7 @@
                     </div>
                 </div>
 
-                <!-- ======================================================== -->
                 <!-- EMPTY STATE -->
-                <!-- ======================================================== -->
                 <div id="emptyState" class="hidden text-center py-12">
                     <i class="fas fa-chalkboard-teacher text-4xl text-gray-300 mb-3 block"></i>
                     <p class="text-gray-400 text-sm">Bu filtrlərə uyğun müəllim tapılmadı</p>
@@ -435,9 +415,7 @@
         </div>
     </div>
 
-    <!-- ============================================================ -->
     <!-- TEACHER DETAIL MODAL -->
-    <!-- ============================================================ -->
     <div id="teacherModal" class="fixed inset-0 z-50 flex items-center justify-center px-4 hidden">
         <div class="absolute inset-0 bg-black/50 modal-overlay" onclick="closeTeacherModal()"></div>
         <div class="bg-white rounded-3xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl relative z-10 modal-content">
@@ -517,9 +495,7 @@
         </div>
     </div>
 
-    <!-- ============================================================ -->
     <!-- FOOTER -->
-    <!-- ============================================================ -->
     <footer class="bg-white border-t border-gray-100 py-12 mt-8">
         <div class="max-w-7xl mx-auto px-4 sm:px-6">
             <div class="grid sm:grid-cols-2 md:grid-cols-4 gap-10 text-gray-600">
@@ -561,13 +537,9 @@
         </div>
     </footer>
 
-    <!-- ============================================================ -->
     <!-- SCRIPTS -->
-    <!-- ============================================================ -->
     <script>
-        // ============================================================
         //  SIDEBAR TOGGLE
-        // ============================================================
         const sidebarToggle = document.getElementById('sidebarToggle');
         const mobileSidebar = document.getElementById('mobileSidebar');
         const sidebarOverlay = document.getElementById('sidebarOverlay');
@@ -589,9 +561,7 @@
         sidebarClose.addEventListener('click', closeSidebar);
         sidebarOverlay.addEventListener('click', closeSidebar);
 
-        // ============================================================
         //  MOBILE TOP MENU
-        // ============================================================
         const mobileMenuBtn = document.getElementById('mobileMenuBtn');
         const mobileMenu = document.getElementById('mobile-menu');
 
@@ -600,9 +570,7 @@
             mobileMenuBtn.querySelector('i').className = isOpen ? 'fas fa-times' : 'fas fa-ellipsis-v';
         });
 
-        // ============================================================
         //  MƏLUMATLAR
-        // ============================================================
         const teachersData = [
             {
                 id: 1,
@@ -786,16 +754,12 @@
             }
         ];
 
-        // ============================================================
         //  STATE
-        // ============================================================
         let currentFilter = 'all';
         let searchQuery = '';
         let currentTeacherId = null;
 
-        // ============================================================
         //  RENDER TEACHERS
-        // ============================================================
         function renderTeachers(data) {
             const container = document.getElementById('teachersTable');
             container.innerHTML = '';
@@ -879,9 +843,7 @@
             updateStats();
         }
 
-        // ============================================================
         //  STATİSTİKALAR
-        // ============================================================
         function updateStats() {
             const total = teachersData.length;
             const pending = teachersData.filter(t => t.status === 'pending').length;
@@ -894,9 +856,7 @@
             document.getElementById('suspendedTeachers').textContent = suspended;
         }
 
-        // ============================================================
         //  FILTERS & SEARCH
-        // ============================================================
         function setFilter(filter) {
             currentFilter = filter;
             document.querySelectorAll('.filter-btn').forEach(btn => {
@@ -930,9 +890,7 @@
             renderTeachers(filtered);
         }
 
-        // ============================================================
         //  TEACHER MODAL
-        // ============================================================
         const teacherModal = document.getElementById('teacherModal');
 
         function openTeacherModal(id) {
@@ -1034,9 +992,7 @@
             if (e.target === teacherModal) closeTeacherModal();
         });
 
-        // ============================================================
         //  ACTIONS
-        // ============================================================
         function handleActionFromRow(action, id) {
             const teacher = teachersData.find(t => t.id === id);
             if (!teacher) return;
@@ -1099,9 +1055,7 @@
             console.log(`👨‍🏫 ${result.icon} ${result.message}`);
         }
 
-        // ============================================================
         //  SIDEBAR ACTIVE STATE
-        // ============================================================
         document.querySelectorAll('.sidebar-item').forEach(item => {
             item.addEventListener('click', function(e) {
                 document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
@@ -1109,9 +1063,7 @@
             });
         });
 
-        // ============================================================
         //  INIT
-        // ============================================================
         renderTeachers(teachersData);
 
         console.log('👨‍🏫 Müəllimləri İdarə Et səhifəsi yükləndi');

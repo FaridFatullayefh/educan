@@ -150,14 +150,10 @@
 </head>
 <body class="bg-gray-50 text-gray-900 font-sans">
 
-    <!-- ============================================================ -->
     <!-- MOBILE SIDEBAR OVERLAY -->
-    <!-- ============================================================ -->
     <div class="overlay" id="sidebarOverlay"></div>
 
-    <!-- ============================================================ -->
     <!-- MOBILE SIDEBAR -->
-    <!-- ============================================================ -->
     <div class="sidebar-mobile" id="mobileSidebar">
         <div class="p-6">
             <span class="sidebar-close" id="sidebarClose"><i class="fas fa-times"></i></span>
@@ -201,9 +197,7 @@
         </div>
     </div>
 
-    <!-- ============================================================ -->
     <!-- HEADER -->
-    <!-- ============================================================ -->
     <header class="sticky top-0 bg-white/95 backdrop-blur-sm z-50 border-b border-gray-100 shadow-sm">
         <nav class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex justify-between items-center">
             <div class="flex items-center gap-4">
@@ -242,15 +236,11 @@
         </div>
     </header>
 
-    <!-- ============================================================ -->
     <!-- MAIN CONTENT -->
-    <!-- ============================================================ -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 py-8">
         <div class="flex flex-col lg:flex-row gap-8">
             
-            <!-- ========================================================== -->
             <!-- SIDEBAR (Desktop) -->
-            <!-- ========================================================== -->
             <aside class="hidden lg:block w-64 flex-shrink-0">
                 <div class="bg-white rounded-2xl border border-gray-100 p-4 sticky top-24">
                     <div class="flex items-center gap-3 mb-6 p-2">
@@ -293,9 +283,7 @@
                 </div>
             </aside>
 
-            <!-- ========================================================== -->
             <!-- EARNINGS CONTENT -->
-            <!-- ========================================================== -->
             <main class="flex-1 space-y-6">
                 
                 <!-- Başlıq -->
@@ -310,9 +298,7 @@
                     <span>Ödəniş tələbi uğurla göndərildi!</span>
                 </div>
 
-                <!-- ======================================================== -->
                 <!-- EARNINGS OVERVIEW -->
-                <!-- ======================================================== -->
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
                     <div class="stat-card bg-white rounded-2xl border border-gray-100 p-5 shadow-sm">
                         <p class="text-sm text-gray-500">Bu ay qazanc</p>
@@ -336,9 +322,7 @@
                     </div>
                 </div>
 
-                <!-- ======================================================== -->
                 <!-- COMMISSION NOTE -->
-                <!-- ======================================================== -->
                 <div class="commission-box rounded-2xl p-5">
                     <div class="flex items-start gap-3">
                         <i class="fas fa-percent text-primary text-xl mt-0.5"></i>
@@ -354,9 +338,7 @@
                     </div>
                 </div>
 
-                <!-- ======================================================== -->
                 <!-- LESSON EARNINGS TABLE -->
-                <!-- ======================================================== -->
                 <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
                     <div class="p-6 border-b border-gray-100">
                         <h2 class="text-lg font-bold text-gray-800 flex items-center gap-2">
@@ -382,9 +364,7 @@
                     </div>
                 </div>
 
-                <!-- ======================================================== -->
                 <!-- PAYOUT REQUEST -->
-                <!-- ======================================================== -->
                 <div class="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
                     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                         <div>
@@ -408,9 +388,7 @@
                     </div>
                 </div>
 
-                <!-- ======================================================== -->
                 <!-- PAYOUT HISTORY -->
-                <!-- ======================================================== -->
                 <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
                     <div class="p-6 border-b border-gray-100">
                         <h2 class="text-lg font-bold text-gray-800 flex items-center gap-2">
@@ -438,9 +416,7 @@
         </div>
     </div>
 
-    <!-- ============================================================ -->
     <!-- PAYOUT CONFIRMATION MODAL -->
-    <!-- ============================================================ -->
     <div id="payoutModal" class="fixed inset-0 z-50 flex items-center justify-center px-4 hidden">
         <div class="absolute inset-0 bg-black/50 modal-overlay" onclick="closePayoutModal()"></div>
         <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl relative z-10 modal-content">
@@ -481,9 +457,7 @@
         </div>
     </div>
 
-    <!-- ============================================================ -->
     <!-- FOOTER -->
-    <!-- ============================================================ -->
     <footer class="bg-white border-t border-gray-100 py-12 mt-8">
         <div class="max-w-7xl mx-auto px-4 sm:px-6">
             <div class="grid sm:grid-cols-2 md:grid-cols-4 gap-10 text-gray-600">
@@ -525,13 +499,9 @@
         </div>
     </footer>
 
-    <!-- ============================================================ -->
     <!-- SCRIPTS -->
-    <!-- ============================================================ -->
     <script>
-        // ============================================================
         //  SIDEBAR TOGGLE
-        // ============================================================
         const sidebarToggle = document.getElementById('sidebarToggle');
         const mobileSidebar = document.getElementById('mobileSidebar');
         const sidebarOverlay = document.getElementById('sidebarOverlay');
@@ -553,9 +523,7 @@
         sidebarClose.addEventListener('click', closeSidebar);
         sidebarOverlay.addEventListener('click', closeSidebar);
 
-        // ============================================================
         //  MOBILE TOP MENU
-        // ============================================================
         const mobileMenuBtn = document.getElementById('mobileMenuBtn');
         const mobileMenu = document.getElementById('mobile-menu');
 
@@ -564,9 +532,7 @@
             mobileMenuBtn.querySelector('i').className = isOpen ? 'fas fa-times' : 'fas fa-ellipsis-v';
         });
 
-        // ============================================================
         //  MƏLUMATLAR
-        // ============================================================
         const COMMISSION_RATE = 0.65; // 65%
         const COMMISSION_TEXT = '35%';
 
@@ -588,9 +554,7 @@
             { date: '5 Aprel 2026', amount: 60.00, account: 'IBAN: AZ96 KAPL 0001 2345 6789', status: 'failed' },
         ];
 
-        // ============================================================
         //  RENDER EARNINGS TABLE
-        // ============================================================
         function renderEarnings() {
             const container = document.getElementById('earningsTable');
             container.innerHTML = '';
@@ -624,9 +588,7 @@
             document.getElementById('availableBalance').textContent = '₼' + (totalEarnings - pendingTotal).toFixed(2);
         }
 
-        // ============================================================
         //  RENDER PAYOUT HISTORY
-        // ============================================================
         function renderPayoutHistory() {
             const container = document.getElementById('payoutHistory');
             container.innerHTML = '';
@@ -647,9 +609,7 @@
             });
         }
 
-        // ============================================================
         //  PAYOUT MODAL
-        // ============================================================
         const payoutModal = document.getElementById('payoutModal');
         const payoutBtn = document.getElementById('payoutBtn');
 
@@ -705,9 +665,7 @@
             if (e.target === payoutModal) closePayoutModal();
         });
 
-        // ============================================================
         //  TOAST MESSAGE
-        // ============================================================
         const successToast = document.getElementById('successToast');
         let toastTimeout;
 
@@ -720,9 +678,7 @@
             }, 4000);
         }
 
-        // ============================================================
         //  CONFETTI EFFECT
-        // ============================================================
         function createConfetti() {
             const colors = ['#1A56A0', '#20948B', '#F59E0B', '#10B981', '#8B5CF6', '#EC4899', '#3B82F6'];
             for (let i = 0; i < 60; i++) {
@@ -741,9 +697,7 @@
             }
         }
 
-        // ============================================================
         //  SIDEBAR ACTIVE STATE
-        // ============================================================
         document.querySelectorAll('.sidebar-item').forEach(item => {
             item.addEventListener('click', function(e) {
                 document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
@@ -751,9 +705,7 @@
             });
         });
 
-        // ============================================================
         //  INIT
-        // ============================================================
         renderEarnings();
         renderPayoutHistory();
 

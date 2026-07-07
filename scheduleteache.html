@@ -239,14 +239,10 @@
 </head>
 <body class="bg-gray-50 text-gray-900 font-sans">
 
-    <!-- ============================================================ -->
     <!-- MOBILE SIDEBAR OVERLAY -->
-    <!-- ============================================================ -->
     <div class="overlay" id="sidebarOverlay"></div>
 
-    <!-- ============================================================ -->
     <!-- MOBILE SIDEBAR -->
-    <!-- ============================================================ -->
     <div class="sidebar-mobile" id="mobileSidebar">
         <div class="p-6">
             <span class="sidebar-close" id="sidebarClose"><i class="fas fa-times"></i></span>
@@ -290,9 +286,7 @@
         </div>
     </div>
 
-    <!-- ============================================================ -->
     <!-- HEADER -->
-    <!-- ============================================================ -->
     <header class="sticky top-0 bg-white/95 backdrop-blur-sm z-50 border-b border-gray-100 shadow-sm">
         <nav class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex justify-between items-center">
             <div class="flex items-center gap-4">
@@ -331,15 +325,11 @@
         </div>
     </header>
 
-    <!-- ============================================================ -->
     <!-- MAIN CONTENT -->
-    <!-- ============================================================ -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 py-8">
         <div class="flex flex-col lg:flex-row gap-8">
             
-            <!-- ========================================================== -->
             <!-- SIDEBAR (Desktop) -->
-            <!-- ========================================================== -->
             <aside class="hidden lg:block w-64 flex-shrink-0">
                 <div class="bg-white rounded-2xl border border-gray-100 p-4 sticky top-24">
                     <div class="flex items-center gap-3 mb-6 p-2">
@@ -382,9 +372,7 @@
                 </div>
             </aside>
 
-            <!-- ========================================================== -->
             <!-- SCHEDULE CONTENT -->
-            <!-- ========================================================== -->
             <main class="flex-1 space-y-6">
                 
                 <!-- Başlıq -->
@@ -399,9 +387,7 @@
                     <span>Cədvəl uğurla yadda saxlanıldı!</span>
                 </div>
 
-                <!-- ======================================================== -->
                 <!-- CƏDVƏL BAŞLIĞI VƏ NAVİQASİYA -->
-                <!-- ======================================================== -->
                 <div class="bg-white rounded-2xl border border-gray-100 p-4 shadow-sm">
                     <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
                         <div class="flex items-center gap-4">
@@ -424,9 +410,7 @@
                     </div>
                 </div>
 
-                <!-- ======================================================== -->
                 <!-- LEQEND -->
-                <!-- ======================================================== -->
                 <div class="bg-white rounded-2xl border border-gray-100 p-4 shadow-sm">
                     <div class="flex flex-wrap items-center gap-4">
                         <span class="text-sm font-medium text-gray-700">Leqend:</span>
@@ -448,9 +432,7 @@
                     </div>
                 </div>
 
-                <!-- ======================================================== -->
                 <!-- HƏFTƏLİK CƏDVƏL -->
-                <!-- ======================================================== -->
                 <div class="bg-white rounded-2xl border border-gray-100 p-4 shadow-sm">
                     <div class="schedule-wrapper">
                         <div class="schedule-grid" id="scheduleGrid">
@@ -463,9 +445,7 @@
                     </p>
                 </div>
 
-                <!-- ======================================================== -->
                 <!-- SAVE BUTTON -->
-                <!-- ======================================================== -->
                 <div class="flex justify-end">
                     <button id="saveBtn" class="bg-primary text-white px-10 py-3.5 rounded-xl font-bold hover:bg-blue-800 transition shadow-lg shadow-primary/20 flex items-center gap-2">
                         <i class="fas fa-save"></i> Cədvəli yadda saxla
@@ -476,9 +456,7 @@
         </div>
     </div>
 
-    <!-- ============================================================ -->
     <!-- FOOTER -->
-    <!-- ============================================================ -->
     <footer class="bg-white border-t border-gray-100 py-12 mt-8">
         <div class="max-w-7xl mx-auto px-4 sm:px-6">
             <div class="grid sm:grid-cols-2 md:grid-cols-4 gap-10 text-gray-600">
@@ -520,13 +498,9 @@
         </div>
     </footer>
 
-    <!-- ============================================================ -->
     <!-- SCRIPTS -->
-    <!-- ============================================================ -->
     <script>
-        // ============================================================
         //  SIDEBAR TOGGLE
-        // ============================================================
         const sidebarToggle = document.getElementById('sidebarToggle');
         const mobileSidebar = document.getElementById('mobileSidebar');
         const sidebarOverlay = document.getElementById('sidebarOverlay');
@@ -548,9 +522,7 @@
         sidebarClose.addEventListener('click', closeSidebar);
         sidebarOverlay.addEventListener('click', closeSidebar);
 
-        // ============================================================
         //  MOBILE TOP MENU
-        // ============================================================
         const mobileMenuBtn = document.getElementById('mobileMenuBtn');
         const mobileMenu = document.getElementById('mobile-menu');
 
@@ -559,9 +531,7 @@
             mobileMenuBtn.querySelector('i').className = isOpen ? 'fas fa-times' : 'fas fa-ellipsis-v';
         });
 
-        // ============================================================
         //  SCHEDULE ENGINE
-        // ============================================================
         // AZT timezone (UTC+4)
         const TIMEZONE = 'UTC+4';
         const DAYS = ['B.e.', 'Ç.a.', 'Ç.', 'C.a.', 'C.', 'Ş.', 'B.'];
@@ -729,9 +699,7 @@
                 `${weekStart.getDate()} - ${weekEnd.getDate()} ${weekEnd.toLocaleDateString('az-AZ', { month: 'long' })} ${weekEnd.getFullYear()}`;
         }
 
-        // ============================================================
         //  NAVİQASİYA
-        // ============================================================
         function changeWeek(delta) {
             currentWeekStart.setDate(currentWeekStart.getDate() + delta * 7);
             renderSchedule();
@@ -744,9 +712,7 @@
             showToast('📅 Bu günə keçid edildi');
         }
 
-        // ============================================================
         //  KÖÇÜR (Copy Schedule)
-        // ============================================================
         function copySchedule() {
             const nextWeekStart = new Date(currentWeekStart);
             nextWeekStart.setDate(nextWeekStart.getDate() + 7);
@@ -770,9 +736,7 @@
             showToast('✅ Cədvəl növbəti həftəyə köçürüldü!');
         }
 
-        // ============================================================
         //  TOAST MESSAGE
-        // ============================================================
         const successToast = document.getElementById('successToast');
         let toastTimeout;
 
@@ -785,9 +749,7 @@
             }, 3000);
         }
 
-        // ============================================================
         //  SAVE SCHEDULE
-        // ============================================================
         document.getElementById('saveBtn').addEventListener('click', function() {
             // Məlumatları topla
             const savedData = {};
@@ -813,9 +775,7 @@
             }, 1200);
         });
 
-        // ============================================================
         //  SIDEBAR ACTIVE STATE
-        // ============================================================
         document.querySelectorAll('.sidebar-item').forEach(item => {
             item.addEventListener('click', function(e) {
                 document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
@@ -823,9 +783,7 @@
             });
         });
 
-        // ============================================================
         //  INIT
-        // ============================================================
         // İlkin cədvəli yarat
         renderSchedule();
 

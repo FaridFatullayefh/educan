@@ -311,9 +311,7 @@
     <!-- Partiküllər -->
     <div class="particles" id="particles"></div>
 
-    <!-- ============================================================ -->
     <!-- ERROR CARD -->
-    <!-- ============================================================ -->
     <div class="error-card rounded-3xl shadow-2xl text-center">
         
         <!-- Logo -->
@@ -386,13 +384,9 @@
 
     </div>
 
-    <!-- ============================================================ -->
     <!-- SCRIPTS -->
-    <!-- ============================================================ -->
     <script>
-        // ============================================================
         //  PARTİKÜLLƏR
-        // ============================================================
         (function createParticles() {
             const container = document.getElementById('particles');
             const count = window.innerWidth < 640 ? 20 : 35;
@@ -410,17 +404,13 @@
             }
         })();
 
-        // ============================================================
         //  URL YÖNLƏNDİRMƏ
-        // ============================================================
         console.log('🔍 404 Səhifə Tapılmadı');
         console.log(`   İstifadəçi: ${document.referrer || 'Birbaşa daxil olub'}`);
         console.log(`   Tarix: ${new Date().toLocaleString('az-AZ')}`);
         console.log('   Tövsiyə: Ana səhifəyə qayıdın');
 
-        // ============================================================
         //  KEYBOARD NAVİQASİYA
-        // ============================================================
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Enter' || e.key === 'Escape') {
                 const homeBtn = document.querySelector('.home-btn');
@@ -431,9 +421,7 @@
             }
         });
 
-        // ============================================================
         //  MOUSE İLƏ 404 KODUNA KLİK
-        // ============================================================
         document.querySelector('.error-code')?.addEventListener('click', function(e) {
             this.style.animation = 'none';
             this.style.transform = 'scale(1.2)';
@@ -488,9 +476,7 @@
             }
         }
 
-        // ============================================================
         //  RESIZE EVENT - PARTİKÜLLƏRİ YENİLƏ
-        // ============================================================
         let resizeTimeout;
         window.addEventListener('resize', () => {
             clearTimeout(resizeTimeout);

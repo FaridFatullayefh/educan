@@ -170,14 +170,10 @@
 </head>
 <body class="bg-gray-50 text-gray-900 font-sans">
 
-    <!-- ============================================================ -->
     <!-- MOBILE SIDEBAR OVERLAY -->
-    <!-- ============================================================ -->
     <div class="overlay" id="sidebarOverlay"></div>
 
-    <!-- ============================================================ -->
     <!-- MOBILE SIDEBAR -->
-    <!-- ============================================================ -->
     <div class="sidebar-mobile" id="mobileSidebar">
         <div class="p-6">
             <span class="sidebar-close" id="sidebarClose"><i class="fas fa-times"></i></span>
@@ -215,9 +211,7 @@
         </div>
     </div>
 
-    <!-- ============================================================ -->
     <!-- HEADER -->
-    <!-- ============================================================ -->
     <header class="sticky top-0 bg-white/95 backdrop-blur-sm z-50 border-b border-gray-100 shadow-sm">
         <nav class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex justify-between items-center">
             <div class="flex items-center gap-4">
@@ -254,15 +248,11 @@
         </div>
     </header>
 
-    <!-- ============================================================ -->
     <!-- MAIN CONTENT -->
-    <!-- ============================================================ -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 py-8">
         <div class="flex flex-col lg:flex-row gap-8">
             
-            <!-- ========================================================== -->
             <!-- SIDEBAR (Desktop) -->
-            <!-- ========================================================== -->
             <aside class="hidden lg:block w-64 flex-shrink-0">
                 <div class="bg-white rounded-2xl border border-gray-100 p-4 sticky top-24">
                     <div class="flex items-center gap-3 mb-6 p-2">
@@ -299,9 +289,7 @@
                 </div>
             </aside>
 
-            <!-- ========================================================== -->
             <!-- PAYMENT CONTENT -->
-            <!-- ========================================================== -->
             <main class="flex-1 space-y-6">
                 
                 <!-- Başlıq -->
@@ -316,9 +304,7 @@
                     <span>Balans uğurla artırıldı!</span>
                 </div>
 
-                <!-- ======================================================== -->
                 <!-- CURRENT BALANCE -->
-                <!-- ======================================================== -->
                 <div class="balance-card rounded-3xl p-8 text-white shadow-xl">
                     <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between">
                         <div>
@@ -340,9 +326,7 @@
                     </div>
                 </div>
 
-                <!-- ======================================================== -->
                 <!-- TOP-UP FORM -->
-                <!-- ======================================================== -->
                 <div class="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
                     <h2 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
                         <i class="fas fa-plus-circle text-primary"></i> Balans artır
@@ -423,9 +407,7 @@
                     </button>
                 </div>
 
-                <!-- ======================================================== -->
                 <!-- PAYMENT HISTORY -->
-                <!-- ======================================================== -->
                 <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
                     <div class="p-6 border-b border-gray-100">
                         <h2 class="text-lg font-bold text-gray-800 flex items-center gap-2">
@@ -506,9 +488,7 @@
         </div>
     </div>
 
-    <!-- ============================================================ -->
     <!-- PAYMENT MODAL -->
-    <!-- ============================================================ -->
     <div id="paymentModal" class="fixed inset-0 z-50 flex items-center justify-center px-4 hidden">
         <div class="absolute inset-0 bg-black/50 modal-overlay" onclick="closePaymentModal()"></div>
         <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl relative z-10 modal-content">
@@ -549,9 +529,7 @@
         </div>
     </div>
 
-    <!-- ============================================================ -->
     <!-- FOOTER -->
-    <!-- ============================================================ -->
     <footer class="bg-white border-t border-gray-100 py-12 mt-8">
         <div class="max-w-7xl mx-auto px-4 sm:px-6">
             <div class="grid sm:grid-cols-2 md:grid-cols-4 gap-10 text-gray-600">
@@ -593,13 +571,9 @@
         </div>
     </footer>
 
-    <!-- ============================================================ -->
     <!-- SCRIPTS -->
-    <!-- ============================================================ -->
     <script>
-        // ============================================================
         //  SIDEBAR TOGGLE
-        // ============================================================
         const sidebarToggle = document.getElementById('sidebarToggle');
         const mobileSidebar = document.getElementById('mobileSidebar');
         const sidebarOverlay = document.getElementById('sidebarOverlay');
@@ -621,9 +595,7 @@
         sidebarClose.addEventListener('click', closeSidebar);
         sidebarOverlay.addEventListener('click', closeSidebar);
 
-        // ============================================================
         //  MOBILE TOP MENU
-        // ============================================================
         const mobileMenuBtn = document.getElementById('mobileMenuBtn');
         const mobileMenu = document.getElementById('mobile-menu');
 
@@ -632,9 +604,7 @@
             mobileMenuBtn.querySelector('i').className = isOpen ? 'fas fa-times' : 'fas fa-ellipsis-v';
         });
 
-        // ============================================================
         //  QUICK AMOUNT
-        // ============================================================
         let currentBalance = 38.00;
 
         function setQuickAmount(amount) {
@@ -650,9 +620,7 @@
             }
         }
 
-        // ============================================================
         //  PAYMENT METHOD SELECTION
-        // ============================================================
         let selectedMethod = 'kapital';
 
         function selectPaymentMethod(element) {
@@ -665,9 +633,7 @@
             selectedMethod = element.dataset.method;
         }
 
-        // ============================================================
         //  TOAST MESSAGE
-        // ============================================================
         const successToast = document.getElementById('successToast');
         let toastTimeout;
 
@@ -680,9 +646,7 @@
             }, 4000);
         }
 
-        // ============================================================
         //  PAYMENT MODAL
-        // ============================================================
         const paymentModal = document.getElementById('paymentModal');
 
         document.getElementById('topupBtn').addEventListener('click', function() {
@@ -733,9 +697,7 @@
             console.log(`   Yeni balans: ₼${currentBalance.toFixed(2)}`);
         }
 
-        // ============================================================
         //  ADD HISTORY ENTRY
-        // ============================================================
         function addHistoryEntry(amount) {
             const tbody = document.querySelector('tbody');
             const now = new Date();
@@ -757,9 +719,7 @@
             row.style.animation = 'slideDown 0.4s ease';
         }
 
-        // ============================================================
         //  CONFETTI EFFECT
-        // ============================================================
         function createConfetti() {
             const colors = ['#1A56A0', '#20948B', '#F59E0B', '#10B981', '#8B5CF6', '#EC4899', '#3B82F6'];
             for (let i = 0; i < 60; i++) {
@@ -778,9 +738,7 @@
             }
         }
 
-        // ============================================================
         //  ESCAPE İLƏ BAĞLA
-        // ============================================================
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
                 if (!paymentModal.classList.contains('hidden')) {
@@ -794,9 +752,7 @@
             if (e.target === paymentModal) closePaymentModal();
         });
 
-        // ============================================================
         //  SIDEBAR ACTIVE STATE
-        // ============================================================
         document.querySelectorAll('.sidebar-item').forEach(item => {
             item.addEventListener('click', function(e) {
                 document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
@@ -804,9 +760,7 @@
             });
         });
 
-        // ============================================================
         //  INIT
-        // ============================================================
         // İlkin olaraq 20 AZN seçili olsun
         setQuickAmount(20);
 

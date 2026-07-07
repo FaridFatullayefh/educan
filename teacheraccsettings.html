@@ -216,14 +216,10 @@
 </head>
 <body class="bg-gray-50 text-gray-900 font-sans">
 
-    <!-- ============================================================ -->
     <!-- MOBILE SIDEBAR OVERLAY -->
-    <!-- ============================================================ -->
     <div class="overlay" id="sidebarOverlay"></div>
 
-    <!-- ============================================================ -->
     <!-- MOBILE SIDEBAR -->
-    <!-- ============================================================ -->
     <div class="sidebar-mobile" id="mobileSidebar">
         <div class="p-6">
             <span class="sidebar-close" id="sidebarClose"><i class="fas fa-times"></i></span>
@@ -267,9 +263,7 @@
         </div>
     </div>
 
-    <!-- ============================================================ -->
     <!-- HEADER -->
-    <!-- ============================================================ -->
     <header class="sticky top-0 bg-white/95 backdrop-blur-sm z-50 border-b border-gray-100 shadow-sm">
         <nav class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex justify-between items-center">
             <div class="flex items-center gap-4">
@@ -308,15 +302,11 @@
         </div>
     </header>
 
-    <!-- ============================================================ -->
     <!-- MAIN CONTENT -->
-    <!-- ============================================================ -->
     <div class="max-w-4xl mx-auto px-4 sm:px-6 py-8">
         <div class="flex flex-col lg:flex-row gap-8">
             
-            <!-- ========================================================== -->
             <!-- SIDEBAR (Desktop) -->
-            <!-- ========================================================== -->
             <aside class="hidden lg:block w-64 flex-shrink-0">
                 <div class="bg-white rounded-2xl border border-gray-100 p-4 sticky top-24">
                     <div class="flex items-center gap-3 mb-6 p-2">
@@ -359,9 +349,7 @@
                 </div>
             </aside>
 
-            <!-- ========================================================== -->
             <!-- SETTINGS CONTENT -->
-            <!-- ========================================================== -->
             <main class="flex-1 space-y-6">
                 
                 <!-- Başlıq -->
@@ -378,9 +366,7 @@
 
                 <form id="settingsForm" class="space-y-6">
                     
-                    <!-- ==================================================== -->
                     <!-- PROFİL ŞƏKİLİ -->
-                    <!-- ==================================================== -->
                     <div class="settings-card bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
                         <h2 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
                             <i class="fas fa-camera text-primary"></i> Profil şəkli
@@ -401,9 +387,7 @@
                         </div>
                     </div>
 
-                    <!-- ==================================================== -->
                     <!-- ŞƏXSİ MƏLUMATLAR -->
-                    <!-- ==================================================== -->
                     <div class="settings-card bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
                         <h2 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
                             <i class="fas fa-user text-primary"></i> Şəxsi məlumatlar
@@ -438,9 +422,7 @@
                         </div>
                     </div>
 
-                    <!-- ==================================================== -->
                     <!-- ŞİFRƏ DƏYİŞDİR -->
-                    <!-- ==================================================== -->
                     <div class="settings-card bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
                         <h2 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
                             <i class="fas fa-key text-primary"></i> Şifrəni dəyiş
@@ -481,9 +463,7 @@
                         </div>
                     </div>
 
-                    <!-- ==================================================== -->
                     <!-- BANK ACCOUNT DETAILS -->
-                    <!-- ==================================================== -->
                     <div class="settings-card bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
                         <h2 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
                             <i class="fas fa-university text-primary"></i> Bank hesabı məlumatları
@@ -519,9 +499,7 @@
                         </div>
                     </div>
 
-                    <!-- ==================================================== -->
                     <!-- BİLDİRİŞLƏR -->
-                    <!-- ==================================================== -->
                     <div class="settings-card bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
                         <h2 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
                             <i class="fas fa-bell text-primary"></i> Bildirişlər
@@ -560,9 +538,7 @@
                         </div>
                     </div>
 
-                    <!-- ==================================================== -->
                     <!-- HESABI SİL -->
-                    <!-- ==================================================== -->
                     <div class="settings-card bg-white rounded-2xl border border-red-200 p-6 shadow-sm">
                         <h2 class="text-lg font-bold text-red-600 mb-2 flex items-center gap-2">
                             <i class="fas fa-exclamation-triangle"></i> Təhlükəli zona
@@ -573,9 +549,7 @@
                         </button>
                     </div>
 
-                    <!-- ==================================================== -->
                     <!-- SAVE BUTTON -->
-                    <!-- ==================================================== -->
                     <div class="flex flex-col sm:flex-row gap-3 justify-end">
                         <button type="button" onclick="resetForm()" class="px-8 py-3 border border-gray-300 text-gray-700 rounded-xl font-semibold hover:bg-gray-50 transition">
                             Ləğv et
@@ -591,9 +565,7 @@
         </div>
     </div>
 
-    <!-- ============================================================ -->
     <!-- DELETE ACCOUNT MODAL -->
-    <!-- ============================================================ -->
     <div id="deleteModal" class="fixed inset-0 z-50 flex items-center justify-center px-4 hidden">
         <div class="absolute inset-0 bg-black/50 modal-overlay" onclick="closeDeleteModal()"></div>
         <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl relative z-10 modal-content">
@@ -621,9 +593,7 @@
         </div>
     </div>
 
-    <!-- ============================================================ -->
     <!-- FOOTER -->
-    <!-- ============================================================ -->
     <footer class="bg-white border-t border-gray-100 py-12 mt-8">
         <div class="max-w-7xl mx-auto px-4 sm:px-6">
             <div class="grid sm:grid-cols-2 md:grid-cols-4 gap-10 text-gray-600">
@@ -665,13 +635,9 @@
         </div>
     </footer>
 
-    <!-- ============================================================ -->
     <!-- SCRIPTS -->
-    <!-- ============================================================ -->
     <script>
-        // ============================================================
         //  SIDEBAR TOGGLE
-        // ============================================================
         const sidebarToggle = document.getElementById('sidebarToggle');
         const mobileSidebar = document.getElementById('mobileSidebar');
         const sidebarOverlay = document.getElementById('sidebarOverlay');
@@ -693,9 +659,7 @@
         sidebarClose.addEventListener('click', closeSidebar);
         sidebarOverlay.addEventListener('click', closeSidebar);
 
-        // ============================================================
         //  MOBILE TOP MENU
-        // ============================================================
         const mobileMenuBtn = document.getElementById('mobileMenuBtn');
         const mobileMenu = document.getElementById('mobile-menu');
 
@@ -704,9 +668,7 @@
             mobileMenuBtn.querySelector('i').className = isOpen ? 'fas fa-times' : 'fas fa-ellipsis-v';
         });
 
-        // ============================================================
         //  PROFILE PHOTO
-        // ============================================================
         const profilePhotoInput = document.getElementById('profilePhoto');
         const profilePhotoImg = document.querySelector('.profile-photo-wrapper img');
         const removePhotoBtn = document.getElementById('removePhotoBtn');
@@ -729,9 +691,7 @@
             showToast('Şəkil silindi');
         });
 
-        // ============================================================
         //  PASSWORD TOGGLE
-        // ============================================================
         function togglePassword(id) {
             const input = document.getElementById(id);
             const icon = input.parentElement.querySelector('button i');
@@ -744,9 +704,7 @@
             }
         }
 
-        // ============================================================
         //  PASSWORD STRENGTH
-        // ============================================================
         const newPassword = document.getElementById('newPassword');
         const strengthBar = document.getElementById('passwordStrength');
         const strengthLabel = document.getElementById('passwordStrengthLabel');
@@ -784,9 +742,7 @@
             }
         });
 
-        // ============================================================
         //  PASSWORD MATCH
-        // ============================================================
         const confirmPassword = document.getElementById('confirmPassword');
         const passwordMatch = document.getElementById('passwordMatch');
 
@@ -811,9 +767,7 @@
         newPassword.addEventListener('input', checkPasswordMatch);
         confirmPassword.addEventListener('input', checkPasswordMatch);
 
-        // ============================================================
         //  TOAST MESSAGE
-        // ============================================================
         const successToast = document.getElementById('successToast');
         let toastTimeout;
 
@@ -826,9 +780,7 @@
             }, 3000);
         }
 
-        // ============================================================
         //  SAVE SETTINGS
-        // ============================================================
         document.getElementById('settingsForm').addEventListener('submit', function(e) {
             e.preventDefault();
 
@@ -915,18 +867,14 @@
             }, 1200);
         });
 
-        // ============================================================
         //  RESET FORM
-        // ============================================================
         function resetForm() {
             if (confirm('Dəyişiklikləri ləğv etmək istədiyinizə əminsiniz?')) {
                 location.reload();
             }
         }
 
-        // ============================================================
         //  DELETE ACCOUNT
-        // ============================================================
         const deleteModal = document.getElementById('deleteModal');
 
         document.getElementById('deleteAccountBtn').addEventListener('click', () => {
@@ -957,9 +905,7 @@
             if (e.target === deleteModal) closeDeleteModal();
         });
 
-        // ============================================================
         //  SIDEBAR ACTIVE STATE
-        // ============================================================
         document.querySelectorAll('.sidebar-item').forEach(item => {
             item.addEventListener('click', function(e) {
                 document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
@@ -967,9 +913,7 @@
             });
         });
 
-        // ============================================================
         //  INIT
-        // ============================================================
         console.log('⚙️ Müəllim Hesab Parametrləri yükləndi');
         console.log('   Müəllim: Rəşad Hüseynov');
         console.log('   Bank məlumatları təhlükəsiz şifrələnir');

@@ -153,14 +153,10 @@
 </head>
 <body class="bg-gray-50 text-gray-900 font-sans">
 
-    <!-- ============================================================ -->
     <!-- MOBILE SIDEBAR OVERLAY -->
-    <!-- ============================================================ -->
     <div class="overlay" id="sidebarOverlay"></div>
 
-    <!-- ============================================================ -->
     <!-- MOBILE SIDEBAR -->
-    <!-- ============================================================ -->
     <div class="sidebar-mobile" id="mobileSidebar">
         <div class="p-6">
             <span class="sidebar-close" id="sidebarClose"><i class="fas fa-times"></i></span>
@@ -198,9 +194,7 @@
         </div>
     </div>
 
-    <!-- ============================================================ -->
     <!-- HEADER -->
-    <!-- ============================================================ -->
     <header class="sticky top-0 bg-white/95 backdrop-blur-sm z-50 border-b border-gray-100 shadow-sm">
         <nav class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex justify-between items-center">
             <div class="flex items-center gap-4">
@@ -237,15 +231,11 @@
         </div>
     </header>
 
-    <!-- ============================================================ -->
     <!-- MAIN CONTENT -->
-    <!-- ============================================================ -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 py-8">
         <div class="flex flex-col lg:flex-row gap-8">
             
-            <!-- ========================================================== -->
             <!-- SIDEBAR (Desktop) -->
-            <!-- ========================================================== -->
             <aside class="hidden lg:block w-64 flex-shrink-0">
                 <div class="bg-white rounded-2xl border border-gray-100 p-4 sticky top-24">
                     <div class="flex items-center gap-3 mb-6 p-2">
@@ -282,9 +272,7 @@
                 </div>
             </aside>
 
-            <!-- ========================================================== -->
             <!-- RECORDINGS CONTENT -->
-            <!-- ========================================================== -->
             <main class="flex-1 space-y-6">
                 
                 <!-- Başlıq -->
@@ -293,9 +281,7 @@
                     <p class="text-gray-500 text-sm mt-1">Keçmiş dərslərinizin yazılışları</p>
                 </div>
 
-                <!-- ======================================================== -->
                 <!-- SEARCH & FILTERS -->
-                <!-- ======================================================== -->
                 <div class="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm">
                     <div class="flex flex-col md:flex-row gap-4">
                         <!-- Axtarış -->
@@ -346,9 +332,7 @@
                     </div>
                 </div>
 
-                <!-- ======================================================== -->
                 <!-- RECORDINGS LIST -->
-                <!-- ======================================================== -->
                 <div id="recordingsList" class="space-y-4">
                     
                     <!-- Recording 1 -->
@@ -491,18 +475,14 @@
 
                 </div>
 
-                <!-- ======================================================== -->
                 <!-- EMPTY STATE (hidden by default) -->
-                <!-- ======================================================== -->
                 <div id="emptyState" class="hidden text-center py-12 empty-state">
                     <i class="fas fa-video-slash text-5xl text-gray-300 mb-4 block"></i>
                     <h3 class="text-lg font-bold text-gray-700">Heç bir yazılış tapılmadı</h3>
                     <p class="text-gray-400 text-sm mt-1">Filtirləri dəyişərək yenidən cəhd edin</p>
                 </div>
 
-                <!-- ======================================================== -->
                 <!-- LOAD MORE -->
-                <!-- ======================================================== -->
                 <div class="text-center pt-2">
                     <button class="text-primary font-medium text-sm hover:underline transition" onclick="loadMore()">
                         <i class="fas fa-chevron-down mr-1"></i> Daha çox yüklə
@@ -513,9 +493,7 @@
         </div>
     </div>
 
-    <!-- ============================================================ -->
     <!-- VIDEO PLAYER MODAL -->
-    <!-- ============================================================ -->
     <div id="videoModal" class="fixed inset-0 z-50 flex items-center justify-center px-4 hidden">
         <div class="absolute inset-0 bg-black/70 modal-overlay" onclick="closeVideo()"></div>
         <div class="bg-white rounded-3xl max-w-3xl w-full p-6 shadow-2xl relative z-10 modal-content">
@@ -544,9 +522,7 @@
         </div>
     </div>
 
-    <!-- ============================================================ -->
     <!-- FOOTER -->
-    <!-- ============================================================ -->
     <footer class="bg-white border-t border-gray-100 py-12 mt-8">
         <div class="max-w-7xl mx-auto px-4 sm:px-6">
             <div class="grid sm:grid-cols-2 md:grid-cols-4 gap-10 text-gray-600">
@@ -588,13 +564,9 @@
         </div>
     </footer>
 
-    <!-- ============================================================ -->
     <!-- SCRIPTS -->
-    <!-- ============================================================ -->
     <script>
-        // ============================================================
         //  SIDEBAR TOGGLE
-        // ============================================================
         const sidebarToggle = document.getElementById('sidebarToggle');
         const mobileSidebar = document.getElementById('mobileSidebar');
         const sidebarOverlay = document.getElementById('sidebarOverlay');
@@ -616,9 +588,7 @@
         sidebarClose.addEventListener('click', closeSidebar);
         sidebarOverlay.addEventListener('click', closeSidebar);
 
-        // ============================================================
         //  MOBILE TOP MENU
-        // ============================================================
         const mobileMenuBtn = document.getElementById('mobileMenuBtn');
         const mobileMenu = document.getElementById('mobile-menu');
 
@@ -627,9 +597,7 @@
             mobileMenuBtn.querySelector('i').className = isOpen ? 'fas fa-times' : 'fas fa-ellipsis-v';
         });
 
-        // ============================================================
         //  FILTERS & SEARCH
-        // ============================================================
         let currentFilter = 'all';
         let searchQuery = '';
 
@@ -712,9 +680,7 @@
             setFilter('all');
         }
 
-        // ============================================================
         //  VIDEO PLAYER MODAL
-        // ============================================================
         const videoModal = document.getElementById('videoModal');
         const videoPlayer = document.getElementById('videoPlayer');
         const videoTitle = document.getElementById('videoTitle');
@@ -753,16 +719,12 @@
             if (e.target === videoModal) closeVideo();
         });
 
-        // ============================================================
         //  LOAD MORE
-        // ============================================================
         function loadMore() {
             alert('📚 Daha çox yazılış yüklənir...');
         }
 
-        // ============================================================
         //  SIDEBAR ACTIVE STATE
-        // ============================================================
         document.querySelectorAll('.sidebar-item').forEach(item => {
             item.addEventListener('click', function(e) {
                 document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
@@ -770,9 +732,7 @@
             });
         });
 
-        // ============================================================
         //  INIT
-        // ============================================================
         // İlkin olaraq bütün recording-ları göstər
         filterRecordings();
 

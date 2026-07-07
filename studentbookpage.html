@@ -196,14 +196,10 @@
 </head>
 <body class="bg-gray-50 text-gray-900 font-sans">
 
-    <!-- ============================================================ -->
     <!-- MOBILE SIDEBAR OVERLAY -->
-    <!-- ============================================================ -->
     <div class="overlay" id="sidebarOverlay"></div>
 
-    <!-- ============================================================ -->
     <!-- MOBILE SIDEBAR -->
-    <!-- ============================================================ -->
     <div class="sidebar-mobile" id="mobileSidebar">
         <div class="p-6">
             <span class="sidebar-close" id="sidebarClose"><i class="fas fa-times"></i></span>
@@ -241,9 +237,7 @@
         </div>
     </div>
 
-    <!-- ============================================================ -->
     <!-- HEADER -->
-    <!-- ============================================================ -->
     <header class="sticky top-0 bg-white/95 backdrop-blur-sm z-50 border-b border-gray-100 shadow-sm">
         <nav class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex justify-between items-center">
             <div class="flex items-center gap-4">
@@ -280,15 +274,11 @@
         </div>
     </header>
 
-    <!-- ============================================================ -->
     <!-- MAIN CONTENT -->
-    <!-- ============================================================ -->
     <div class="max-w-5xl mx-auto px-4 sm:px-6 py-8">
         <div class="flex flex-col lg:flex-row gap-8">
             
-            <!-- ========================================================== -->
             <!-- SIDEBAR (Desktop) -->
-            <!-- ========================================================== -->
             <aside class="hidden lg:block w-64 flex-shrink-0">
                 <div class="bg-white rounded-2xl border border-gray-100 p-4 sticky top-24">
                     <div class="flex items-center gap-3 mb-6 p-2">
@@ -325,14 +315,10 @@
                 </div>
             </aside>
 
-            <!-- ========================================================== -->
             <!-- BOOKING CONTENT -->
-            <!-- ========================================================== -->
             <main class="flex-1 space-y-6">
                 
-                <!-- ======================================================== -->
                 <!-- TEACHER INFO -->
-                <!-- ======================================================== -->
                 <div class="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm flex items-center gap-4">
                     <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=100&h=100&fit=crop&crop=face&auto=format&q=80" alt="Rəşad Hüseynov" class="w-16 h-16 rounded-full object-cover border-2 border-primary flex-shrink-0">
                     <div>
@@ -354,9 +340,7 @@
                     </div>
                 </div>
 
-                <!-- ======================================================== -->
                 <!-- SESSION TYPE SELECTION -->
-                <!-- ======================================================== -->
                 <div>
                     <h2 class="text-lg font-bold text-gray-800 mb-3 flex items-center gap-2">
                         <i class="fas fa-users text-primary"></i> Dərs növünü seçin
@@ -404,9 +388,7 @@
                     </div>
                 </div>
 
-                <!-- ======================================================== -->
                 <!-- CALENDAR -->
-                <!-- ======================================================== -->
                 <div>
                     <h2 class="text-lg font-bold text-gray-800 mb-3 flex items-center gap-2">
                         <i class="fas fa-calendar-alt text-primary"></i> Tarix və vaxt seçin
@@ -441,9 +423,7 @@
                     </div>
                 </div>
 
-                <!-- ======================================================== -->
                 <!-- TIME SLOTS -->
-                <!-- ======================================================== -->
                 <div id="timeSlotsSection" class="hidden">
                     <h2 class="text-lg font-bold text-gray-800 mb-3 flex items-center gap-2">
                         <i class="fas fa-clock text-primary"></i> Mövcud saatlar
@@ -459,9 +439,7 @@
                     </div>
                 </div>
 
-                <!-- ======================================================== -->
                 <!-- SELECTED SLOT SUMMARY -->
-                <!-- ======================================================== -->
                 <div id="summarySection" class="hidden">
                     <div class="summary-card bg-gradient-to-r from-primary to-accent rounded-2xl p-6 text-white">
                         <h3 class="font-bold text-lg mb-3 flex items-center gap-2">
@@ -488,9 +466,7 @@
                     </div>
                 </div>
 
-                <!-- ======================================================== -->
                 <!-- CONFIRM / PAYMENT -->
-                <!-- ======================================================== -->
                 <div id="paymentSection" class="hidden">
                     <div class="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
                         <div id="paymentStatus" class="mb-4">
@@ -506,9 +482,7 @@
         </div>
     </div>
 
-    <!-- ============================================================ -->
     <!-- SUCCESS MODAL -->
-    <!-- ============================================================ -->
     <div id="successModal" class="fixed inset-0 z-50 flex items-center justify-center px-4 hidden">
         <div class="absolute inset-0 bg-black/60" onclick="closeSuccess()"></div>
         <div class="bg-white rounded-3xl max-w-md w-full p-8 shadow-2xl relative z-10 text-center">
@@ -550,9 +524,7 @@
         </div>
     </div>
 
-    <!-- ============================================================ -->
     <!-- FOOTER -->
-    <!-- ============================================================ -->
     <footer class="bg-white border-t border-gray-100 py-12 mt-8">
         <div class="max-w-7xl mx-auto px-4 sm:px-6">
             <div class="grid sm:grid-cols-2 md:grid-cols-4 gap-10 text-gray-600">
@@ -594,13 +566,9 @@
         </div>
     </footer>
 
-    <!-- ============================================================ -->
     <!-- SCRIPTS -->
-    <!-- ============================================================ -->
     <script>
-        // ============================================================
         //  SIDEBAR TOGGLE
-        // ============================================================
         const sidebarToggle = document.getElementById('sidebarToggle');
         const mobileSidebar = document.getElementById('mobileSidebar');
         const sidebarOverlay = document.getElementById('sidebarOverlay');
@@ -622,9 +590,7 @@
         sidebarClose.addEventListener('click', closeSidebar);
         sidebarOverlay.addEventListener('click', closeSidebar);
 
-        // ============================================================
         //  MOBILE TOP MENU
-        // ============================================================
         const mobileMenuBtn = document.getElementById('mobileMenuBtn');
         const mobileMenu = document.getElementById('mobile-menu');
 
@@ -633,9 +599,7 @@
             mobileMenuBtn.querySelector('i').className = isOpen ? 'fas fa-times' : 'fas fa-ellipsis-v';
         });
 
-        // ============================================================
         //  SESSION SELECTION
-        // ============================================================
         let selectedSession = null;
         let selectedPrice = 0;
 
@@ -648,9 +612,7 @@
             checkPayment();
         }
 
-        // ============================================================
         //  CALENDAR
-        // ============================================================
         let currentDate = new Date();
         let currentMonth = currentDate.getMonth();
         let currentYear = currentDate.getFullYear();
@@ -726,9 +688,7 @@
 
         renderCalendar();
 
-        // ============================================================
         //  TIME SLOTS
-        // ============================================================
         const availableSlots = [
             '09:00', '10:00', '11:00', '12:00', '14:00', '15:00', '16:00', '17:00', '18:00'
         ];
@@ -763,9 +723,7 @@
             });
         }
 
-        // ============================================================
         //  SUMMARY UPDATE
-        // ============================================================
         function updateSummary() {
             const section = document.getElementById('summarySection');
             if (selectedDate && selectedTime && selectedSession) {
@@ -781,9 +739,7 @@
             }
         }
 
-        // ============================================================
         //  PAYMENT CHECK
-        // ============================================================
         const userBalance = 45; // ₼
 
         function checkPayment() {
@@ -823,9 +779,7 @@
             }
         }
 
-        // ============================================================
         //  CONFIRM BOOKING
-        // ============================================================
         function confirmBooking() {
             // Konfetti effekti
             createConfetti();
@@ -853,9 +807,7 @@
             document.body.style.overflow = '';
         }
 
-        // ============================================================
         //  CONFETTI EFFECT
-        // ============================================================
         function createConfetti() {
             const container = document.createElement('div');
             container.className = 'confetti';
@@ -882,9 +834,7 @@
             }, 5000);
         }
 
-        // ============================================================
         //  SIDEBAR ACTIVE STATE
-        // ============================================================
         document.querySelectorAll('.sidebar-item').forEach(item => {
             item.addEventListener('click', function(e) {
                 document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));

@@ -195,14 +195,10 @@
 </head>
 <body class="bg-gray-50 text-gray-900 font-sans">
 
-    <!-- ============================================================ -->
     <!-- MOBILE SIDEBAR OVERLAY -->
-    <!-- ============================================================ -->
     <div class="overlay" id="sidebarOverlay"></div>
 
-    <!-- ============================================================ -->
     <!-- MOBILE SIDEBAR -->
-    <!-- ============================================================ -->
     <div class="sidebar-mobile" id="mobileSidebar">
         <div class="p-6">
             <span class="sidebar-close" id="sidebarClose"><i class="fas fa-times"></i></span>
@@ -246,9 +242,7 @@
         </div>
     </div>
 
-    <!-- ============================================================ -->
     <!-- HEADER -->
-    <!-- ============================================================ -->
     <header class="sticky top-0 bg-white/95 backdrop-blur-sm z-50 border-b border-gray-100 shadow-sm">
         <nav class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex justify-between items-center">
             <div class="flex items-center gap-4">
@@ -287,15 +281,11 @@
         </div>
     </header>
 
-    <!-- ============================================================ -->
     <!-- MAIN CONTENT -->
-    <!-- ============================================================ -->
     <div class="max-w-4xl mx-auto px-4 sm:px-6 py-8">
         <div class="flex flex-col lg:flex-row gap-8">
             
-            <!-- ========================================================== -->
             <!-- SIDEBAR (Desktop) -->
-            <!-- ========================================================== -->
             <aside class="hidden lg:block w-64 flex-shrink-0">
                 <div class="bg-white rounded-2xl border border-gray-100 p-4 sticky top-24">
                     <div class="flex items-center gap-3 mb-6 p-2">
@@ -338,9 +328,7 @@
                 </div>
             </aside>
 
-            <!-- ========================================================== -->
             <!-- PROFILE EDITOR CONTENT -->
-            <!-- ========================================================== -->
             <main class="flex-1 space-y-6">
                 
                 <!-- Başlıq -->
@@ -365,9 +353,7 @@
 
                 <form id="profileForm" class="space-y-6">
                     
-                    <!-- ==================================================== -->
                     <!-- PROFİL ŞƏKİLİ -->
-                    <!-- ==================================================== -->
                     <div class="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
                         <h2 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
                             <i class="fas fa-camera text-primary"></i> Profil şəkli
@@ -388,9 +374,7 @@
                         </div>
                     </div>
 
-                    <!-- ==================================================== -->
                     <!-- ŞƏXSİ MƏLUMATLAR -->
-                    <!-- ==================================================== -->
                     <div class="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
                         <h2 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
                             <i class="fas fa-user text-primary"></i> Şəxsi məlumatlar
@@ -411,9 +395,7 @@
                         </div>
                     </div>
 
-                    <!-- ==================================================== -->
                     <!-- PEŞƏKAR MƏLUMATLAR -->
-                    <!-- ==================================================== -->
                     <div class="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
                         <h2 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
                             <i class="fas fa-briefcase text-primary"></i> Peşəkar məlumatlar
@@ -454,9 +436,7 @@
                         </div>
                     </div>
 
-                    <!-- ==================================================== -->
                     <!-- DƏRS NÖVLƏRİ -->
-                    <!-- ==================================================== -->
                     <div class="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
                         <h2 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
                             <i class="fas fa-users text-primary"></i> Dərs növləri
@@ -497,9 +477,7 @@
                         </div>
                     </div>
 
-                    <!-- ==================================================== -->
                     <!-- TƏQDİMAT VİDEOSU -->
-                    <!-- ==================================================== -->
                     <div class="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
                         <h2 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
                             <i class="fas fa-video text-primary"></i> Təqdimat videosu
@@ -535,9 +513,7 @@
                         </div>
                     </div>
 
-                    <!-- ==================================================== -->
                     <!-- SAVE BUTTON -->
-                    <!-- ==================================================== -->
                     <div class="flex flex-col sm:flex-row gap-3 justify-end">
                         <button type="button" onclick="resetForm()" class="px-8 py-3 border border-gray-300 text-gray-700 rounded-xl font-semibold hover:bg-gray-50 transition">
                             Ləğv et
@@ -561,9 +537,7 @@
         </div>
     </div>
 
-    <!-- ============================================================ -->
     <!-- FOOTER -->
-    <!-- ============================================================ -->
     <footer class="bg-white border-t border-gray-100 py-12 mt-8">
         <div class="max-w-7xl mx-auto px-4 sm:px-6">
             <div class="grid sm:grid-cols-2 md:grid-cols-4 gap-10 text-gray-600">
@@ -605,13 +579,9 @@
         </div>
     </footer>
 
-    <!-- ============================================================ -->
     <!-- SCRIPTS -->
-    <!-- ============================================================ -->
     <script>
-        // ============================================================
         //  SIDEBAR TOGGLE
-        // ============================================================
         const sidebarToggle = document.getElementById('sidebarToggle');
         const mobileSidebar = document.getElementById('mobileSidebar');
         const sidebarOverlay = document.getElementById('sidebarOverlay');
@@ -633,9 +603,7 @@
         sidebarClose.addEventListener('click', closeSidebar);
         sidebarOverlay.addEventListener('click', closeSidebar);
 
-        // ============================================================
         //  MOBILE TOP MENU
-        // ============================================================
         const mobileMenuBtn = document.getElementById('mobileMenuBtn');
         const mobileMenu = document.getElementById('mobile-menu');
 
@@ -644,9 +612,7 @@
             mobileMenuBtn.querySelector('i').className = isOpen ? 'fas fa-times' : 'fas fa-ellipsis-v';
         });
 
-        // ============================================================
         //  PROFILE PHOTO
-        // ============================================================
         const profilePhotoInput = document.getElementById('profilePhoto');
         const profilePhotoImg = document.querySelector('.profile-photo-wrapper img');
         const removePhotoBtn = document.getElementById('removePhotoBtn');
@@ -669,9 +635,7 @@
             showToast('Şəkil silindi');
         });
 
-        // ============================================================
         //  BIO CHARACTER COUNT
-        // ============================================================
         const bio = document.getElementById('bio');
         const bioCount = document.getElementById('bioCount');
 
@@ -683,9 +647,7 @@
             else if (count > 400) bioCount.classList.add('warning');
         });
 
-        // ============================================================
         //  SUBJECT TOGGLE
-        // ============================================================
         function toggleSubject(element) {
             element.classList.toggle('selected');
             element.classList.toggle('bg-primary');
@@ -695,9 +657,7 @@
             element.classList.toggle('border-gray-200');
         }
 
-        // ============================================================
         //  GROUP LESSONS TOGGLE
-        // ============================================================
         const groupLessons = document.getElementById('groupLessons');
         const groupSettings = document.getElementById('groupSettings');
 
@@ -705,9 +665,7 @@
             groupSettings.classList.toggle('hidden', !this.checked);
         });
 
-        // ============================================================
         //  VIDEO UPLOAD
-        // ============================================================
         const videoDrop = document.getElementById('videoDrop');
         const videoFile = document.getElementById('videoFile');
         const videoPreview = document.getElementById('videoPreview');
@@ -734,9 +692,7 @@
             videoDrop.querySelector('p:first-of-type').textContent = 'Video faylı yüklə';
         });
 
-        // ============================================================
         //  TOAST MESSAGE
-        // ============================================================
         const successToast = document.getElementById('successToast');
         let toastTimeout;
 
@@ -749,9 +705,7 @@
             }, 3000);
         }
 
-        // ============================================================
         //  SAVE PROFILE
-        // ============================================================
         const profileForm = document.getElementById('profileForm');
 
         profileForm.addEventListener('submit', function(e) {
@@ -817,18 +771,14 @@
             }, 1200);
         });
 
-        // ============================================================
         //  RESET FORM
-        // ============================================================
         function resetForm() {
             if (confirm('Dəyişiklikləri ləğv etmək istədiyinizə əminsiniz?')) {
                 location.reload();
             }
         }
 
-        // ============================================================
         //  SIDEBAR ACTIVE STATE
-        // ============================================================
         document.querySelectorAll('.sidebar-item').forEach(item => {
             item.addEventListener('click', function(e) {
                 document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
@@ -836,9 +786,7 @@
             });
         });
 
-        // ============================================================
         //  INIT
-        // ============================================================
         console.log('📝 Müəllim Profil Redaktoru yükləndi');
         console.log('   Müəllim: Rəşad Hüseynov');
         console.log('   Profil statusu: Təsdiqlənib');

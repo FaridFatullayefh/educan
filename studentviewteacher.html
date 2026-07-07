@@ -140,14 +140,10 @@
 </head>
 <body class="bg-gray-50 text-gray-900 font-sans">
 
-    <!-- ============================================================ -->
     <!-- MOBILE SIDEBAR OVERLAY -->
-    <!-- ============================================================ -->
     <div class="overlay" id="sidebarOverlay"></div>
 
-    <!-- ============================================================ -->
     <!-- MOBILE SIDEBAR -->
-    <!-- ============================================================ -->
     <div class="sidebar-mobile" id="mobileSidebar">
         <div class="p-6">
             <span class="sidebar-close" id="sidebarClose"><i class="fas fa-times"></i></span>
@@ -185,9 +181,7 @@
         </div>
     </div>
 
-    <!-- ============================================================ -->
     <!-- HEADER -->
-    <!-- ============================================================ -->
     <header class="sticky top-0 bg-white/95 backdrop-blur-sm z-50 border-b border-gray-100 shadow-sm">
         <nav class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex justify-between items-center">
             <div class="flex items-center gap-4">
@@ -225,15 +219,11 @@
         </div>
     </header>
 
-    <!-- ============================================================ -->
     <!-- MAIN CONTENT -->
-    <!-- ============================================================ -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 py-8">
         <div class="flex flex-col lg:flex-row gap-8">
             
-            <!-- ========================================================== -->
             <!-- SIDEBAR (Desktop) -->
-            <!-- ========================================================== -->
             <aside class="hidden lg:block w-64 flex-shrink-0">
                 <div class="bg-white rounded-2xl border border-gray-100 p-4 sticky top-24">
                     <div class="flex items-center gap-3 mb-6 p-2">
@@ -270,9 +260,7 @@
                 </div>
             </aside>
 
-            <!-- ========================================================== -->
             <!-- TEACHER SEARCH CONTENT -->
-            <!-- ========================================================== -->
             <main class="flex-1 space-y-6">
                 
                 <!-- Başlıq -->
@@ -281,9 +269,7 @@
                     <p class="text-gray-500 text-sm mt-1">Fənn, qiymət və reytinqə görə filtrlə. Özünə uyğun müəllimi tap.</p>
                 </div>
 
-                <!-- ======================================================== -->
                 <!-- SEARCH BAR -->
-                <!-- ======================================================== -->
                 <div class="bg-white rounded-2xl border border-gray-100 p-4 shadow-sm">
                     <div class="flex flex-col sm:flex-row gap-3">
                         <div class="flex-1 relative">
@@ -300,9 +286,7 @@
                     </div>
                 </div>
 
-                <!-- ======================================================== -->
                 <!-- FILTERS -->
-                <!-- ======================================================== -->
                 <div class="bg-white rounded-2xl border border-gray-100 p-4 shadow-sm">
                     <div class="flex flex-wrap items-center gap-3">
                         <span class="text-sm font-medium text-gray-700 mr-1">Fənn:</span>
@@ -335,9 +319,7 @@
                     </div>
                 </div>
 
-                <!-- ======================================================== -->
                 <!-- TEACHER GRID -->
-                <!-- ======================================================== -->
                 <div class="grid md:grid-cols-2 xl:grid-cols-3 gap-6">
                     
                     <!-- Teacher 1 -->
@@ -564,9 +546,7 @@
 
                 </div>
 
-                <!-- ======================================================== -->
                 <!-- PAGINATION -->
-                <!-- ======================================================== -->
                 <div class="flex items-center justify-between border-t border-gray-100 pt-6">
                     <p class="text-sm text-gray-500">6 müəllim göstərilir</p>
                     <div class="flex gap-2">
@@ -581,9 +561,7 @@
         </div>
     </div>
 
-    <!-- ============================================================ -->
     <!-- BOOKING MODAL (Page 12 simulyasiyası) -->
-    <!-- ============================================================ -->
     <div id="bookingModal" class="fixed inset-0 z-50 flex items-center justify-center px-4 hidden">
         <div class="absolute inset-0 bg-black/50" onclick="closeBooking()"></div>
         <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl relative z-10">
@@ -631,9 +609,7 @@
         </div>
     </div>
 
-    <!-- ============================================================ -->
     <!-- FOOTER -->
-    <!-- ============================================================ -->
     <footer class="bg-white border-t border-gray-100 py-12 mt-8">
         <div class="max-w-7xl mx-auto px-4 sm:px-6">
             <div class="grid sm:grid-cols-2 md:grid-cols-4 gap-10 text-gray-600">
@@ -675,13 +651,9 @@
         </div>
     </footer>
 
-    <!-- ============================================================ -->
     <!-- SCRIPTS -->
-    <!-- ============================================================ -->
     <script>
-        // ============================================================
         //  MOBILE SIDEBAR
-        // ============================================================
         const sidebarToggle = document.getElementById('sidebarToggle');
         const mobileSidebar = document.getElementById('mobileSidebar');
         const sidebarOverlay = document.getElementById('sidebarOverlay');
@@ -703,9 +675,7 @@
         sidebarClose.addEventListener('click', closeSidebar);
         sidebarOverlay.addEventListener('click', closeSidebar);
 
-        // ============================================================
         //  MOBILE TOP MENU
-        // ============================================================
         const mobileMenuBtn = document.getElementById('mobileMenuBtn');
         const mobileMenu = document.getElementById('mobile-menu');
 
@@ -714,9 +684,7 @@
             mobileMenuBtn.querySelector('i').className = isOpen ? 'fas fa-times' : 'fas fa-ellipsis-v';
         });
 
-        // ============================================================
         //  FILTER BUTTONS
-        // ============================================================
         document.querySelectorAll('.filter-btn').forEach(btn => {
             btn.addEventListener('click', function() {
                 if (this.textContent.trim() === 'Hamısı') {
@@ -737,9 +705,7 @@
             });
         });
 
-        // ============================================================
         //  PRICE RANGE
-        // ============================================================
         const priceRange = document.querySelector('.price-range');
         const priceDisplay = document.getElementById('priceDisplay');
 
@@ -747,9 +713,7 @@
             priceDisplay.textContent = this.value + ' AZN';
         });
 
-        // ============================================================
         //  BOOKING MODAL
-        // ============================================================
         const bookingModal = document.getElementById('bookingModal');
         const bookingTeacher = document.getElementById('bookingTeacher');
         const bookingSubject = document.getElementById('bookingSubject');
@@ -780,9 +744,7 @@
             }
         });
 
-        // ============================================================
         //  SIDEBAR ACTIVE STATE
-        // ============================================================
         document.querySelectorAll('.sidebar-item').forEach(item => {
             item.addEventListener('click', function(e) {
                 document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
@@ -790,9 +752,7 @@
             });
         });
 
-        // ============================================================
         //  SEARCH
-        // ============================================================
         const searchInput = document.querySelector('.search-input');
         const searchBtn = document.querySelector('.bg-primary .search-btn');
 
