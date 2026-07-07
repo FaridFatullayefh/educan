@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Necə İşləyir? | EduCan</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = { theme: { extend: { colors: { primary: '#1A56A0', accent: '#20948B' } } } }
+    </script>
+</head>
+<body class="bg-white text-gray-900 font-sans">
+
+    <!-- HEADER -->
+    <header class="sticky top-0 bg-white/95 backdrop-blur-sm z-50 border-b border-gray-100 shadow-sm">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex justify-between items-center">
+            <a href="/" class="text-2xl sm:text-3xl font-extrabold text-primary tracking-tighter">EduCan</a>
+
+            <div class="hidden md:flex gap-8 font-medium text-gray-600">
+                <a href="/teachers" class="hover:text-primary transition">Müəllim tap</a>
+                <a href="/how-it-works" class="hover:text-primary transition">Necə işləyir</a>
+                <a href="/about" class="hover:text-primary transition">Haqqımızda</a>
+                <a href="/contact" class="hover:text-primary transition">Əlaqə</a>
+            </div>
+
+            <div class="hidden md:flex gap-3 items-center">
+                <a href="/login" class="px-5 py-2 font-semibold text-primary hover:text-blue-800 transition">Daxil ol</a>
+                <a href="/register/student" class="bg-primary text-white px-6 py-2 rounded-xl font-semibold hover:bg-blue-800 transition">Qeydiyyat</a>
+            </div>
+
+            <button id="menu-btn" class="md:hidden text-2xl text-primary p-2">
+                <i class="fas fa-bars" id="menu-icon"></i>
+            </button>
+        </nav>
+    </header>
+
+    <main class="max-w-5xl mx-auto px-6 py-12">
+        <h1 class="text-4xl font-extrabold text-center mb-16">EduCan necə işləyir?</h1>
+
+        <!-- SECTION FOR STUDENTS -->
+        <section class="mb-20">
+            <h2 class="text-2xl font-bold mb-10 text-primary"><i class="fas fa-user-graduate mr-2"></i> Tələbələr üçün</h2>
+            <div class="grid md:grid-cols-5 gap-6 text-center">
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100"><div class="text-primary text-3xl mb-4"><i class="fas fa-user-plus"></i></div><p class="font-bold">1. Qeydiyyatdan keç</p></div>
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100"><div class="text-primary text-3xl mb-4"><i class="fas fa-search"></i></div><p class="font-bold">2. Müəllim axtar</p></div>
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100"><div class="text-primary text-3xl mb-4"><i class="fas fa-calendar-check"></i></div><p class="font-bold">3. Slot rezerv et</p></div>
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100"><div class="text-primary text-3xl mb-4"><i class="fas fa-video"></i></div><p class="font-bold">4. Zoom-da qoşul</p></div>
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100"><div class="text-primary text-3xl mb-4"><i class="fas fa-star"></i></div><p class="font-bold">5. Qiymətləndir</p></div>
+            </div>
+        </section>
+
+        <!-- SECTION FOR TEACHERS -->
+        <section class="mb-20">
+            <h2 class="text-2xl font-bold mb-10 text-accent"><i class="fas fa-chalkboard-teacher mr-2"></i> Müəllimlər üçün</h2>
+            <div class="grid md:grid-cols-3 gap-6">
+                <div class="bg-white p-6 rounded-2xl border-l-4 border-accent shadow-sm"><h3 class="font-bold">1. Müəllim kimi qeydiyyatdan keç</h3></div>
+                <div class="bg-white p-6 rounded-2xl border-l-4 border-accent shadow-sm"><h3 class="font-bold">2. Profil yarat</h3></div>
+                <div class="bg-white p-6 rounded-2xl border-l-4 border-accent shadow-sm"><h3 class="font-bold">3. Cədvəlini təyin et</h3></div>
+                <div class="bg-white p-6 rounded-2xl border-l-4 border-accent shadow-sm"><h3 class="font-bold">4. Tələbə sənə rezerv edir</h3></div>
+                <div class="bg-white p-6 rounded-2xl border-l-4 border-accent shadow-sm"><h3 class="font-bold">5. Zoom-da dərs ver</h3></div>
+                <div class="bg-white p-6 rounded-2xl border-l-4 border-accent shadow-sm"><h3 class="font-bold">6. Ödənişini al</h3></div>
+            </div>
+        </section>
+<!-- FAQ bölməsini bu hissə ilə əvəz edin -->
+<section class="mb-20">
+    <h2 class="text-2xl font-bold mb-8 text-center">Tez-tez verilən suallar</h2>
+    <div class="space-y-4 max-w-2xl mx-auto">
+        <details class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
+            <summary class="font-bold cursor-pointer">Ödəniş necə həyata keçirilir?</summary>
+            <p class="mt-4 text-gray-600 text-sm">Ödənişlər daxili balans və ya kart vasitəsilə təhlükəsiz şəkildə həyata keçirilir.</p>
+        </details>
+        <details class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
+            <summary class="font-bold cursor-pointer">Zoom pulsuzdurmu?</summary>
+            <p class="mt-4 text-gray-600 text-sm">Bəli, dərslər Zoom vasitəsilə keçirilir və tələbələr üçün əlavə ödəniş tələb olunmur.</p>
+        </details>
+        <details class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
+            <summary class="font-bold cursor-pointer">Dərsi dəyişə və ya ləğv edə bilərəmmi?</summary>
+            <p class="mt-4 text-gray-600 text-sm">Bəli, dərsin vaxtına 24 saat qalmışa qədər ləğv və ya dəyişiklik edə bilərsiniz.</p>
+        </details>
+        <details class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
+            <summary class="font-bold cursor-pointer">Müəllim dərsə gəlməzsə nə olar?</summary>
+            <p class="mt-4 text-gray-600 text-sm">Müəllim dərsə qoşulmazsa, ödənişiniz balansınıza tam geri qaytarılır.</p>
+        </details>
+        <details class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
+            <summary class="font-bold cursor-pointer">Dərs qeydini necə əldə edə bilərəm?</summary>
+            <p class="mt-4 text-gray-600 text-sm">Müəllim dərsi qeydə alarsa, link şəxsi kabinetinizdə paylaşılacaq.</p>
+        </details>
+    </div>
+</section>
+
+        <!-- CTA -->
+        <section class="text-center bg-primary rounded-3xl p-12 text-white">
+            <h2 class="text-3xl font-bold mb-8">Başlamağa hazırsan?</h2>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="/register/student" class="bg-white text-primary px-8 py-4 rounded-xl font-bold shadow-lg">Tələbə kimi qeydiyyat</a>
+                <a href="/register/teacher" class="bg-accent text-white px-8 py-4 rounded-xl font-bold shadow-lg">Müəllim kimi qeydiyyat</a>
+            </div>
+        </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-white border-t border-gray-100 py-12 sm:py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6">
+            <div class="grid sm:grid-cols-2 md:grid-cols-4 gap-10 text-gray-600">
+                <div>
+                    <a href="/" class="text-2xl font-extrabold text-primary mb-4 block">EduCan</a>
+                    <p class="text-sm leading-relaxed">Azərbaycanın DİM hazırlığı üçün onlayn müəllim platforması.</p>
+                </div>
+                <div>
+                    <h4 class="font-bold text-gray-900 mb-4">Naviqasiya</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="/teachers" class="hover:text-primary transition">Müəllim tap</a></li>
+                        <li><a href="/how-it-works" class="hover:text-primary transition">Necə işləyir</a></li>
+                        <li><a href="/about" class="hover:text-primary transition">Haqqımızda</a></li>
+                        <li><a href="/contact" class="hover:text-primary transition">Əlaqə</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold text-gray-900 mb-4">Hüquqi</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="/privacy" class="hover:text-primary transition">Məxfilik Siyasəti</a></li>
+                        <li><a href="/terms" class="hover:text-primary transition">İstifadə Qaydaları</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold text-gray-900 mb-4">Sosial şəbəkələr</h4>
+                    <div class="flex gap-4 text-2xl">
+                        <a href="#" class="text-gray-400 hover:text-primary transition"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-primary transition"><i class="fab fa-facebook"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-12 pt-8 border-t border-gray-100 text-center text-sm text-gray-400">
+                © 2026 EduCan. Bütün hüquqlar qorunur.
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>

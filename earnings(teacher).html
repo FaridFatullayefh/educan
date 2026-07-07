@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Qazanc və Ödənişlər | EduCan</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: { primary: '#1A56A0', accent: '#20948B' }
+                }
+            }
+        }
+    </script>
+    <style>
+        #mobile-menu { display: none; }
+        #mobile-menu.open { display: block; }
+        .sidebar-item {
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+        .sidebar-item:hover {
+            background: #EFF6FF;
+            color: #1A56A0;
+        }
+        .sidebar-item.active {
+            background: #1A56A0;
+            color: white;
+        }
+        .sidebar-item i {
+            width: 1.5rem;
+            text-align: center;
+        }
+        .stat-card {
+            transition: all 0.3s ease;
+        }
+        .stat-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+        }
+        .sidebar-mobile {
+            position: fixed;
+            top: 0;
+            left: -280px;
+            width: 280px;
+            height: 100vh;
+            background: white;
+            z-index: 1000;
+            transition: left 0.3s ease;
+            box-shadow: 2px 0 20px rgba(0,0,0,0.1);
+            overflow-y: auto;
+        }
+        .sidebar-mobile.open {
+            left: 0;
+        }
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.4);
+            z-index: 999;
+            display: none;
+        }
+        .overlay.open {
+            display: block;
+        }
+        .sidebar-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            font-size: 1.5rem;
+            color: #6B7280;
+            cursor: pointer;
+        }
+        .sidebar-close:hover {
+            color: #1A56A0;
+        }
+        .commission-box {
+            background: linear-gradient(135deg, #EFF6FF, #DBEAFE);
+            border: 1px solid #BFDBFE;
+        }
+        .payout-btn {
+            transition: all 0.3s ease;
+        }
+        .payout-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(26, 86, 160, 0.3);
+        }
+        .payout-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .history-row {
+            transition: all 0.2s ease;
+        }
+        .history-row:hover {
+            background: #F9FAFB;
+        }
+        .status-badge {
+            font-size: 0.6rem;
+            padding: 0.15rem 0.6rem;
+            border-radius: 999px;
+            font-weight: 600;
+        }
+        .status-badge.paid { background: #D1FAE5; color: #065F46; }
+        .status-badge.pending { background: #FEF3C7; color: #92400E; }
+        .status-badge.failed { background: #FEE2E2; color: #991B1B; }
+        .modal-overlay {
+            animation: fadeIn 0.3s ease;
+        }
+        .modal-content {
+            animation: slideUp 0.3s ease;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        .success-toast {
+            animation: slideDown 0.4s ease;
+        }
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .confetti-piece {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            pointer-events: none;
+            z-index: 100;
+            animation: confettiFall 4s ease-in forwards;
+        }
+        @keyframes confettiFall {
+            0% { transform: translateY(-100px) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+        }
+        .amount-positive { color: #10B981; }
+        .amount-negative { color: #EF4444; }
+        .amount-pending { color: #F59E0B; }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-900 font-sans">
+
+    <!-- ============================================================ -->
+    <!-- MOBILE SIDEBAR OVERLAY -->
+    <!-- ============================================================ -->
+    <div class="overlay" id="sidebarOverlay"></div>
+
+    <!-- ============================================================ -->
+    <!-- MOBILE SIDEBAR -->
+    <!-- ============================================================ -->
+    <div class="sidebar-mobile" id="mobileSidebar">
+        <div class="p-6">
+            <span class="sidebar-close" id="sidebarClose"><i class="fas fa-times"></i></span>
+            <div class="flex items-center gap-3 mb-8 mt-2">
+                <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=80&h=80&fit=crop&crop=face&auto=format&q=80" alt="Müəllim" class="w-12 h-12 rounded-full object-cover border-2 border-primary">
+                <div>
+                    <div class="font-bold text-gray-900">Rəşad Hüseynov</div>
+                    <div class="text-sm text-gray-500">Müəllim</div>
+                </div>
+            </div>
+            <nav class="space-y-1">
+                <a href="/teacher/dashboard" class="flex items-center gap-3 px-4 py-3 rounded-xl sidebar-item">
+                    <i class="fas fa-th-large"></i> Dashboard
+                </a>
+                <a href="/teacher/profile" class="flex items-center gap-3 px-4 py-3 rounded-xl sidebar-item">
+                    <i class="fas fa-user"></i> Profilim
+                </a>
+                <a href="/teacher/schedule" class="flex items-center gap-3 px-4 py-3 rounded-xl sidebar-item">
+                    <i class="fas fa-calendar-alt"></i> Cədvəlim
+                </a>
+                <a href="/teacher/students" class="flex items-center gap-3 px-4 py-3 rounded-xl sidebar-item">
+                    <i class="fas fa-user-graduate"></i> Tələbələrim
+                </a>
+                <a href="/teacher/lessons" class="flex items-center gap-3 px-4 py-3 rounded-xl sidebar-item">
+                    <i class="fas fa-calendar-check"></i> Dərslərim
+                </a>
+                <a href="/teacher/recordings" class="flex items-center gap-3 px-4 py-3 rounded-xl sidebar-item">
+                    <i class="fas fa-video"></i> Yazılarım
+                </a>
+                <a href="/teacher/earnings" class="flex items-center gap-3 px-4 py-3 rounded-xl sidebar-item active">
+                    <i class="fas fa-money-bill-wave"></i> Qazanc
+                </a>
+                <a href="/teacher/settings" class="flex items-center gap-3 px-4 py-3 rounded-xl sidebar-item">
+                    <i class="fas fa-cog"></i> Parametrlər
+                </a>
+                <div class="border-t border-gray-100 my-3"></div>
+                <a href="/logout" class="flex items-center gap-3 px-4 py-3 rounded-xl sidebar-item text-red-500 hover:bg-red-50">
+                    <i class="fas fa-sign-out-alt"></i> Çıxış
+                </a>
+            </nav>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- HEADER -->
+    <!-- ============================================================ -->
+    <header class="sticky top-0 bg-white/95 backdrop-blur-sm z-50 border-b border-gray-100 shadow-sm">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex justify-between items-center">
+            <div class="flex items-center gap-4">
+                <button id="sidebarToggle" class="lg:hidden text-2xl text-gray-600 hover:text-primary transition p-2" aria-label="Sidebar">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <a href="/teacher/dashboard" class="text-2xl sm:text-3xl font-extrabold text-primary tracking-tighter">EduCan</a>
+            </div>
+
+            <div class="flex items-center gap-4">
+                <span class="hidden sm:inline text-sm text-gray-600">
+                    <i class="fas fa-user-circle text-primary text-xl mr-1"></i>
+                    Rəşad Hüseynov
+                </span>
+                <a href="/logout" class="text-gray-500 hover:text-red-500 transition text-sm font-medium hidden sm:inline">
+                    <i class="fas fa-sign-out-alt"></i> Çıxış
+                </a>
+                <button class="lg:hidden text-2xl text-gray-600 hover:text-primary transition" id="mobileMenuBtn">
+                    <i class="fas fa-ellipsis-v"></i>
+                </button>
+            </div>
+        </nav>
+
+        <div id="mobile-menu" class="lg:hidden border-t border-gray-100 bg-white px-4 pb-4">
+            <div class="flex flex-wrap gap-2 pt-3">
+                <a href="/teacher/dashboard" class="text-sm px-3 py-1.5 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition">Dashboard</a>
+                <a href="/teacher/profile" class="text-sm px-3 py-1.5 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition">Profilim</a>
+                <a href="/teacher/schedule" class="text-sm px-3 py-1.5 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition">Cədvəlim</a>
+                <a href="/teacher/students" class="text-sm px-3 py-1.5 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition">Tələbələrim</a>
+                <a href="/teacher/lessons" class="text-sm px-3 py-1.5 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition">Dərslərim</a>
+                <a href="/teacher/recordings" class="text-sm px-3 py-1.5 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition">Yazılarım</a>
+                <a href="/teacher/earnings" class="text-sm px-3 py-1.5 bg-primary text-white rounded-lg font-medium">Qazanc</a>
+                <a href="/teacher/settings" class="text-sm px-3 py-1.5 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition">Parametrlər</a>
+                <a href="/logout" class="text-sm px-3 py-1.5 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition">Çıxış</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- ============================================================ -->
+    <!-- MAIN CONTENT -->
+    <!-- ============================================================ -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-8">
+        <div class="flex flex-col lg:flex-row gap-8">
+            
+            <!-- ========================================================== -->
+            <!-- SIDEBAR (Desktop) -->
+            <!-- ========================================================== -->
+            <aside class="hidden lg:block w-64 flex-shrink-0">
+                <div class="bg-white rounded-2xl border border-gray-100 p-4 sticky top-24">
+                    <div class="flex items-center gap-3 mb-6 p-2">
+                        <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=80&h=80&fit=crop&crop=face&auto=format&q=80" alt="Müəllim" class="w-14 h-14 rounded-full object-cover border-2 border-primary">
+                        <div>
+                            <div class="font-bold text-gray-900">Rəşad Hüseynov</div>
+                            <div class="text-sm text-gray-500">Müəllim</div>
+                        </div>
+                    </div>
+                    <nav class="space-y-1">
+                        <a href="/teacher/dashboard" class="flex items-center gap-3 px-4 py-3 rounded-xl sidebar-item">
+                            <i class="fas fa-th-large"></i> Dashboard
+                        </a>
+                        <a href="/teacher/profile" class="flex items-center gap-3 px-4 py-3 rounded-xl sidebar-item">
+                            <i class="fas fa-user"></i> Profilim
+                        </a>
+                        <a href="/teacher/schedule" class="flex items-center gap-3 px-4 py-3 rounded-xl sidebar-item">
+                            <i class="fas fa-calendar-alt"></i> Cədvəlim
+                        </a>
+                        <a href="/teacher/students" class="flex items-center gap-3 px-4 py-3 rounded-xl sidebar-item">
+                            <i class="fas fa-user-graduate"></i> Tələbələrim
+                        </a>
+                        <a href="/teacher/lessons" class="flex items-center gap-3 px-4 py-3 rounded-xl sidebar-item">
+                            <i class="fas fa-calendar-check"></i> Dərslərim
+                        </a>
+                        <a href="/teacher/recordings" class="flex items-center gap-3 px-4 py-3 rounded-xl sidebar-item">
+                            <i class="fas fa-video"></i> Yazılarım
+                        </a>
+                        <a href="/teacher/earnings" class="flex items-center gap-3 px-4 py-3 rounded-xl sidebar-item active">
+                            <i class="fas fa-money-bill-wave"></i> Qazanc
+                        </a>
+                        <a href="/teacher/settings" class="flex items-center gap-3 px-4 py-3 rounded-xl sidebar-item">
+                            <i class="fas fa-cog"></i> Parametrlər
+                        </a>
+                        <div class="border-t border-gray-100 my-3"></div>
+                        <a href="/logout" class="flex items-center gap-3 px-4 py-3 rounded-xl sidebar-item text-red-500 hover:bg-red-50">
+                            <i class="fas fa-sign-out-alt"></i> Çıxış
+                        </a>
+                    </nav>
+                </div>
+            </aside>
+
+            <!-- ========================================================== -->
+            <!-- EARNINGS CONTENT -->
+            <!-- ========================================================== -->
+            <main class="flex-1 space-y-6">
+                
+                <!-- Başlıq -->
+                <div>
+                    <h1 class="text-2xl font-extrabold text-gray-900">Qazanc və Ödənişlər</h1>
+                    <p class="text-gray-500 text-sm mt-1">Qazancınızı izləyin və ödəniş tələb edin</p>
+                </div>
+
+                <!-- Uğur mesajı (toast) -->
+                <div id="successToast" class="hidden bg-green-50 border border-green-200 rounded-xl px-4 py-3 text-green-700 flex items-center gap-3 success-toast">
+                    <i class="fas fa-check-circle text-green-500"></i>
+                    <span>Ödəniş tələbi uğurla göndərildi!</span>
+                </div>
+
+                <!-- ======================================================== -->
+                <!-- EARNINGS OVERVIEW -->
+                <!-- ======================================================== -->
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div class="stat-card bg-white rounded-2xl border border-gray-100 p-5 shadow-sm">
+                        <p class="text-sm text-gray-500">Bu ay qazanc</p>
+                        <p class="text-2xl font-extrabold text-primary">₼245.00</p>
+                        <p class="text-xs text-green-600 mt-1"><i class="fas fa-arrow-up"></i> +12% ötən aydan</p>
+                    </div>
+                    <div class="stat-card bg-white rounded-2xl border border-gray-100 p-5 shadow-sm">
+                        <p class="text-sm text-gray-500">Ötən ay qazanc</p>
+                        <p class="text-2xl font-extrabold text-gray-700">₼218.75</p>
+                        <p class="text-xs text-gray-400 mt-1">15 dərs</p>
+                    </div>
+                    <div class="stat-card bg-white rounded-2xl border border-gray-100 p-5 shadow-sm">
+                        <p class="text-sm text-gray-500">Gözləyən ödəniş</p>
+                        <p class="text-2xl font-extrabold text-yellow-600" id="pendingBalance">₼80.00</p>
+                        <p class="text-xs text-gray-400 mt-1">3 dərs təsdiq gözləyir</p>
+                    </div>
+                    <div class="stat-card bg-white rounded-2xl border border-gray-100 p-5 shadow-sm">
+                        <p class="text-sm text-gray-500">Ümumi qazanc</p>
+                        <p class="text-2xl font-extrabold text-accent">₼1,280.00</p>
+                        <p class="text-xs text-gray-400 mt-1">Bütün dövr ərzində</p>
+                    </div>
+                </div>
+
+                <!-- ======================================================== -->
+                <!-- COMMISSION NOTE -->
+                <!-- ======================================================== -->
+                <div class="commission-box rounded-2xl p-5">
+                    <div class="flex items-start gap-3">
+                        <i class="fas fa-percent text-primary text-xl mt-0.5"></i>
+                        <div>
+                            <p class="text-sm font-semibold text-gray-800">EduCan 35% komissiya tutur.</p>
+                            <p class="text-sm text-gray-600">Siz hər dərsdən 65% alırsınız.</p>
+                            <div class="mt-2 flex items-center gap-4 text-xs">
+                                <span class="text-gray-500">Dərs qiyməti: <span class="font-bold text-gray-700">₼100</span></span>
+                                <span class="text-gray-500">Sizin pay: <span class="font-bold text-green-600">₼65</span></span>
+                                <span class="text-gray-500">EduCan: <span class="font-bold text-primary">₼35</span></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ======================================================== -->
+                <!-- LESSON EARNINGS TABLE -->
+                <!-- ======================================================== -->
+                <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+                    <div class="p-6 border-b border-gray-100">
+                        <h2 class="text-lg font-bold text-gray-800 flex items-center gap-2">
+                            <i class="fas fa-list-ul text-primary"></i> Dərs qazancları
+                        </h2>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full">
+                            <thead class="bg-gray-50 text-left">
+                                <tr>
+                                    <th class="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Tarix</th>
+                                    <th class="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Tələbə</th>
+                                    <th class="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Növ</th>
+                                    <th class="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider text-right">Ümumi</th>
+                                    <th class="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider text-right">Sizin pay (65%)</th>
+                                    <th class="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider text-center">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-100" id="earningsTable">
+                                <!-- JS ilə doldurulacaq -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- ======================================================== -->
+                <!-- PAYOUT REQUEST -->
+                <!-- ======================================================== -->
+                <div class="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                        <div>
+                            <h2 class="text-lg font-bold text-gray-800 flex items-center gap-2">
+                                <i class="fas fa-hand-holding-usd text-primary"></i> Ödəniş tələb et
+                            </h2>
+                            <p class="text-sm text-gray-500 mt-1">Mövcud balansınızdan bank hesabınıza pul çıxarın</p>
+                            <div class="mt-2 flex items-center gap-4 text-sm">
+                                <span class="text-gray-600">Mövcud balans: <span class="font-bold text-primary" id="availableBalance">₼165.00</span></span>
+                                <span class="text-gray-400">|</span>
+                                <span class="text-gray-600">Minimum ödəniş: <span class="font-bold">₼20.00</span></span>
+                            </div>
+                        </div>
+                        <button id="payoutBtn" class="payout-btn bg-primary text-white px-8 py-3 rounded-xl font-bold hover:bg-blue-800 transition shadow-lg shadow-primary/20 flex items-center gap-2 whitespace-nowrap">
+                            <i class="fas fa-arrow-up"></i> Ödəniş tələb et
+                        </button>
+                    </div>
+                    <div class="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded-xl text-sm text-yellow-800">
+                        <i class="fas fa-info-circle mr-1"></i>
+                        Ödənişlər 1-3 iş günü ərzində bank hesabınıza köçürüləcək. Bank hesabı məlumatlarınız Parametrlər bölməsində əlavə edilməlidir.
+                    </div>
+                </div>
+
+                <!-- ======================================================== -->
+                <!-- PAYOUT HISTORY -->
+                <!-- ======================================================== -->
+                <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+                    <div class="p-6 border-b border-gray-100">
+                        <h2 class="text-lg font-bold text-gray-800 flex items-center gap-2">
+                            <i class="fas fa-history text-primary"></i> Ödəniş tarixçəsi
+                        </h2>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full">
+                            <thead class="bg-gray-50 text-left">
+                                <tr>
+                                    <th class="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Tarix</th>
+                                    <th class="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Məbləğ</th>
+                                    <th class="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Hesab</th>
+                                    <th class="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider text-center">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-100" id="payoutHistory">
+                                <!-- JS ilə doldurulacaq -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </main>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- PAYOUT CONFIRMATION MODAL -->
+    <!-- ============================================================ -->
+    <div id="payoutModal" class="fixed inset-0 z-50 flex items-center justify-center px-4 hidden">
+        <div class="absolute inset-0 bg-black/50 modal-overlay" onclick="closePayoutModal()"></div>
+        <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl relative z-10 modal-content">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-xl font-bold text-gray-900">Ödəniş tələbi</h3>
+                <button onclick="closePayoutModal()" class="text-gray-400 hover:text-gray-600 transition text-2xl">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="bg-gray-50 rounded-xl p-4 mb-4 space-y-3">
+                <div class="flex justify-between">
+                    <span class="text-gray-500">Tələb olunan məbləğ</span>
+                    <span class="font-bold text-primary text-lg" id="modalPayoutAmount">₼165.00</span>
+                </div>
+                <div class="flex justify-between border-t border-gray-200 pt-3">
+                    <span class="text-gray-500">Hesab növü</span>
+                    <span class="font-medium text-gray-800">Bank köçürməsi</span>
+                </div>
+                <div class="flex justify-between border-t border-gray-200 pt-3">
+                    <span class="text-gray-500">Hesab məlumatları</span>
+                    <span class="font-medium text-gray-800">IBAN: AZ96 KAPL 0001 2345 6789</span>
+                </div>
+            </div>
+            <div class="bg-yellow-50 border border-yellow-200 rounded-xl p-3 mb-4">
+                <p class="text-sm text-yellow-800 flex items-center gap-2">
+                    <i class="fas fa-info-circle"></i>
+                    Ödəniş 1-3 iş günü ərzində hesabınıza köçürüləcək.
+                </p>
+            </div>
+            <div class="flex gap-3">
+                <button onclick="closePayoutModal()" class="flex-1 bg-gray-100 text-gray-700 py-3 rounded-xl font-semibold hover:bg-gray-200 transition">
+                    İmtina et
+                </button>
+                <button onclick="confirmPayout()" class="flex-1 bg-primary text-white py-3 rounded-xl font-semibold hover:bg-blue-800 transition">
+                    <i class="fas fa-check mr-1"></i> Təsdiqlə
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- FOOTER -->
+    <!-- ============================================================ -->
+    <footer class="bg-white border-t border-gray-100 py-12 mt-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6">
+            <div class="grid sm:grid-cols-2 md:grid-cols-4 gap-10 text-gray-600">
+                <div>
+                    <a href="/" class="text-2xl font-extrabold text-primary mb-4 block">EduCan</a>
+                    <p class="text-sm leading-relaxed">Azərbaycanın DİM hazırlığı üçün onlayn müəllim platforması.</p>
+                </div>
+                <div>
+                    <h4 class="font-bold text-gray-900 mb-4">Naviqasiya</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="/teachers" class="hover:text-primary transition">Müəllim tap</a></li>
+                        <li><a href="/how-it-works" class="hover:text-primary transition">Necə işləyir</a></li>
+                        <li><a href="/about" class="hover:text-primary transition">Haqqımızda</a></li>
+                        <li><a href="/contact" class="hover:text-primary transition">Əlaqə</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold text-gray-900 mb-4">Hüquqi</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="/privacy" class="hover:text-primary transition">Məxfilik Siyasəti</a></li>
+                        <li><a href="/terms" class="hover:text-primary transition">İstifadə Qaydaları</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold text-gray-900 mb-4">Sosial şəbəkələr</h4>
+                    <div class="flex gap-4 text-2xl">
+                        <a href="https://instagram.com/educan" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-primary transition" aria-label="Instagram">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="https://facebook.com/educan" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-primary transition" aria-label="Facebook">
+                            <i class="fab fa-facebook"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-12 pt-8 border-t border-gray-100 text-center text-sm text-gray-400">
+                © 2026 EduCan. Bütün hüquqlar qorunur.
+            </div>
+        </div>
+    </footer>
+
+    <!-- ============================================================ -->
+    <!-- SCRIPTS -->
+    <!-- ============================================================ -->
+    <script>
+        // ============================================================
+        //  SIDEBAR TOGGLE
+        // ============================================================
+        const sidebarToggle = document.getElementById('sidebarToggle');
+        const mobileSidebar = document.getElementById('mobileSidebar');
+        const sidebarOverlay = document.getElementById('sidebarOverlay');
+        const sidebarClose = document.getElementById('sidebarClose');
+
+        function openSidebar() {
+            mobileSidebar.classList.add('open');
+            sidebarOverlay.classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeSidebar() {
+            mobileSidebar.classList.remove('open');
+            sidebarOverlay.classList.remove('open');
+            document.body.style.overflow = '';
+        }
+
+        sidebarToggle.addEventListener('click', openSidebar);
+        sidebarClose.addEventListener('click', closeSidebar);
+        sidebarOverlay.addEventListener('click', closeSidebar);
+
+        // ============================================================
+        //  MOBILE TOP MENU
+        // ============================================================
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            const isOpen = mobileMenu.classList.toggle('open');
+            mobileMenuBtn.querySelector('i').className = isOpen ? 'fas fa-times' : 'fas fa-ellipsis-v';
+        });
+
+        // ============================================================
+        //  MƏLUMATLAR
+        // ============================================================
+        const COMMISSION_RATE = 0.65; // 65%
+        const COMMISSION_TEXT = '35%';
+
+        const earningsData = [
+            { date: '15 İyun 2026', student: 'Əli Məmmədov', sessionType: '1-on-1', gross: 20.00, status: 'paid' },
+            { date: '14 İyun 2026', student: 'Aynur Əliyeva', sessionType: 'Qrup', gross: 9.00, status: 'pending' },
+            { date: '12 İyun 2026', student: 'Murad Vəliyev', sessionType: '1-on-1', gross: 22.00, status: 'paid' },
+            { date: '10 İyun 2026', student: 'Günay Səfərova', sessionType: 'Qrup', gross: 9.00, status: 'pending' },
+            { date: '8 İyun 2026', student: 'Tural Rəhimov', sessionType: '1-on-1', gross: 18.00, status: 'paid' },
+            { date: '5 İyun 2026', student: 'Nərmin Hüseynova', sessionType: '1-on-1', gross: 15.00, status: 'paid' },
+            { date: '3 İyun 2026', student: 'Rəşad Qasımov', sessionType: '1-on-1', gross: 20.00, status: 'pending' },
+            { date: '1 İyun 2026', student: 'Leyla Məmmədova', sessionType: 'Qrup', gross: 9.00, status: 'paid' },
+        ];
+
+        const payoutHistoryData = [
+            { date: '10 İyun 2026', amount: 120.00, account: 'IBAN: AZ96 KAPL 0001 2345 6789', status: 'completed' },
+            { date: '15 May 2026', amount: 85.50, account: 'IBAN: AZ96 KAPL 0001 2345 6789', status: 'completed' },
+            { date: '20 Aprel 2026', amount: 150.00, account: 'IBAN: AZ96 KAPL 0001 2345 6789', status: 'pending' },
+            { date: '5 Aprel 2026', amount: 60.00, account: 'IBAN: AZ96 KAPL 0001 2345 6789', status: 'failed' },
+        ];
+
+        // ============================================================
+        //  RENDER EARNINGS TABLE
+        // ============================================================
+        function renderEarnings() {
+            const container = document.getElementById('earningsTable');
+            container.innerHTML = '';
+
+            let totalEarnings = 0;
+            let pendingTotal = 0;
+
+            earningsData.forEach(item => {
+                const yourShare = item.gross * COMMISSION_RATE;
+                totalEarnings += yourShare;
+                if (item.status === 'pending') pendingTotal += yourShare;
+
+                const statusClass = item.status === 'paid' ? 'paid' : 'pending';
+                const statusText = item.status === 'paid' ? 'Ödənildi' : 'Gözləyir';
+
+                const row = document.createElement('tr');
+                row.className = 'history-row';
+                row.innerHTML = `
+                    <td class="px-6 py-3 text-sm text-gray-600">${item.date}</td>
+                    <td class="px-6 py-3 text-sm text-gray-800 font-medium">${item.student}</td>
+                    <td class="px-6 py-3 text-sm text-gray-600">${item.sessionType}</td>
+                    <td class="px-6 py-3 text-sm text-right text-gray-600">₼${item.gross.toFixed(2)}</td>
+                    <td class="px-6 py-3 text-sm text-right font-bold text-primary">₼${yourShare.toFixed(2)}</td>
+                    <td class="px-6 py-3 text-center"><span class="status-badge ${statusClass}">${statusText}</span></td>
+                `;
+                container.appendChild(row);
+            });
+
+            // Gözləyən balansı yenilə
+            document.getElementById('pendingBalance').textContent = '₼' + pendingTotal.toFixed(2);
+            document.getElementById('availableBalance').textContent = '₼' + (totalEarnings - pendingTotal).toFixed(2);
+        }
+
+        // ============================================================
+        //  RENDER PAYOUT HISTORY
+        // ============================================================
+        function renderPayoutHistory() {
+            const container = document.getElementById('payoutHistory');
+            container.innerHTML = '';
+
+            payoutHistoryData.forEach(item => {
+                const statusClass = item.status === 'completed' ? 'paid' : item.status === 'pending' ? 'pending' : 'failed';
+                const statusText = item.status === 'completed' ? 'Tamamlandı' : item.status === 'pending' ? 'Gözləyir' : 'Uğursuz';
+
+                const row = document.createElement('tr');
+                row.className = 'history-row';
+                row.innerHTML = `
+                    <td class="px-6 py-3 text-sm text-gray-600">${item.date}</td>
+                    <td class="px-6 py-3 text-sm font-bold text-primary">₼${item.amount.toFixed(2)}</td>
+                    <td class="px-6 py-3 text-sm text-gray-600">${item.account}</td>
+                    <td class="px-6 py-3 text-center"><span class="status-badge ${statusClass}">${statusText}</span></td>
+                `;
+                container.appendChild(row);
+            });
+        }
+
+        // ============================================================
+        //  PAYOUT MODAL
+        // ============================================================
+        const payoutModal = document.getElementById('payoutModal');
+        const payoutBtn = document.getElementById('payoutBtn');
+
+        payoutBtn.addEventListener('click', function() {
+            const balanceText = document.getElementById('availableBalance').textContent;
+            const amount = parseFloat(balanceText.replace('₼', ''));
+            
+            if (amount < 20) {
+                showToast('⚠️ Minimum ödəniş məbləği ₼20.00-dir!');
+                return;
+            }
+
+            document.getElementById('modalPayoutAmount').textContent = '₼' + amount.toFixed(2);
+            payoutModal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        });
+
+        function closePayoutModal() {
+            payoutModal.classList.add('hidden');
+            document.body.style.overflow = '';
+        }
+
+        function confirmPayout() {
+            closePayoutModal();
+            createConfetti();
+            showToast('✅ Ödəniş tələbiniz uğurla göndərildi! 1-3 iş günü ərzində hesabınıza köçürüləcək.');
+            
+            // Tarixçəyə əlavə et
+            const amount = parseFloat(document.getElementById('modalPayoutAmount').textContent.replace('₼', ''));
+            const now = new Date();
+            const dateStr = now.toLocaleDateString('az-AZ', { day: '2-digit', month: 'long', year: 'numeric' });
+            
+            payoutHistoryData.unshift({
+                date: dateStr,
+                amount: amount,
+                account: 'IBAN: AZ96 KAPL 0001 2345 6789',
+                status: 'pending'
+            });
+            renderPayoutHistory();
+            
+            console.log('💰 Ödəniş tələbi göndərildi:', { amount, date: dateStr });
+        }
+
+        // Escape ilə bağla
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && !payoutModal.classList.contains('hidden')) {
+                closePayoutModal();
+            }
+        });
+
+        // Modal xaricində klik
+        payoutModal.addEventListener('click', (e) => {
+            if (e.target === payoutModal) closePayoutModal();
+        });
+
+        // ============================================================
+        //  TOAST MESSAGE
+        // ============================================================
+        const successToast = document.getElementById('successToast');
+        let toastTimeout;
+
+        function showToast(message) {
+            successToast.querySelector('span').textContent = message;
+            successToast.classList.remove('hidden');
+            clearTimeout(toastTimeout);
+            toastTimeout = setTimeout(() => {
+                successToast.classList.add('hidden');
+            }, 4000);
+        }
+
+        // ============================================================
+        //  CONFETTI EFFECT
+        // ============================================================
+        function createConfetti() {
+            const colors = ['#1A56A0', '#20948B', '#F59E0B', '#10B981', '#8B5CF6', '#EC4899', '#3B82F6'];
+            for (let i = 0; i < 60; i++) {
+                const piece = document.createElement('div');
+                piece.className = 'confetti-piece';
+                piece.style.left = Math.random() * 100 + '%';
+                piece.style.top = '-10px';
+                piece.style.background = colors[Math.floor(Math.random() * colors.length)];
+                piece.style.width = (Math.random() * 8 + 4) + 'px';
+                piece.style.height = (Math.random() * 8 + 4) + 'px';
+                piece.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+                piece.style.animationDuration = (Math.random() * 2 + 2) + 's';
+                piece.style.animationDelay = (Math.random() * 1.5) + 's';
+                document.body.appendChild(piece);
+                setTimeout(() => piece.remove(), 4000);
+            }
+        }
+
+        // ============================================================
+        //  SIDEBAR ACTIVE STATE
+        // ============================================================
+        document.querySelectorAll('.sidebar-item').forEach(item => {
+            item.addEventListener('click', function(e) {
+                document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // ============================================================
+        //  INIT
+        // ============================================================
+        renderEarnings();
+        renderPayoutHistory();
+
+        console.log('💰 Qazanc və Ödənişlər səhifəsi yükləndi');
+        console.log(`   Komissiya: ${COMMISSION_TEXT}`);
+        console.log(`   Sizin pay: ${COMMISSION_RATE * 100}%`);
+        console.log(`   Ümumi qazanc: ₼1,280.00`);
+        console.log(`   Bu ay qazanc: ₼245.00`);
+    </script>
+</body>
+</html>

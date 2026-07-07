@@ -1,0 +1,978 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hesab Parametrləri | EduCan</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: { primary: '#1A56A0', accent: '#20948B' }
+                }
+            }
+        }
+    </script>
+    <style>
+        #mobile-menu { display: none; }
+        #mobile-menu.open { display: block; }
+        .sidebar-item {
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+        .sidebar-item:hover {
+            background: #EFF6FF;
+            color: #1A56A0;
+        }
+        .sidebar-item.active {
+            background: #1A56A0;
+            color: white;
+        }
+        .sidebar-item i {
+            width: 1.5rem;
+            text-align: center;
+        }
+        .settings-card {
+            transition: all 0.3s ease;
+        }
+        .settings-card:hover {
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+        }
+        .profile-photo-wrapper {
+            position: relative;
+            display: inline-block;
+        }
+        .profile-photo-wrapper .upload-overlay {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            background: #1A56A0;
+            color: white;
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 3px solid white;
+        }
+        .profile-photo-wrapper .upload-overlay:hover {
+            transform: scale(1.1);
+            background: #1A4A8A;
+        }
+        .settings-input {
+            transition: all 0.3s ease;
+        }
+        .settings-input:focus {
+            box-shadow: 0 0 0 3px rgba(26, 86, 160, 0.15);
+            border-color: #1A56A0;
+        }
+        .settings-input.error {
+            border-color: #EF4444;
+            box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15);
+        }
+        .settings-input.success {
+            border-color: #10B981;
+            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.15);
+        }
+        .toggle-switch {
+            position: relative;
+            width: 3.5rem;
+            height: 2rem;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        .toggle-slider {
+            position: absolute;
+            inset: 0;
+            background: #D1D5DB;
+            border-radius: 999px;
+            transition: all 0.3s ease;
+        }
+        .toggle-slider::before {
+            content: '';
+            position: absolute;
+            height: 1.5rem;
+            width: 1.5rem;
+            left: 0.25rem;
+            bottom: 0.25rem;
+            background: white;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        .toggle-switch input:checked + .toggle-slider {
+            background: #1A56A0;
+        }
+        .toggle-switch input:checked + .toggle-slider::before {
+            transform: translateX(1.5rem);
+        }
+        .sidebar-mobile {
+            position: fixed;
+            top: 0;
+            left: -280px;
+            width: 280px;
+            height: 100vh;
+            background: white;
+            z-index: 1000;
+            transition: left 0.3s ease;
+            box-shadow: 2px 0 20px rgba(0,0,0,0.1);
+            overflow-y: auto;
+        }
+        .sidebar-mobile.open {
+            left: 0;
+        }
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.4);
+            z-index: 999;
+            display: none;
+        }
+        .overlay.open {
+            display: block;
+        }
+        .sidebar-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            font-size: 1.5rem;
+            color: #6B7280;
+            cursor: pointer;
+        }
+        .sidebar-close:hover {
+            color: #1A56A0;
+        }
+        .delete-account-btn {
+            transition: all 0.3s ease;
+        }
+        .delete-account-btn:hover {
+            background: #FEE2E2;
+            border-color: #EF4444;
+            color: #EF4444;
+        }
+        .modal-overlay {
+            animation: fadeIn 0.3s ease;
+        }
+        .modal-content {
+            animation: slideUp 0.3s ease;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        .success-toast {
+            animation: slideDown 0.4s ease;
+        }
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .region-select {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236B7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+            background-position: right 0.75rem center;
+            background-repeat: no-repeat;
+            background-size: 1.5rem 1.5rem;
+            padding-right: 2.5rem;
+        }
+        .password-strength {
+            height: 0.25rem;
+            border-radius: 999px;
+            transition: all 0.3s ease;
+        }
+        .password-strength.weak { background: #EF4444; width: 33%; }
+        .password-strength.medium { background: #F59E0B; width: 66%; }
+        .password-strength.strong { background: #10B981; width: 100%; }
+        .password-strength.empty { background: #E5E7EB; width: 0; }
+        .bank-input {
+            font-family: 'Courier New', monospace;
+            letter-spacing: 1px;
+        }
+        .bank-input::placeholder {
+            font-family: 'Courier New', monospace;
+            letter-spacing: 1px;
+        }
+        .security-note {
+            background: linear-gradient(135deg, #EFF6FF, #DBEAFE);
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-900 font-sans">
+
+    <!-- ============================================================ -->
+    <!-- MOBILE SIDEBAR OVERLAY -->
+    <!-- ============================================================ -->
+    <div class="overlay" id="sidebarOverlay"></div>
+
+    <!-- ============================================================ -->
+    <!-- MOBILE SIDEBAR -->
+    <!-- ============================================================ -->
+    <div class="sidebar-mobile" id="mobileSidebar">
+        <div class="p-6">
+            <span class="sidebar-close" id="sidebarClose"><i class="fas fa-times"></i></span>
+            <div class="flex items-center gap-3 mb-8 mt-2">
+                <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=80&h=80&fit=crop&crop=face&auto=format&q=80" alt="Müəllim" class="w-12 h-12 rounded-full object-cover border-2 border-primary">
+                <div>
+                    <div class="font-bold text-gray-900">Rəşad Hüseynov</div>
+                    <div class="text-sm text-gray-500">Müəllim</div>
+                </div>
+            </div>
+            <nav class="space-y-1">
+                <a href="/teacher/dashboard" class="flex items-center gap-3 px-4 py-3 rounded-xl sidebar-item">
+                    <i class="fas fa-th-large"></i> Dashboard
+                </a>
+                <a href="/teacher/profile" class="flex items-center gap-3 px-4 py-3 rounded-xl sidebar-item">
+                    <i class="fas fa-user"></i> Profilim
+                </a>
+                <a href="/teacher/schedule" class="flex items-center gap-3 px-4 py-3 rounded-xl sidebar-item">
+                    <i class="fas fa-calendar-alt"></i> Cədvəlim
+                </a>
+                <a href="/teacher/students" class="flex items-center gap-3 px-4 py-3 rounded-xl sidebar-item">
+                    <i class="fas fa-user-graduate"></i> Tələbələrim
+                </a>
+                <a href="/teacher/lessons" class="flex items-center gap-3 px-4 py-3 rounded-xl sidebar-item">
+                    <i class="fas fa-calendar-check"></i> Dərslərim
+                </a>
+                <a href="/teacher/recordings" class="flex items-center gap-3 px-4 py-3 rounded-xl sidebar-item">
+                    <i class="fas fa-video"></i> Yazılarım
+                </a>
+                <a href="/teacher/earnings" class="flex items-center gap-3 px-4 py-3 rounded-xl sidebar-item">
+                    <i class="fas fa-money-bill-wave"></i> Qazanc
+                </a>
+                <a href="/teacher/settings" class="flex items-center gap-3 px-4 py-3 rounded-xl sidebar-item active">
+                    <i class="fas fa-cog"></i> Parametrlər
+                </a>
+                <div class="border-t border-gray-100 my-3"></div>
+                <a href="/logout" class="flex items-center gap-3 px-4 py-3 rounded-xl sidebar-item text-red-500 hover:bg-red-50">
+                    <i class="fas fa-sign-out-alt"></i> Çıxış
+                </a>
+            </nav>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- HEADER -->
+    <!-- ============================================================ -->
+    <header class="sticky top-0 bg-white/95 backdrop-blur-sm z-50 border-b border-gray-100 shadow-sm">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex justify-between items-center">
+            <div class="flex items-center gap-4">
+                <button id="sidebarToggle" class="lg:hidden text-2xl text-gray-600 hover:text-primary transition p-2" aria-label="Sidebar">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <a href="/teacher/dashboard" class="text-2xl sm:text-3xl font-extrabold text-primary tracking-tighter">EduCan</a>
+            </div>
+
+            <div class="flex items-center gap-4">
+                <span class="hidden sm:inline text-sm text-gray-600">
+                    <i class="fas fa-user-circle text-primary text-xl mr-1"></i>
+                    Rəşad Hüseynov
+                </span>
+                <a href="/logout" class="text-gray-500 hover:text-red-500 transition text-sm font-medium hidden sm:inline">
+                    <i class="fas fa-sign-out-alt"></i> Çıxış
+                </a>
+                <button class="lg:hidden text-2xl text-gray-600 hover:text-primary transition" id="mobileMenuBtn">
+                    <i class="fas fa-ellipsis-v"></i>
+                </button>
+            </div>
+        </nav>
+
+        <div id="mobile-menu" class="lg:hidden border-t border-gray-100 bg-white px-4 pb-4">
+            <div class="flex flex-wrap gap-2 pt-3">
+                <a href="/teacher/dashboard" class="text-sm px-3 py-1.5 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition">Dashboard</a>
+                <a href="/teacher/profile" class="text-sm px-3 py-1.5 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition">Profilim</a>
+                <a href="/teacher/schedule" class="text-sm px-3 py-1.5 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition">Cədvəlim</a>
+                <a href="/teacher/students" class="text-sm px-3 py-1.5 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition">Tələbələrim</a>
+                <a href="/teacher/lessons" class="text-sm px-3 py-1.5 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition">Dərslərim</a>
+                <a href="/teacher/recordings" class="text-sm px-3 py-1.5 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition">Yazılarım</a>
+                <a href="/teacher/earnings" class="text-sm px-3 py-1.5 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition">Qazanc</a>
+                <a href="/teacher/settings" class="text-sm px-3 py-1.5 bg-primary text-white rounded-lg font-medium">Parametrlər</a>
+                <a href="/logout" class="text-sm px-3 py-1.5 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition">Çıxış</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- ============================================================ -->
+    <!-- MAIN CONTENT -->
+    <!-- ============================================================ -->
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 py-8">
+        <div class="flex flex-col lg:flex-row gap-8">
+            
+            <!-- ========================================================== -->
+            <!-- SIDEBAR (Desktop) -->
+            <!-- ========================================================== -->
+            <aside class="hidden lg:block w-64 flex-shrink-0">
+                <div class="bg-white rounded-2xl border border-gray-100 p-4 sticky top-24">
+                    <div class="flex items-center gap-3 mb-6 p-2">
+                        <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=80&h=80&fit=crop&crop=face&auto=format&q=80" alt="Müəllim" class="w-14 h-14 rounded-full object-cover border-2 border-primary">
+                        <div>
+                            <div class="font-bold text-gray-900">Rəşad Hüseynov</div>
+                            <div class="text-sm text-gray-500">Müəllim</div>
+                        </div>
+                    </div>
+                    <nav class="space-y-1">
+                        <a href="/teacher/dashboard" class="flex items-center gap-3 px-4 py-3 rounded-xl sidebar-item">
+                            <i class="fas fa-th-large"></i> Dashboard
+                        </a>
+                        <a href="/teacher/profile" class="flex items-center gap-3 px-4 py-3 rounded-xl sidebar-item">
+                            <i class="fas fa-user"></i> Profilim
+                        </a>
+                        <a href="/teacher/schedule" class="flex items-center gap-3 px-4 py-3 rounded-xl sidebar-item">
+                            <i class="fas fa-calendar-alt"></i> Cədvəlim
+                        </a>
+                        <a href="/teacher/students" class="flex items-center gap-3 px-4 py-3 rounded-xl sidebar-item">
+                            <i class="fas fa-user-graduate"></i> Tələbələrim
+                        </a>
+                        <a href="/teacher/lessons" class="flex items-center gap-3 px-4 py-3 rounded-xl sidebar-item">
+                            <i class="fas fa-calendar-check"></i> Dərslərim
+                        </a>
+                        <a href="/teacher/recordings" class="flex items-center gap-3 px-4 py-3 rounded-xl sidebar-item">
+                            <i class="fas fa-video"></i> Yazılarım
+                        </a>
+                        <a href="/teacher/earnings" class="flex items-center gap-3 px-4 py-3 rounded-xl sidebar-item">
+                            <i class="fas fa-money-bill-wave"></i> Qazanc
+                        </a>
+                        <a href="/teacher/settings" class="flex items-center gap-3 px-4 py-3 rounded-xl sidebar-item active">
+                            <i class="fas fa-cog"></i> Parametrlər
+                        </a>
+                        <div class="border-t border-gray-100 my-3"></div>
+                        <a href="/logout" class="flex items-center gap-3 px-4 py-3 rounded-xl sidebar-item text-red-500 hover:bg-red-50">
+                            <i class="fas fa-sign-out-alt"></i> Çıxış
+                        </a>
+                    </nav>
+                </div>
+            </aside>
+
+            <!-- ========================================================== -->
+            <!-- SETTINGS CONTENT -->
+            <!-- ========================================================== -->
+            <main class="flex-1 space-y-6">
+                
+                <!-- Başlıq -->
+                <div>
+                    <h1 class="text-2xl font-extrabold text-gray-900">Hesab Parametrləri</h1>
+                    <p class="text-gray-500 text-sm mt-1">Şəxsi məlumatlarınızı və ödəniş tənzimləmələrini yeniləyin</p>
+                </div>
+
+                <!-- Uğur mesajı (toast) -->
+                <div id="successToast" class="hidden bg-green-50 border border-green-200 rounded-xl px-4 py-3 text-green-700 flex items-center gap-3 success-toast">
+                    <i class="fas fa-check-circle text-green-500"></i>
+                    <span>Dəyişikliklər uğurla yadda saxlanıldı!</span>
+                </div>
+
+                <form id="settingsForm" class="space-y-6">
+                    
+                    <!-- ==================================================== -->
+                    <!-- PROFİL ŞƏKİLİ -->
+                    <!-- ==================================================== -->
+                    <div class="settings-card bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
+                        <h2 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
+                            <i class="fas fa-camera text-primary"></i> Profil şəkli
+                        </h2>
+                        <div class="flex flex-col sm:flex-row items-center gap-6">
+                            <div class="profile-photo-wrapper">
+                                <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=150&h=150&fit=crop&crop=face&auto=format&q=80" alt="Profil şəkli" class="w-24 h-24 rounded-full object-cover border-4 border-primary">
+                                <label for="profilePhoto" class="upload-overlay" title="Şəkli dəyiş">
+                                    <i class="fas fa-camera text-sm"></i>
+                                </label>
+                                <input type="file" id="profilePhoto" accept="image/*" class="hidden">
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-600">PNG, JPG formatı</p>
+                                <p class="text-xs text-gray-400">Maksimum 5MB</p>
+                                <button type="button" id="removePhotoBtn" class="text-sm text-red-500 hover:text-red-700 transition font-medium mt-1">Şəkli sil</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ==================================================== -->
+                    <!-- ŞƏXSİ MƏLUMATLAR -->
+                    <!-- ==================================================== -->
+                    <div class="settings-card bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
+                        <h2 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
+                            <i class="fas fa-user text-primary"></i> Şəxsi məlumatlar
+                        </h2>
+                        <div class="grid md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1.5">Ad Soyad</label>
+                                <input type="text" id="fullName" value="Rəşad Hüseynov" class="settings-input w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1.5">E-poçt</label>
+                                <input type="email" id="email" value="rashad@email.com" class="settings-input w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1.5">Telefon nömrəsi</label>
+                                <input type="tel" id="phone" value="+994 50 123 45 67" class="settings-input w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1.5">Region</label>
+                                <select id="region" class="settings-input region-select w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary outline-none bg-white">
+                                    <option value="Bakı" selected>Bakı</option>
+                                    <option value="Gəncə">Gəncə</option>
+                                    <option value="Sumqayıt">Sumqayıt</option>
+                                    <option value="Xırdalan">Xırdalan</option>
+                                    <option value="Şəki">Şəki</option>
+                                    <option value="Quba">Quba</option>
+                                    <option value="Lənkəran">Lənkəran</option>
+                                    <option value="Mingəçevir">Mingəçevir</option>
+                                    <option value="Naxçıvan">Naxçıvan</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ==================================================== -->
+                    <!-- ŞİFRƏ DƏYİŞDİR -->
+                    <!-- ==================================================== -->
+                    <div class="settings-card bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
+                        <h2 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
+                            <i class="fas fa-key text-primary"></i> Şifrəni dəyiş
+                        </h2>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1.5">Cari şifrə</label>
+                                <div class="relative">
+                                    <input type="password" id="currentPassword" placeholder="••••••••" class="settings-input w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary outline-none pr-12">
+                                    <button type="button" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition" onclick="togglePassword('currentPassword')">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1.5">Yeni şifrə</label>
+                                <div class="relative">
+                                    <input type="password" id="newPassword" placeholder="Min 8 simvol" class="settings-input w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary outline-none pr-12">
+                                    <button type="button" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition" onclick="togglePassword('newPassword')">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </div>
+                                <div class="mt-2">
+                                    <div class="password-strength empty" id="passwordStrength"></div>
+                                    <p class="text-xs text-gray-400 mt-1" id="passwordStrengthLabel">Şifrə gücü</p>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1.5">Yeni şifrəni təsdiqlə</label>
+                                <div class="relative">
+                                    <input type="password" id="confirmPassword" placeholder="••••••••" class="settings-input w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary outline-none pr-12">
+                                    <button type="button" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition" onclick="togglePassword('confirmPassword')">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </div>
+                                <p id="passwordMatch" class="text-xs mt-1 hidden"></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ==================================================== -->
+                    <!-- BANK ACCOUNT DETAILS -->
+                    <!-- ==================================================== -->
+                    <div class="settings-card bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
+                        <h2 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
+                            <i class="fas fa-university text-primary"></i> Bank hesabı məlumatları
+                        </h2>
+                        <p class="text-sm text-gray-500 mb-4">Ödənişlərinizin köçürülməsi üçün bank məlumatlarınızı daxil edin</p>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1.5">Bankın adı</label>
+                                <select id="bankName" class="settings-input region-select w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary outline-none bg-white">
+                                    <option value="Kapital Bank" selected>Kapital Bank</option>
+                                    <option value="ABB">ABB</option>
+                                    <option value="Leobank">Leobank</option>
+                                    <option value="Unibank">Unibank</option>
+                                    <option value="PAŞA Bank">PAŞA Bank</option>
+                                    <option value="Bank Respublika">Bank Respublika</option>
+                                    <option value="Rabitəbank">Rabitəbank</option>
+                                    <option value="Xalq Bank">Xalq Bank</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1.5">IBAN</label>
+                                <input type="text" id="iban" value="AZ96 KAPL 0001 2345 6789" placeholder="AZ00 BANK 0000 0000 0000 0000" class="settings-input bank-input w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary outline-none uppercase">
+                                <p class="text-xs text-gray-400 mt-1">IBAN 28 simvoldan ibarət olmalıdır</p>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1.5">Hesab sahibinin adı</label>
+                                <input type="text" id="accountHolder" value="Rəşad Hüseynov" placeholder="Ad Soyad" class="settings-input w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary outline-none">
+                            </div>
+                            <div class="security-note rounded-xl p-3 text-sm text-gray-700">
+                                <i class="fas fa-lock text-primary mr-2"></i>
+                                Bank məlumatlarınız təhlükəsiz şəkildə şifrələnərək saxlanılır
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ==================================================== -->
+                    <!-- BİLDİRİŞLƏR -->
+                    <!-- ==================================================== -->
+                    <div class="settings-card bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
+                        <h2 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
+                            <i class="fas fa-bell text-primary"></i> Bildirişlər
+                        </h2>
+                        <div class="space-y-3">
+                            <div class="flex items-center justify-between py-2 border-b border-gray-100">
+                                <div>
+                                    <p class="font-medium text-gray-800">E-poçt bildirişləri</p>
+                                    <p class="text-sm text-gray-500">Yaxın dərslər və ödənişlər üçün</p>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="emailNotifications" checked>
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                            <div class="flex items-center justify-between py-2 border-b border-gray-100">
+                                <div>
+                                    <p class="font-medium text-gray-800">SMS bildirişləri</p>
+                                    <p class="text-sm text-gray-500">Dərs xatırlatmaları üçün</p>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="smsNotifications">
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                            <div class="flex items-center justify-between py-2">
+                                <div>
+                                    <p class="font-medium text-gray-800">Ödəniş bildirişləri</p>
+                                    <p class="text-sm text-gray-500">Ödənişlər köçürüldükdə xəbərdarlıq</p>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="paymentNotifications" checked>
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ==================================================== -->
+                    <!-- HESABI SİL -->
+                    <!-- ==================================================== -->
+                    <div class="settings-card bg-white rounded-2xl border border-red-200 p-6 shadow-sm">
+                        <h2 class="text-lg font-bold text-red-600 mb-2 flex items-center gap-2">
+                            <i class="fas fa-exclamation-triangle"></i> Təhlükəli zona
+                        </h2>
+                        <p class="text-sm text-gray-500 mb-4">Hesabınızı silmək bütün məlumatlarınızı itirməyinizə səbəb olacaq. Bu əməliyyat geri qaytarıla bilməz.</p>
+                        <button type="button" id="deleteAccountBtn" class="delete-account-btn border-2 border-red-300 text-red-500 px-6 py-2.5 rounded-xl font-semibold hover:bg-red-50 transition text-sm flex items-center gap-2">
+                            <i class="fas fa-trash"></i> Hesabı sil
+                        </button>
+                    </div>
+
+                    <!-- ==================================================== -->
+                    <!-- SAVE BUTTON -->
+                    <!-- ==================================================== -->
+                    <div class="flex flex-col sm:flex-row gap-3 justify-end">
+                        <button type="button" onclick="resetForm()" class="px-8 py-3 border border-gray-300 text-gray-700 rounded-xl font-semibold hover:bg-gray-50 transition">
+                            Ləğv et
+                        </button>
+                        <button type="submit" id="saveBtn" class="bg-primary text-white px-10 py-3.5 rounded-xl font-bold hover:bg-blue-800 transition shadow-lg shadow-primary/20 flex items-center justify-center gap-2">
+                            <i class="fas fa-save"></i> Dəyişiklikləri yadda saxla
+                        </button>
+                    </div>
+
+                </form>
+
+            </main>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- DELETE ACCOUNT MODAL -->
+    <!-- ============================================================ -->
+    <div id="deleteModal" class="fixed inset-0 z-50 flex items-center justify-center px-4 hidden">
+        <div class="absolute inset-0 bg-black/50 modal-overlay" onclick="closeDeleteModal()"></div>
+        <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl relative z-10 modal-content">
+            <div class="text-center mb-4">
+                <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                    <i class="fas fa-exclamation-triangle text-2xl text-red-500"></i>
+                </div>
+                <h3 class="text-xl font-bold text-gray-900">Hesabı silmək istədiyinizə əminsiniz?</h3>
+                <p class="text-sm text-gray-500 mt-1">Bu əməliyyat geri qaytarıla bilməz. Bütün məlumatlarınız, dərsləriniz və qazanclarınız silinəcək.</p>
+            </div>
+            <div class="bg-red-50 border border-red-200 rounded-xl p-3 mb-4">
+                <p class="text-sm text-red-700 flex items-center gap-2">
+                    <i class="fas fa-info-circle"></i>
+                    Hesabınızı silmək üçün "Hesabı sil" düyməsini klikləyin
+                </p>
+            </div>
+            <div class="flex gap-3">
+                <button onclick="closeDeleteModal()" class="flex-1 bg-gray-100 text-gray-700 py-3 rounded-xl font-semibold hover:bg-gray-200 transition">
+                    İmtina et
+                </button>
+                <button onclick="confirmDelete()" class="flex-1 bg-red-600 text-white py-3 rounded-xl font-semibold hover:bg-red-700 transition">
+                    <i class="fas fa-trash mr-1"></i> Hesabı sil
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- FOOTER -->
+    <!-- ============================================================ -->
+    <footer class="bg-white border-t border-gray-100 py-12 mt-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6">
+            <div class="grid sm:grid-cols-2 md:grid-cols-4 gap-10 text-gray-600">
+                <div>
+                    <a href="/" class="text-2xl font-extrabold text-primary mb-4 block">EduCan</a>
+                    <p class="text-sm leading-relaxed">Azərbaycanın DİM hazırlığı üçün onlayn müəllim platforması.</p>
+                </div>
+                <div>
+                    <h4 class="font-bold text-gray-900 mb-4">Naviqasiya</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="/teachers" class="hover:text-primary transition">Müəllim tap</a></li>
+                        <li><a href="/how-it-works" class="hover:text-primary transition">Necə işləyir</a></li>
+                        <li><a href="/about" class="hover:text-primary transition">Haqqımızda</a></li>
+                        <li><a href="/contact" class="hover:text-primary transition">Əlaqə</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold text-gray-900 mb-4">Hüquqi</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="/privacy" class="hover:text-primary transition">Məxfilik Siyasəti</a></li>
+                        <li><a href="/terms" class="hover:text-primary transition">İstifadə Qaydaları</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold text-gray-900 mb-4">Sosial şəbəkələr</h4>
+                    <div class="flex gap-4 text-2xl">
+                        <a href="https://instagram.com/educan" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-primary transition" aria-label="Instagram">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="https://facebook.com/educan" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-primary transition" aria-label="Facebook">
+                            <i class="fab fa-facebook"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-12 pt-8 border-t border-gray-100 text-center text-sm text-gray-400">
+                © 2026 EduCan. Bütün hüquqlar qorunur.
+            </div>
+        </div>
+    </footer>
+
+    <!-- ============================================================ -->
+    <!-- SCRIPTS -->
+    <!-- ============================================================ -->
+    <script>
+        // ============================================================
+        //  SIDEBAR TOGGLE
+        // ============================================================
+        const sidebarToggle = document.getElementById('sidebarToggle');
+        const mobileSidebar = document.getElementById('mobileSidebar');
+        const sidebarOverlay = document.getElementById('sidebarOverlay');
+        const sidebarClose = document.getElementById('sidebarClose');
+
+        function openSidebar() {
+            mobileSidebar.classList.add('open');
+            sidebarOverlay.classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeSidebar() {
+            mobileSidebar.classList.remove('open');
+            sidebarOverlay.classList.remove('open');
+            document.body.style.overflow = '';
+        }
+
+        sidebarToggle.addEventListener('click', openSidebar);
+        sidebarClose.addEventListener('click', closeSidebar);
+        sidebarOverlay.addEventListener('click', closeSidebar);
+
+        // ============================================================
+        //  MOBILE TOP MENU
+        // ============================================================
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            const isOpen = mobileMenu.classList.toggle('open');
+            mobileMenuBtn.querySelector('i').className = isOpen ? 'fas fa-times' : 'fas fa-ellipsis-v';
+        });
+
+        // ============================================================
+        //  PROFILE PHOTO
+        // ============================================================
+        const profilePhotoInput = document.getElementById('profilePhoto');
+        const profilePhotoImg = document.querySelector('.profile-photo-wrapper img');
+        const removePhotoBtn = document.getElementById('removePhotoBtn');
+
+        profilePhotoInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(ev) {
+                    profilePhotoImg.src = ev.target.result;
+                    showToast('Şəkil uğurla yeniləndi!');
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        removePhotoBtn.addEventListener('click', () => {
+            profilePhotoImg.src = 'https://ui-avatars.com/api/?name=Rashad+Huseynov&background=1A56A0&color=fff&size=150';
+            profilePhotoInput.value = '';
+            showToast('Şəkil silindi');
+        });
+
+        // ============================================================
+        //  PASSWORD TOGGLE
+        // ============================================================
+        function togglePassword(id) {
+            const input = document.getElementById(id);
+            const icon = input.parentElement.querySelector('button i');
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.className = 'fas fa-eye-slash';
+            } else {
+                input.type = 'password';
+                icon.className = 'fas fa-eye';
+            }
+        }
+
+        // ============================================================
+        //  PASSWORD STRENGTH
+        // ============================================================
+        const newPassword = document.getElementById('newPassword');
+        const strengthBar = document.getElementById('passwordStrength');
+        const strengthLabel = document.getElementById('passwordStrengthLabel');
+
+        newPassword.addEventListener('input', function() {
+            const val = this.value;
+            let strength = 0;
+            
+            if (val.length >= 8) strength++;
+            if (val.match(/[a-z]/)) strength++;
+            if (val.match(/[A-Z]/)) strength++;
+            if (val.match(/[0-9]/)) strength++;
+            if (val.match(/[^a-zA-Z0-9]/)) strength++;
+
+            strengthBar.className = 'password-strength';
+            if (val.length === 0) {
+                strengthBar.classList.add('empty');
+                strengthLabel.textContent = 'Şifrə gücü';
+                strengthLabel.className = 'text-xs text-gray-400 mt-1';
+                return;
+            }
+
+            if (strength <= 1) {
+                strengthBar.classList.add('weak');
+                strengthLabel.textContent = 'Zəif şifrə';
+                strengthLabel.className = 'text-xs text-red-500 mt-1';
+            } else if (strength <= 3) {
+                strengthBar.classList.add('medium');
+                strengthLabel.textContent = 'Orta şifrə';
+                strengthLabel.className = 'text-xs text-yellow-600 mt-1';
+            } else {
+                strengthBar.classList.add('strong');
+                strengthLabel.textContent = 'Güclü şifrə';
+                strengthLabel.className = 'text-xs text-green-600 mt-1';
+            }
+        });
+
+        // ============================================================
+        //  PASSWORD MATCH
+        // ============================================================
+        const confirmPassword = document.getElementById('confirmPassword');
+        const passwordMatch = document.getElementById('passwordMatch');
+
+        function checkPasswordMatch() {
+            const newVal = newPassword.value;
+            const confirmVal = confirmPassword.value;
+            
+            if (confirmVal.length === 0) {
+                passwordMatch.className = 'text-xs mt-1 hidden';
+                return;
+            }
+            
+            if (newVal === confirmVal) {
+                passwordMatch.textContent = '✓ Şifrələr uyğundur';
+                passwordMatch.className = 'text-xs mt-1 text-green-600';
+            } else {
+                passwordMatch.textContent = '✗ Şifrələr uyğun deyil';
+                passwordMatch.className = 'text-xs mt-1 text-red-500';
+            }
+        }
+
+        newPassword.addEventListener('input', checkPasswordMatch);
+        confirmPassword.addEventListener('input', checkPasswordMatch);
+
+        // ============================================================
+        //  TOAST MESSAGE
+        // ============================================================
+        const successToast = document.getElementById('successToast');
+        let toastTimeout;
+
+        function showToast(message) {
+            successToast.querySelector('span').textContent = message;
+            successToast.classList.remove('hidden');
+            clearTimeout(toastTimeout);
+            toastTimeout = setTimeout(() => {
+                successToast.classList.add('hidden');
+            }, 3000);
+        }
+
+        // ============================================================
+        //  SAVE SETTINGS
+        // ============================================================
+        document.getElementById('settingsForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const fullName = document.getElementById('fullName').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const phone = document.getElementById('phone').value.trim();
+            const region = document.getElementById('region').value;
+            const bankName = document.getElementById('bankName').value;
+            const iban = document.getElementById('iban').value.trim();
+            const accountHolder = document.getElementById('accountHolder').value.trim();
+            const currentPass = document.getElementById('currentPassword').value;
+            const newPass = document.getElementById('newPassword').value;
+            const confirmPass = document.getElementById('confirmPassword').value;
+
+            // Validasiya
+            if (!fullName) {
+                showToast('Ad Soyad daxil edin!');
+                return;
+            }
+            if (!email || !email.includes('@')) {
+                showToast('Düzgün e-poçt daxil edin!');
+                return;
+            }
+            if (!phone) {
+                showToast('Telefon nömrəsi daxil edin!');
+                return;
+            }
+            if (iban && iban.length < 10) {
+                showToast('Düzgün IBAN daxil edin!');
+                return;
+            }
+
+            // Şifrə dəyişikliyi yoxlaması
+            if (newPass || confirmPass || currentPass) {
+                if (!currentPass) {
+                    showToast('Cari şifrəni daxil edin!');
+                    return;
+                }
+                if (newPass.length < 8) {
+                    showToast('Yeni şifrə minimum 8 simvol olmalıdır!');
+                    return;
+                }
+                if (newPass !== confirmPass) {
+                    showToast('Şifrələr uyğun deyil!');
+                    return;
+                }
+                if (currentPass !== 'password123') {
+                    showToast('Cari şifrə yanlışdır!');
+                    return;
+                }
+            }
+
+            // Bütün məlumatları topla
+            const settings = {
+                fullName,
+                email,
+                phone,
+                region,
+                bankName,
+                iban,
+                accountHolder,
+                emailNotifications: document.getElementById('emailNotifications').checked,
+                smsNotifications: document.getElementById('smsNotifications').checked,
+                paymentNotifications: document.getElementById('paymentNotifications').checked,
+                passwordChanged: newPass.length > 0
+            };
+
+            console.log('📝 Hesab məlumatları yeniləndi:', settings);
+
+            const saveBtn = document.getElementById('saveBtn');
+            saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Yadda saxlanılır...';
+            saveBtn.disabled = true;
+
+            setTimeout(() => {
+                saveBtn.innerHTML = '<i class="fas fa-check"></i> Yadda saxlanıldı!';
+                saveBtn.className = 'bg-green-600 text-white px-10 py-3.5 rounded-xl font-bold shadow-lg shadow-green-600/20 flex items-center justify-center gap-2';
+                showToast('✅ Dəyişikliklər uğurla yadda saxlanıldı!');
+
+                setTimeout(() => {
+                    saveBtn.innerHTML = '<i class="fas fa-save"></i> Dəyişiklikləri yadda saxla';
+                    saveBtn.className = 'bg-primary text-white px-10 py-3.5 rounded-xl font-bold hover:bg-blue-800 transition shadow-lg shadow-primary/20 flex items-center justify-center gap-2';
+                    saveBtn.disabled = false;
+                }, 1500);
+            }, 1200);
+        });
+
+        // ============================================================
+        //  RESET FORM
+        // ============================================================
+        function resetForm() {
+            if (confirm('Dəyişiklikləri ləğv etmək istədiyinizə əminsiniz?')) {
+                location.reload();
+            }
+        }
+
+        // ============================================================
+        //  DELETE ACCOUNT
+        // ============================================================
+        const deleteModal = document.getElementById('deleteModal');
+
+        document.getElementById('deleteAccountBtn').addEventListener('click', () => {
+            deleteModal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        });
+
+        function closeDeleteModal() {
+            deleteModal.classList.add('hidden');
+            document.body.style.overflow = '';
+        }
+
+        function confirmDelete() {
+            closeDeleteModal();
+            showToast('⚠️ Hesabınız silinmək üçün sorğu göndərildi. 24 saat ərzində təsdiqlənəcək.');
+            console.log('🗑️ Hesab silmə sorğusu göndərildi');
+        }
+
+        // Escape ilə bağla
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && !deleteModal.classList.contains('hidden')) {
+                closeDeleteModal();
+            }
+        });
+
+        // Modal xaricində klik
+        deleteModal.addEventListener('click', (e) => {
+            if (e.target === deleteModal) closeDeleteModal();
+        });
+
+        // ============================================================
+        //  SIDEBAR ACTIVE STATE
+        // ============================================================
+        document.querySelectorAll('.sidebar-item').forEach(item => {
+            item.addEventListener('click', function(e) {
+                document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // ============================================================
+        //  INIT
+        // ============================================================
+        console.log('⚙️ Müəllim Hesab Parametrləri yükləndi');
+        console.log('   Müəllim: Rəşad Hüseynov');
+        console.log('   Bank məlumatları təhlükəsiz şifrələnir');
+    </script>
+</body>
+</html>
